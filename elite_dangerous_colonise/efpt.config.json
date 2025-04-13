@@ -1,0 +1,121 @@
+﻿{
+   "CodeGenerationMode": 5,
+   "ContextClassName": "SystemsDatabaseContext",
+   "ContextNamespace": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Models\/Database_Structure",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "elite_dangerous_colonise",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 2,
+   "SelectedToBeGenerated": 0,
+   "T4TemplatePath": null,
+   "Tables": [
+      {
+         "Name": "public.bodies",
+         "ObjectType": 0
+      },
+      {
+         "Name": "public.bodytype",
+         "ObjectType": 0
+      },
+      {
+         "Name": "public.factions",
+         "ObjectType": 0
+      },
+      {
+         "Name": "public.hotspots",
+         "ObjectType": 0
+      },
+      {
+         "Name": "public.hotspottype",
+         "ObjectType": 0
+      },
+      {
+         "Name": "public.nearbystarsystems",
+         "ObjectType": 0
+      },
+      {
+         "Name": "public.nearbystarsystemsvalues",
+         "ObjectType": 0
+      },
+      {
+         "Name": "public.reservetype",
+         "ObjectType": 0
+      },
+      {
+         "Name": "public.rings",
+         "ObjectType": 0
+      },
+      {
+         "Name": "public.ringtype",
+         "ObjectType": 0
+      },
+      {
+         "Name": "public.starsystems",
+         "ObjectType": 0
+      },
+      {
+         "Name": "public.starsystemstaging",
+         "ObjectType": 0
+      },
+      {
+         "Name": "public.stations",
+         "ObjectType": 0
+      },
+      {
+         "Name": "public.systemcoords",
+         "ObjectType": 0
+      },
+      {
+         "Name": "public.CalculateNearbyStarSystemsValues",
+         "ObjectType": 1
+      },
+      {
+         "Name": "public.GetAASystems",
+         "ObjectType": 1
+      },
+      {
+         "Name": "public.getsearchresultsfunc",
+         "ObjectType": 1
+      },
+      {
+         "Name": "public.GetSystemSummary",
+         "ObjectType": 1
+      },
+      {
+         "Name": "public.UpdateSystemColonisationState",
+         "ObjectType": 1
+      }
+   ],
+   "UiHint": null,
+   "UncountableWords": null,
+   "UseAsyncStoredProcedureCalls": true,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDatabaseNamesForRoutines": true,
+   "UseDateOnlyTimeOnly": false,
+   "UseDbContextSplitting": false,
+   "UseDecimalDataAnnotationForSprocResult": true,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": true,
+   "UseInternalAccessModifiersForSprocsAndFunctions": false,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UsePrefixNavigationNaming": false,
+   "UseSchemaFolders": false,
+   "UseSchemaNamespaces": false,
+   "UseSpatial": false,
+   "UseT4": false,
+   "UseT4Split": false
+}

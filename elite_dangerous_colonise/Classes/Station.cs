@@ -1,0 +1,39 @@
+﻿using elite_dangerous_colonise.Models.Database_Types;
+
+namespace elite_dangerous_colonise.Classes
+{
+    /// <summary>
+    /// Represents a station.
+    /// </summary>
+    public class Station
+    {
+        /// <summary> The station's Spansh ID. </summary>
+        public Int64 StationID { get; private set; }
+        /// <summary> The station's name. </summary>
+        public string Name { get; private set; }
+        /// <summary> The station's controlling faction. </summary>
+        public string Faction { get; private set; }
+        
+        /// <summary>
+        /// Creates a station.
+        /// </summary>
+        /// <param name="stationID"> The Spansh ID of the station. </param>
+        /// <param name="name"> The name of the station. </param>
+        /// <param name="faction"> The station's controlling faction. </param>
+        public Station(Int64 stationID, string name, string faction)
+        {
+            StationID = stationID;
+            Name = name;
+            Faction = faction;
+        }
+
+        /// <summary>
+        /// Adds the Station to the Stations List.
+        /// </summary>
+        /// <param name="systemID"> The ID of the System the Station is in. </param>
+        internal void AddToDataList(DatabaseDataLists dataLists, Int64 systemID)
+        {
+            dataLists.Stations.Add(new StationsType(StationID, systemID, Name, Faction != null ? Faction : "None"));
+        }
+    }
+}

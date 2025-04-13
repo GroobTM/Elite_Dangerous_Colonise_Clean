@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="@ViewData["Description"]" />
+    <meta name="author" content="GroobTM" />
+    <meta property="og:title" content="@ViewData["Title"] - ED Colonise" />
+    <meta property="og:site_name" content="ED Colonise" />
+    <meta property="og:description" content="@ViewData["Description"]" />
+    <meta property="og:image" content="https://edcolonise.net/images/Expanding.svg" />
+    <meta property="og:url" content="@ViewData["url"]" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="@ViewData["Title"] - ED Colonise" />
+    <meta name="twitter:description" content="@ViewData["Description"]" />
+    <meta name="twitter:image" content="https://edcolonise.net/images/Expanding.svg" />
+    <meta name="keywords" content="Elite Dangerous, colonisation, ED Colonise, EDC" />
+    <title>@ViewData["Title"] - ED Colonise</title>
+    <link rel="stylesheet" href="~/css/site_tailwind.css" asp-append-version="true"/>
+    @await Html.PartialAsync("_Favicons")
+    <script type="application/ld+json">
+        {
+          "@@context": "https://schema.org",
+          "@@type": "WebApplication",
+          "name": "ED Colonise",
+          "url": "https://edcolonise.net",
+          "description": "ED Colonise is a colonisation helper for the game Elite Dangerous.",
+          "applicationCategory": "GameUtilityApplication",
+          "operatingSystem": "All",
+          "creator": {
+            "@@type": "Person",
+            "name": "GroobTM"
+          }
+        }
+    </script>
+</head>
+<body class="flex min-h-screen flex-col bg-[#0F0F0F]">
+    <header class="border-b-2 border-[#F0F0F0] bg-[#F07B05] lg:pl-10 lg:pr-10">
+        <nav class="pt-2.5 text-5xl font-[EUROCAPS] text-[#F0F0F0] sm:text-6xl lg:py-2.5 lg:px-6">
+            <div class="flex flex-col flex-wrap items-center justify-between lg:flex-row">
+                <a asp-page="index" class="flex flex-col items-center pb-3 sm:flex-row lg:pb-0">
+                    <img src="~/images/Expanding.svg" class="mr-5 h-15 sm:h-25" />
+                    <span class="self-center whitespace-nowrap">ED Colonise</span>
+                </a>
+                <div class="border-t-2 w-full items-center justify-between border-[#F0F0F0] pt-3 pb-3 lg:border-t-0 lg:w-auto lg:pt-0 lg:pb-0">
+                    <ul class="mt-0 flex flex-row text-4xl sm:text-5xl">
+                        <li class="border-[#F0F0F0] lg:border-r-1"></li>
+                        <li class="w-1/2 text-center lg:w-42">
+                            <a asp-page="index" class="block py-2 pr-4 pl-3 first-letter:tracking-[0.01em] lg:leading-20">Tool</a>
+                        </li>
+                        <li class="border-r-1 border-[#F0F0F0]"></li>
+                        <li class="w-1/2 text-center lg:w-42">
+                            <a asp-page="about" class="block py-2 pr-4 pl-3 lg:leading-20">About</a>
+                        </li>
+                        <li class="border-[#F0F0F0] lg:border-r-1"></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main class="min-h-100 pr-3 pl-3 sm:pl-10 sm:pr-10">
+        @RenderBody()
+    </main>
+    <footer class="text-md border-t-2 mt-auto flex flex-col gap-6 border-[#F0F0F0] bg-[#F07B05] p-5 pt-8 text-center font-bold text-[#F0F0F0] sm:gap-3 lg:pl-10 lg:pr-10">
+        <p>
+            Thanks to Gareth Harper for creating the amazing <a href="https://spansh.co.uk" target="_blank" class="text-blue-800 underline">Spansh</a> which provides the
+            data dumps used by this tool.
+        </p>
+        <p>
+            Thanks to the Elite Dangerous Community Developers for creating <a href="https://github.com/EDCD/EDDN" target="_blank" class="text-blue-800 underline">EDDN</a> which keeps this tool up to
+            date.
+        </p>
+        <p>
+            Thanks to CMDR SpyTec for recreating and providing the Elite Dangerous assets via
+            <a href="https://edassets.org" target="_blank" class="text-blue-800 underline">Elite Dangerous Assets</a>.
+        </p>
+        <p>
+            ED Colonise was created using assets and imagery from Elite Dangerous, with the permission of Frontier 
+            Developments plc, for non-commercial purposes. It is not endorsed by nor reflects the views or opinions 
+            of Frontier Developments and no employee of Frontier Developments was involved in the making of it.
+        </p>
+        <p>Please use the <a href="https://forums.frontier.co.uk/threads/introducing-edcolonise-net-a-colonisation-candidate-finder.635882/" target="_blank" class="text-blue-800 underline">Fontier Forum</a> post to report any bugs or issues with the tool.</p>
+        <p>Tool Created by CMDR GroobTM.</p>
+        <a asp-page="Licences" class="w-20 self-center text-blue-800 underline">Licences</a>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,1546 @@
+[
+  {
+    "PackageId": "Accord",
+    "PackageVersion": "3.8.0",
+    "PackageProjectUrl": "http://accord-framework.net/",
+    "Authors": "Accord.NET",
+    "License": "http://accord-framework.net/license.txt",
+    "LicenseUrl": "http://accord-framework.net/license.txt",
+    "LicenseInformationOrigin": 1
+  },
+  {
+    "PackageId": "Accord.MachineLearning",
+    "PackageVersion": "3.8.0",
+    "PackageProjectUrl": "http://accord-framework.net/",
+    "Authors": "Accord.NET",
+    "License": "http://accord-framework.net/license.txt",
+    "LicenseUrl": "http://accord-framework.net/license.txt",
+    "LicenseInformationOrigin": 1
+  },
+  {
+    "PackageId": "Accord.Math",
+    "PackageVersion": "3.8.0",
+    "PackageProjectUrl": "http://accord-framework.net/",
+    "Authors": "Accord.NET",
+    "License": "http://accord-framework.net/license.txt",
+    "LicenseUrl": "http://accord-framework.net/license.txt",
+    "LicenseInformationOrigin": 1
+  },
+  {
+    "PackageId": "Accord.Statistics",
+    "PackageVersion": "3.8.0",
+    "PackageProjectUrl": "http://accord-framework.net/",
+    "Authors": "Accord.NET",
+    "License": "http://accord-framework.net/license.txt",
+    "LicenseUrl": "http://accord-framework.net/license.txt",
+    "LicenseInformationOrigin": 1
+  },
+  {
+    "PackageId": "AsyncIO",
+    "PackageVersion": "0.1.69",
+    "PackageProjectUrl": "https://github.com/somdoron/AsyncIO",
+    "Authors": "AsyncIO",
+    "License": "https://github.com/somdoron/AsyncIO/blob/master/LICENSE.md",
+    "LicenseUrl": "https://github.com/somdoron/AsyncIO/blob/master/LICENSE.md",
+    "LicenseInformationOrigin": 1
+  },
+  {
+    "PackageId": "Humanizer",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.af",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.ar",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.az",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.bg",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.bn-BD",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.cs",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.da",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.de",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.el",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.es",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.fa",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.fi-FI",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.fr",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.fr-BE",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.he",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.hr",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.hu",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.hy",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.id",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.is",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.it",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.ja",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.ko-KR",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.ku",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.lv",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.ms-MY",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.mt",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.nb",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.nb-NO",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.nl",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.pl",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.pt",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.ro",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.ru",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.sk",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.sl",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.sr",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.sr-Latn",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.sv",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.th-TH",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.tr",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.uk",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.uz-Cyrl-UZ",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.uz-Latn-UZ",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.vi",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.zh-CN",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.zh-Hans",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Humanizer.Core.zh-Hant",
+    "PackageVersion": "2.14.1",
+    "PackageProjectUrl": "https://github.com/Humanizr/Humanizer",
+    "Copyright": "Copyright (c) .NET Foundation and Contributors",
+    "Authors": "Mehdi Khalili, Claire Novotny",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.AspNetCore.Connections.Abstractions",
+    "PackageVersion": "7.0.20",
+    "PackageProjectUrl": "https://asp.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.AspNetCore.Http.Connections.Client",
+    "PackageVersion": "7.0.20",
+    "PackageProjectUrl": "https://asp.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.AspNetCore.Http.Connections.Common",
+    "PackageVersion": "7.0.20",
+    "PackageProjectUrl": "https://asp.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.AspNetCore.Razor.Language",
+    "PackageVersion": "6.0.24",
+    "PackageProjectUrl": "https://asp.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.AspNetCore.SignalR.Client",
+    "PackageVersion": "7.0.20",
+    "PackageProjectUrl": "https://asp.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.AspNetCore.SignalR.Client.Core",
+    "PackageVersion": "7.0.20",
+    "PackageProjectUrl": "https://asp.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.AspNetCore.SignalR.Common",
+    "PackageVersion": "7.0.20",
+    "PackageProjectUrl": "https://asp.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.AspNetCore.SignalR.Protocols.Json",
+    "PackageVersion": "7.0.20",
+    "PackageProjectUrl": "https://asp.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.Bcl.AsyncInterfaces",
+    "PackageVersion": "7.0.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.Bcl.Cryptography",
+    "PackageVersion": "9.0.3",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.Build",
+    "PackageVersion": "17.10.4",
+    "PackageProjectUrl": "http://go.microsoft.com/fwlink/?LinkId=624683",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.Build.Framework",
+    "PackageVersion": "17.10.4",
+    "PackageProjectUrl": "http://go.microsoft.com/fwlink/?LinkId=624683",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.CodeAnalysis.Analyzers",
+    "PackageVersion": "3.3.4",
+    "PackageProjectUrl": "https://github.com/dotnet/roslyn-analyzers",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.CodeAnalysis.AnalyzerUtilities",
+    "PackageVersion": "3.3.0",
+    "PackageProjectUrl": "https://github.com/dotnet/roslyn-analyzers",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "Apache-2.0",
+    "LicenseUrl": "https://licenses.nuget.org/Apache-2.0",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.CodeAnalysis.Common",
+    "PackageVersion": "4.8.0",
+    "PackageProjectUrl": "https://github.com/dotnet/roslyn",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.CodeAnalysis.CSharp",
+    "PackageVersion": "4.8.0",
+    "PackageProjectUrl": "https://github.com/dotnet/roslyn",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.CodeAnalysis.CSharp.Features",
+    "PackageVersion": "4.8.0",
+    "PackageProjectUrl": "https://github.com/dotnet/roslyn",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.CodeAnalysis.CSharp.Workspaces",
+    "PackageVersion": "4.8.0",
+    "PackageProjectUrl": "https://github.com/dotnet/roslyn",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.CodeAnalysis.Elfie",
+    "PackageVersion": "1.0.0",
+    "PackageProjectUrl": "https://github.com/microsoft/elfie-arriba",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.CodeAnalysis.Features",
+    "PackageVersion": "4.8.0",
+    "PackageProjectUrl": "https://github.com/dotnet/roslyn",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.CodeAnalysis.Razor",
+    "PackageVersion": "6.0.24",
+    "PackageProjectUrl": "https://asp.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.CodeAnalysis.Scripting.Common",
+    "PackageVersion": "4.8.0",
+    "PackageProjectUrl": "https://github.com/dotnet/roslyn",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.CodeAnalysis.Workspaces.Common",
+    "PackageVersion": "4.8.0",
+    "PackageProjectUrl": "https://github.com/dotnet/roslyn",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.DiaSymReader",
+    "PackageVersion": "2.0.0",
+    "PackageProjectUrl": "https://github.com/dotnet/symreader",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.DotNet.Scaffolding.Shared",
+    "PackageVersion": "9.0.0",
+    "PackageProjectUrl": "https://github.com/dotnet/Scaffolding",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.Extensions.Configuration.Abstractions",
+    "PackageVersion": "9.0.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.Extensions.Configuration.Binder",
+    "PackageVersion": "9.0.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.Extensions.DependencyInjection",
+    "PackageVersion": "9.0.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.Extensions.DependencyInjection.Abstractions",
+    "PackageVersion": "9.0.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.Extensions.DependencyModel",
+    "PackageVersion": "9.0.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.Extensions.Diagnostics.Abstractions",
+    "PackageVersion": "9.0.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.Extensions.Features",
+    "PackageVersion": "7.0.20",
+    "PackageProjectUrl": "https://asp.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.Extensions.FileProviders.Abstractions",
+    "PackageVersion": "9.0.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.Extensions.Hosting.Abstractions",
+    "PackageVersion": "9.0.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.Extensions.Logging",
+    "PackageVersion": "9.0.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.Extensions.Logging.Abstractions",
+    "PackageVersion": "9.0.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.Extensions.ObjectPool",
+    "PackageVersion": "5.0.10",
+    "PackageProjectUrl": "https://asp.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "Apache-2.0",
+    "LicenseUrl": "https://licenses.nuget.org/Apache-2.0",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.Extensions.Options",
+    "PackageVersion": "9.0.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.Extensions.Primitives",
+    "PackageVersion": "9.0.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.NET.StringTools",
+    "PackageVersion": "17.10.4",
+    "PackageProjectUrl": "http://go.microsoft.com/fwlink/?LinkId=624683",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.VisualStudio.Web.CodeGeneration",
+    "PackageVersion": "9.0.0",
+    "PackageProjectUrl": "https://github.com/dotnet/Scaffolding",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.VisualStudio.Web.CodeGeneration.Core",
+    "PackageVersion": "9.0.0",
+    "PackageProjectUrl": "https://github.com/dotnet/Scaffolding",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.VisualStudio.Web.CodeGeneration.Design",
+    "PackageVersion": "9.0.0",
+    "PackageProjectUrl": "https://github.com/dotnet/Scaffolding",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore",
+    "PackageVersion": "9.0.0",
+    "PackageProjectUrl": "https://github.com/dotnet/Scaffolding",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.VisualStudio.Web.CodeGeneration.Templating",
+    "PackageVersion": "9.0.0",
+    "PackageProjectUrl": "https://github.com/dotnet/Scaffolding",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.VisualStudio.Web.CodeGeneration.Utils",
+    "PackageVersion": "9.0.0",
+    "PackageProjectUrl": "https://github.com/dotnet/Scaffolding",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.VisualStudio.Web.CodeGenerators.Mvc",
+    "PackageVersion": "9.0.0",
+    "PackageProjectUrl": "https://github.com/dotnet/Scaffolding",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Mono.TextTemplating",
+    "PackageVersion": "3.0.0",
+    "PackageProjectUrl": "https://github.com/mono/t4",
+    "Authors": "Mikayla Hutchinson",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "murmurhash",
+    "PackageVersion": "1.0.3",
+    "PackageProjectUrl": "https://github.com/darrenkopp/murmurhash-net",
+    "Copyright": "Copyright 2013",
+    "Authors": "Darren Kopp",
+    "License": "https://github.com/darrenkopp/murmurhash-net/blob/master/LICENSE.md",
+    "LicenseUrl": "https://github.com/darrenkopp/murmurhash-net/blob/master/LICENSE.md",
+    "LicenseInformationOrigin": 1
+  },
+  {
+    "PackageId": "NaCl.Net",
+    "PackageVersion": "0.1.13",
+    "PackageProjectUrl": "https://github.com/somdoron/nacl.net",
+    "Authors": "Doron Somech",
+    "License": "MPL-2.0",
+    "LicenseUrl": "https://licenses.nuget.org/MPL-2.0",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "NetMQ",
+    "PackageVersion": "4.0.1.13",
+    "PackageProjectUrl": "https://github.com/zeromq/netmq",
+    "Authors": "NetMQ",
+    "License": "https://github.com/zeromq/netmq/blob/master/COPYING.LESSER",
+    "LicenseUrl": "https://github.com/zeromq/netmq/blob/master/COPYING.LESSER",
+    "LicenseInformationOrigin": 1
+  },
+  {
+    "PackageId": "Newtonsoft.Json",
+    "PackageVersion": "13.0.3",
+    "PackageProjectUrl": "https://www.newtonsoft.com/json",
+    "Copyright": "Copyright \u00A9 James Newton-King 2008",
+    "Authors": "James Newton-King",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Npgsql",
+    "PackageVersion": "9.0.3",
+    "PackageProjectUrl": "https://github.com/npgsql/npgsql",
+    "Copyright": "Copyright 2024 \u00A9 The Npgsql Development Team",
+    "Authors": "Shay Rojansky,Nikita Kazmin,Brar Piening,Nino Floris,Yoh Deadfall,Austin Drenski,Emil Lenngren,Francisco Figueiredo Jr.,Kenji Uno",
+    "License": "PostgreSQL",
+    "LicenseUrl": "https://licenses.nuget.org/PostgreSQL",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "NuGet.Common",
+    "PackageVersion": "6.11.0",
+    "PackageProjectUrl": "https://aka.ms/nugetprj",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "Apache-2.0",
+    "LicenseUrl": "https://licenses.nuget.org/Apache-2.0",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "NuGet.Configuration",
+    "PackageVersion": "6.11.0",
+    "PackageProjectUrl": "https://aka.ms/nugetprj",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "Apache-2.0",
+    "LicenseUrl": "https://licenses.nuget.org/Apache-2.0",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "NuGet.DependencyResolver.Core",
+    "PackageVersion": "6.11.0",
+    "PackageProjectUrl": "https://aka.ms/nugetprj",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "Apache-2.0",
+    "LicenseUrl": "https://licenses.nuget.org/Apache-2.0",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "NuGet.Frameworks",
+    "PackageVersion": "6.11.0",
+    "PackageProjectUrl": "https://aka.ms/nugetprj",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "Apache-2.0",
+    "LicenseUrl": "https://licenses.nuget.org/Apache-2.0",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "NuGet.LibraryModel",
+    "PackageVersion": "6.11.0",
+    "PackageProjectUrl": "https://aka.ms/nugetprj",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "Apache-2.0",
+    "LicenseUrl": "https://licenses.nuget.org/Apache-2.0",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "NuGet.Packaging",
+    "PackageVersion": "6.11.0",
+    "PackageProjectUrl": "https://aka.ms/nugetprj",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "Apache-2.0",
+    "LicenseUrl": "https://licenses.nuget.org/Apache-2.0",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "NuGet.ProjectModel",
+    "PackageVersion": "6.11.0",
+    "PackageProjectUrl": "https://aka.ms/nugetprj",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "Apache-2.0",
+    "LicenseUrl": "https://licenses.nuget.org/Apache-2.0",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "NuGet.Protocol",
+    "PackageVersion": "6.11.0",
+    "PackageProjectUrl": "https://aka.ms/nugetprj",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "Apache-2.0",
+    "LicenseUrl": "https://licenses.nuget.org/Apache-2.0",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "NuGet.Versioning",
+    "PackageVersion": "6.11.0",
+    "PackageProjectUrl": "https://aka.ms/nugetprj",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "Apache-2.0",
+    "LicenseUrl": "https://licenses.nuget.org/Apache-2.0",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Serilog",
+    "PackageVersion": "4.2.0",
+    "PackageProjectUrl": "https://serilog.net/",
+    "Copyright": "Copyright \u00A9 Serilog Contributors",
+    "Authors": "Serilog Contributors",
+    "License": "Apache-2.0",
+    "LicenseUrl": "https://licenses.nuget.org/Apache-2.0",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Serilog.AspNetCore",
+    "PackageVersion": "9.0.0",
+    "PackageProjectUrl": "https://github.com/serilog/serilog-aspnetcore",
+    "Authors": "Microsoft,Serilog Contributors",
+    "License": "Apache-2.0",
+    "LicenseUrl": "https://licenses.nuget.org/Apache-2.0",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Serilog.Extensions.Hosting",
+    "PackageVersion": "9.0.0",
+    "PackageProjectUrl": "https://github.com/serilog/serilog-extensions-hosting",
+    "Authors": "Microsoft,Serilog Contributors",
+    "License": "Apache-2.0",
+    "LicenseUrl": "https://licenses.nuget.org/Apache-2.0",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Serilog.Extensions.Logging",
+    "PackageVersion": "9.0.0",
+    "PackageProjectUrl": "https://github.com/serilog/serilog-extensions-logging",
+    "Authors": "Microsoft,Serilog Contributors",
+    "License": "Apache-2.0",
+    "LicenseUrl": "https://licenses.nuget.org/Apache-2.0",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Serilog.Formatting.Compact",
+    "PackageVersion": "3.0.0",
+    "PackageProjectUrl": "https://github.com/serilog/serilog-formatting-compact",
+    "Authors": "Serilog Contributors",
+    "License": "Apache-2.0",
+    "LicenseUrl": "https://licenses.nuget.org/Apache-2.0",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Serilog.Settings.Configuration",
+    "PackageVersion": "9.0.0",
+    "PackageProjectUrl": "https://github.com/serilog/serilog-settings-configuration",
+    "Authors": "Serilog Contributors",
+    "License": "Apache-2.0",
+    "LicenseUrl": "https://licenses.nuget.org/Apache-2.0",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Serilog.Sinks.Console",
+    "PackageVersion": "6.0.0",
+    "PackageProjectUrl": "https://github.com/serilog/serilog-sinks-console",
+    "Authors": "Serilog Contributors",
+    "License": "Apache-2.0",
+    "LicenseUrl": "https://licenses.nuget.org/Apache-2.0",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Serilog.Sinks.Debug",
+    "PackageVersion": "3.0.0",
+    "PackageProjectUrl": "https://github.com/serilog/serilog-sinks-debug",
+    "Authors": "Serilog Contributors",
+    "License": "Apache-2.0",
+    "LicenseUrl": "https://licenses.nuget.org/Apache-2.0",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Serilog.Sinks.File",
+    "PackageVersion": "6.0.0",
+    "PackageProjectUrl": "https://github.com/serilog/serilog-sinks-file",
+    "Authors": "Serilog Contributors",
+    "License": "Apache-2.0",
+    "LicenseUrl": "https://licenses.nuget.org/Apache-2.0",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "System.CodeDom",
+    "PackageVersion": "6.0.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "System.Collections.Immutable",
+    "PackageVersion": "8.0.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "System.Composition",
+    "PackageVersion": "7.0.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "System.Composition.AttributedModel",
+    "PackageVersion": "7.0.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "System.Composition.Convention",
+    "PackageVersion": "7.0.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "System.Composition.Hosting",
+    "PackageVersion": "7.0.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "System.Composition.Runtime",
+    "PackageVersion": "7.0.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "System.Composition.TypedParts",
+    "PackageVersion": "7.0.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "System.Configuration.ConfigurationManager",
+    "PackageVersion": "8.0.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "System.Data.DataSetExtensions",
+    "PackageVersion": "4.5.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation.  All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://github.com/dotnet/corefx/blob/master/LICENSE.TXT",
+    "LicenseInformationOrigin": 1
+  },
+  {
+    "PackageId": "System.Diagnostics.DiagnosticSource",
+    "PackageVersion": "9.0.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "System.Diagnostics.EventLog",
+    "PackageVersion": "8.0.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "System.Formats.Asn1",
+    "PackageVersion": "9.0.3",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "System.IO.Pipelines",
+    "PackageVersion": "9.0.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "System.Numerics.Vectors",
+    "PackageVersion": "4.5.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation.  All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://github.com/dotnet/corefx/blob/master/LICENSE.TXT",
+    "LicenseInformationOrigin": 1
+  },
+  {
+    "PackageId": "System.Private.ServiceModel",
+    "PackageVersion": "4.9.0",
+    "PackageProjectUrl": "https://github.com/dotnet/wcf",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "System.Reflection.DispatchProxy",
+    "PackageVersion": "4.7.1",
+    "PackageProjectUrl": "https://github.com/dotnet/corefx",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "System.Reflection.Metadata",
+    "PackageVersion": "8.0.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "System.Reflection.MetadataLoadContext",
+    "PackageVersion": "8.0.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "System.Runtime.CompilerServices.Unsafe",
+    "PackageVersion": "6.0.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "System.Security.Cryptography.Pkcs",
+    "PackageVersion": "9.0.3",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "System.Security.Cryptography.ProtectedData",
+    "PackageVersion": "8.0.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "System.Security.Cryptography.Xml",
+    "PackageVersion": "9.0.3",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "System.Security.Principal.Windows",
+    "PackageVersion": "5.0.0",
+    "PackageProjectUrl": "https://github.com/dotnet/runtime",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "System.ServiceModel.Primitives",
+    "PackageVersion": "4.9.0",
+    "PackageProjectUrl": "https://github.com/dotnet/wcf",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "System.Text.Encodings.Web",
+    "PackageVersion": "9.0.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "System.Text.Json",
+    "PackageVersion": "9.0.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "System.Threading.Channels",
+    "PackageVersion": "7.0.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "System.Threading.Tasks.Dataflow",
+    "PackageVersion": "8.0.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "System.ValueTuple",
+    "PackageVersion": "4.5.0",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation.  All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://github.com/dotnet/corefx/blob/master/LICENSE.TXT",
+    "LicenseInformationOrigin": 1
+  }
+]

@@ -1,0 +1,6 @@
+﻿@import "tailwindcss";
+
+@font-face {
+    font-family: "EUROCAPS";
+    src: url("../fonts/EUROCAPS.TTF");
+}
