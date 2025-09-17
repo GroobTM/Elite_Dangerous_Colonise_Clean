@@ -127,7 +127,7 @@ CREATE TABLE TrailblazerMegaships (
 	trailblazerName VARCHAR(25) UNIQUE NOT NULL,
 	coordinateX NUMERIC(10, 5) NOT NULL,
 	coordinateY NUMERIC(10, 5) NOT NULL,
-	coordinateZ NUMERIC(10, 5) NOT NULL
+	coordinateZ NUMERIC(10, 5) NOT NULL,
 	lastUpdate TIMESTAMP NOT NULL,
 );
 
