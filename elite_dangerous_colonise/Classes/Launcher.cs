@@ -68,7 +68,7 @@
 
         private async static Task InsertIntoDatabase(IServiceProvider serviceProvider)
         {
-            string filePath = SelectJson();
+            string filePath = SelectJson().Trim().Trim('"');
 
             if (File.Exists(filePath))
             {
