@@ -46,7 +46,7 @@ BEGIN
 		ST_MakePoint("coordinateX", "coordinateY", "coordinateZ"),
 		"isColonised"
 	FROM inss
-	ON CONFLICT (systemID) DO UPDATE
+	ON CONFLICT ("systemID") DO UPDATE
 	SET
 		"isColonised" = EXCLUDED."isColonised"
 	WHERE "StarSystems"."isColonised" = FALSE
@@ -126,7 +126,7 @@ RETURNS VOID AS $$
 BEGIN
 	CREATE TEMP TABLE ind (
 		"systemID" BIGINT,
-		"lastUpdated" TIMESTAMP,
+		"lastUpdated" TIMESTAMPTZ,
 		"reserveLevel" "ReserveType",
 		"landableCount" SMALLINT,
 		"walkableCount" SMALLINT,
@@ -501,7 +501,7 @@ CREATE OR REPLACE FUNCTION "InsertTrailblazerMegaship"(
 	"inputCoordX" NUMERIC(11, 5),
 	"inputCoordY" NUMERIC(11, 5),
 	"inputCoordZ" NUMERIC(11, 5),
-	"inputUpdateDate" TIMESTAMP
+	"inputUpdateDate" TIMESTAMPTZ
 )
 RETURNS VOID AS $$
 BEGIN

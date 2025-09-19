@@ -29,57 +29,60 @@ namespace elite_dangerous_colonise.Classes
         /// <summary> Increases the counter of the corresponding body type.</summary>
         public void BinBodyTypes(string bodyType)
         {
-            if (bodyType == "Black Hole")
+            if (bodyType != null)
             {
-                BlackHoleCount++;
-            }
-            else if (bodyType == "Neutron Star")
-            {
-                NeutronStarCount++;
-            }
-            else if (bodyType.Contains("White Dwarf"))
-            {
-                WhiteDwarves++;
-            }
-            else if (bodyType.Contains("Star"))
-            {
-                OtherStarCount++;
-            }
-            else if (bodyType == "Earth-like world")
-            {
-                EarthLikeCount++;
-            }
-            else if (bodyType == "Water world")
-            {
-                WaterWorldCount++;
-            }
-            else if (bodyType == "Ammonia world")
-            {
-                AmmoniaWorldCount++;
-            }
-            else if (bodyType.Contains("giant"))
-            {
-                GasGiantCount++;
-            }
-            else if (bodyType == "High metal content world")
-            {
-                HighMetalContentCount++;
-            }
-            else if (bodyType == "Metal-rich body")
-            {
-                MetalRichCount++;
-            }
-            else if (bodyType == "Rocky Ice world")
-            {
-                RockyIceBodyCount++;
-            }
-            else if (bodyType == "Rocky body")
-            {
-                RockBodyCount++;
-            }
-            else if (bodyType == "Icy body")
-            {
-                IcyBodyCount++;
+                if (bodyType == "Black Hole")
+                {
+                    BlackHoleCount++;
+                }
+                else if (bodyType == "Neutron Star")
+                {
+                    NeutronStarCount++;
+                }
+                else if (bodyType.Contains("White Dwarf"))
+                {
+                    WhiteDwarves++;
+                }
+                else if (bodyType.Contains("Star"))
+                {
+                    OtherStarCount++;
+                }
+                else if (bodyType == "Earth-like world")
+                {
+                    EarthLikeCount++;
+                }
+                else if (bodyType == "Water world")
+                {
+                    WaterWorldCount++;
+                }
+                else if (bodyType == "Ammonia world")
+                {
+                    AmmoniaWorldCount++;
+                }
+                else if (bodyType.Contains("giant"))
+                {
+                    GasGiantCount++;
+                }
+                else if (bodyType == "High metal content world")
+                {
+                    HighMetalContentCount++;
+                }
+                else if (bodyType == "Metal-rich body")
+                {
+                    MetalRichCount++;
+                }
+                else if (bodyType == "Rocky Ice world")
+                {
+                    RockyIceBodyCount++;
+                }
+                else if (bodyType == "Rocky body")
+                {
+                    RockBodyCount++;
+                }
+                else if (bodyType == "Icy body")
+                {
+                    IcyBodyCount++;
+                }
             }
         }
 
