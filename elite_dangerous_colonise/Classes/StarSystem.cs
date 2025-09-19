@@ -38,12 +38,12 @@ namespace elite_dangerous_colonise.Classes
     /// <summary> Defines the ColonisedStarSystem class. </summary>
     public class ColonisedStarSystem : StarSystem
     {
-        public List<Station>? Stations { get; private set; }
+        public List<Station> Stations { get; private set; }
 
         /// <summary> Instantiates a ColonisedStarSystem object. </summary>
         /// <inheritdoc cref="StarSystem.StarSystem(long, string, bool, Vector3"/>
         /// <param name="stations"> The list of the system's stations. </param>
-        public ColonisedStarSystem(long systemID, string name, Vector3 coordinates, List<Station>? stations) :
+        public ColonisedStarSystem(long systemID, string name, Vector3 coordinates, List<Station> stations) :
             base(systemID, name, true, coordinates)
         {
             Stations = stations;
@@ -71,12 +71,15 @@ namespace elite_dangerous_colonise.Classes
     /// <summary> Defines the UncolonisedStarSystem class. </summary>
     public class UncolonisedStarSystem : StarSystem
     {
-        public DateTime LastUpdate { get; set; }
-        public ReserveType ReserveLevel { get; set; }
-        public short LandableCount { get; set; }
-        public short WalkableCount { get; set; }
-        public List<Ring>? Rings { get; private set; }
-        public Bodies Bodies { get; private set; }
+        public DateTime LastUpdate { get; private set; }
+        public ReserveType ReserveLevel { get; private set; }
+        public short LandableCount { get; private set; }
+        public short WalkableCount { get; private set; }
+        public int DistanceToSol {  get; private set; }
+        public short TotalHotspots { get; private set; }
+        public double SystemValue { get; private set; }
+        public List<Ring> Rings { get; private set; }
+        public BodyCount BodyCounts { get; private set; }
 
         /// <summary> Instantiates a UncolonisedStarSystem object. </summary>
         /// <inheritdoc cref="StarSystem.StarSystem(long, string, bool, Vector3"/>
@@ -86,7 +89,7 @@ namespace elite_dangerous_colonise.Classes
         /// <param name="walkableCount"></param>
         /// <param name="rings"></param>
         public UncolonisedStarSystem(long systemID, string name, Vector3 coordinates, DateTime lastUpdate, ReserveType reserveLevel,
-            short landableCount, short walkableCount, List<Ring>? rings, Bodies bodies)
+            short landableCount, short walkableCount, List<Ring> rings, BodyCount bodyCounts)
             : base(systemID, name, false, coordinates)
         {
             LastUpdate = lastUpdate;
@@ -94,12 +97,59 @@ namespace elite_dangerous_colonise.Classes
             LandableCount = landableCount;
             WalkableCount = walkableCount;
             Rings = rings;
-            Bodies = bodies;
+            BodyCounts = bodyCounts;
+            DistanceToSol = (int)coordinates.Length();
+            TotalHotspots = CountHotspots();
+            SystemValue = CalculateSystemValue();
+        }
+
+        private short CountHotspots()
+        {
+            short count = 0;
+
+            foreach (Ring ring in Rings)
+            {
+                if (ring.Hotspots != null)
+                {
+                    count += (short)ring.Hotspots.Values.Sum(value => value);
+                }
+            }
+
+            return count;
+        }
+
+        private double CalculateSystemValue()
+        {
+            double WALKABLE_WEIGHT = 0.6;
+            double HOTSPOT_WEIGHT = 0.8;
+
+            return
+                BodyCounts.CalculateCountValues() +
+                TotalHotspots * HOTSPOT_WEIGHT +
+                WalkableCount * WALKABLE_WEIGHT;
+        }
+
+        private void AddSystemDetailsToDataLists(DatabaseDataLists dataLists)
+        {
+            BodyCounts.AddToDataLists(dataLists, this);
+        }
+
+        private void AddRingsToDataList(DatabaseDataLists dataLists)
+        {
+            if (Rings != null)
+            {
+                foreach (Ring ring in Rings)
+                {
+                    ring.AddToDataLists(dataLists, SystemID);
+                }
+            }
         }
 
         public override void AddToDataLists(DatabaseDataLists dataLists)
         {
-            throw new NotImplementedException();
+            AddSystemToDataList(dataLists);
+            AddSystemDetailsToDataLists(dataLists);
+            AddRingsToDataList(dataLists);
         }
     }
 }

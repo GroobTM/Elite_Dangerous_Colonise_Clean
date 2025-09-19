@@ -1,11 +1,10 @@
 ﻿using Newtonsoft.Json;
 using elite_dangerous_colonise.Classes;
+using elite_dangerous_colonise.Models.Database_Types;
 
 namespace elite_dangerous_colonise.Models.Json_Structure
 {
-    /// <summary>
-    /// Represents the Json structure of a system.
-    /// </summary>
+    /// <summary> Defines the Json structure of a star system. </summary>
     public class SystemJson
     {
         readonly string[] COLONISED_STATION_TYPES = new string[]
@@ -14,6 +13,24 @@ namespace elite_dangerous_colonise.Models.Json_Structure
             "Ocellus Starport",
             "Orbis Starport",
             "Outposts"
+        };
+
+        private readonly string[] INVALID_STATIONS =
+        {
+            "Drake-Class Carrier",
+            "Mega ship",
+            "Settlement",
+            "Planetary Construction Depot",
+            "Space Construction Depot",
+            null
+        };
+
+        private readonly string[] SPECIAL_MEGASHIP_NAMES =
+        {
+            "$EXT_PANEL_ColonisationShip:#index=1;",
+            "$EXT_PANEL_ColonisationShip; [inactive]",
+            "System Colonisation Ship",
+            "Stronghold Carrier"
         };
 
         [JsonProperty("id64")]
@@ -25,27 +42,20 @@ namespace elite_dangerous_colonise.Models.Json_Structure
         [JsonProperty("government")]
         public string? Government { get; set; } = "None";
         [JsonProperty("date")]
-        public DateTime LastUpdate { get; set; }
+        public DateTimeOffset LastUpdate { get; set; }
         [JsonProperty("bodies")]
         public required List<BodyJson> Bodies { get; set; }
         [JsonProperty("stations")]
         public List<StationJson>? Stations { get; set; }
 
-        /// <summary>
-        /// Checks if the system is colonised.
-        /// </summary>
-        /// <returns> If the system is colonised. </returns>
-        internal bool IsColonised()
+        private bool IsColonised()
         {
             return (Government != null && Government != "None") 
                 || (Stations != null && Stations.Any(station => COLONISED_STATION_TYPES.Contains(station.StationType)));
         }
 
-        /// <summary>
-        /// Checks if the system has invlid signals.
-        /// </summary>
-        /// <returns> If the system has invalid signals. </returns>
-        internal bool HasInvalidSignals()
+        /// <summary> Checks if the system has invlid signals. </summary>
+        private bool HasInvalidSignals()
         {
             foreach (BodyJson body in Bodies)
             {
@@ -53,7 +63,7 @@ namespace elite_dangerous_colonise.Models.Json_Structure
                 {
                     foreach (string key in body.SignalCategory.SignalTypes.Keys)
                     {
-                        if (key == "$SAA_SignalType_Human;" || key == "$SAA_SignalType_Other;")
+                        if (key == "$SAA_SignalType_Human;")
                         {
                             return true;
                         }
@@ -64,27 +74,8 @@ namespace elite_dangerous_colonise.Models.Json_Structure
             return false;
         }
 
-        /// <summary>
-        /// Converts the BodyJson object list into a Body object list.
-        /// </summary>
-        /// <returns> A Body object list with the same values as this objects' list. </returns>
-        private List<Body> ConvertToBodyList()
-        {
-            List<Body> bodyList = new List<Body>();
-
-            if (Bodies != null)
-            {
-                foreach (BodyJson body in Bodies)
-                {
-                    bodyList.Add(body.ConvertToBody());
-                }
-            }
-
-            return bodyList;
-        }
-
         /// <summary> Merges the lists of StationJsons in Bodies into Stations. </summary>
-        public void MergeSystemAndBodyStationLists()
+        private void MergeSystemAndBodyStationLists()
         {
             foreach (BodyJson body in Bodies)
             {
@@ -100,37 +91,86 @@ namespace elite_dangerous_colonise.Models.Json_Structure
             }
         }
 
-        /// <summary>
-        /// Removes all mega ships from the System object's station list.
-        /// </summary>
-        private void RemoveMegaShips()
+        private void RemoveInvalidStations()
         {
-            string[] colonyShipNames =
-            {
-                "$EXT_PANEL_ColonisationShip:#index=1;",
-                "$EXT_PANEL_ColonisationShip; [inactive]",
-                "System Colonisation Ship",
-                "Stronghold Carrier"
-            };
-
             if (Stations != null && Stations.Count() > 0)
             {
-                Stations.RemoveAll(station => colonyShipNames.Contains(station.Name));
-
-                if (Stations.Count() == 0)
-                {
-                    Stations = null;
-                }
+                Stations.RemoveAll(station => INVALID_STATIONS.Contains(station.StationType) || SPECIAL_MEGASHIP_NAMES.Contains(station.Name));
             }
         }
 
-        /// <summary>
-        /// Converts the SystemJson object into a System object.
-        /// </summary>
-        /// <returns> A System object with the same values as this objects. </returns>
-        public StarSystem ConvertToSystem()
+        private ReserveType GetSystemReserveLevel()
         {
-            RemoveMegaShips();
+            ReserveType systemReserveLevel = ReserveType.None;
+
+            foreach (BodyJson body in Bodies)
+            {
+                if (Enum.TryParse<ReserveType>(body.ReserveLevel, out ReserveType bodyReserveType))
+                {
+                    if (bodyReserveType != ReserveType.None)
+                    {
+                        systemReserveLevel = bodyReserveType;
+                        return systemReserveLevel;
+                    }
+                }
+            }
+
+            return systemReserveLevel;
+        }
+
+        private (short, short) CountLandableAndWalkables()
+        {
+            short landableCount = 0;
+            short walkableCount = 0;
+
+            foreach (BodyJson body in Bodies)
+            {
+                if (body.IsLandable)
+                {
+                    landableCount++;
+                    
+                    if (body.IsDisembarkable())
+                    {
+                        walkableCount++;
+                    }
+                }
+            }
+
+            return (landableCount, walkableCount);
+        }
+
+        private List<Ring> CreateRingList()
+        {
+            List<Ring> rings = new List<Ring>();
+
+            foreach (BodyJson body in Bodies)
+            {
+                rings.AddRange(RingJson.ConvertToRingList(body.Rings));
+            }
+
+            return rings;
+        }
+
+        private BodyCount CountBodyDetails()
+        {
+            BodyCount bodyCount = new BodyCount();
+
+            foreach (BodyJson body in Bodies)
+            {
+                bodyCount.BinBodyTypes(body.BodyType);
+                bodyCount.OrganicCount += body.SignalCategory?.SignalTypes.GetValueOrDefault("$SAA_SignalType_Biological;", (short)0) ?? 0;
+                bodyCount.GeologicalsCount += body.SignalCategory?.SignalTypes.GetValueOrDefault("SAA_SignalType_Geological;", (short)0) ?? 0;
+                bodyCount.RingCount += (short)(body.Rings?.Count() ?? 0);
+            }
+
+            return bodyCount;
+        }
+
+        /// <summary> Converts the SystemJson object into a StarSystem object. </summary>
+        public StarSystem? ConvertToStarSystem()
+        {
+            MergeSystemAndBodyStationLists();
+            RemoveInvalidStations();
 
             if (IsColonised())
             {
@@ -138,12 +178,25 @@ namespace elite_dangerous_colonise.Models.Json_Structure
             }
             else
             {
-                Database_Types.ReserveType reserveType = Database_Types.ReserveType.None;
-                short landableCount = 0;
-                short walkableCount = 0;
-                List<Ring> rings = new List<Ring>();
-                Bodies bodies = new Bodies();
-                return new UncolonisedStarSystem(SystemID, Name, Coordinates.ConvertToVector(), LastUpdate, reserveType, landableCount, walkableCount, rings, bodies);
+                if (HasInvalidSignals())
+                {
+                    return null;
+                }
+                else
+                {
+                    (short, short) landableAndWalkableCounts = CountLandableAndWalkables();
+                    return new UncolonisedStarSystem(
+                        SystemID,
+                        Name,
+                        Coordinates.ConvertToVector(),
+                        LastUpdate.UtcDateTime,
+                        GetSystemReserveLevel(),
+                        landableAndWalkableCounts.Item1,
+                        landableAndWalkableCounts.Item2,
+                        CreateRingList(),
+                        CountBodyDetails()
+                    );
+                }
             }
         }
     }

@@ -20,7 +20,7 @@ namespace elite_dangerous_colonise.Models.Database_Types
         [PgName("totalHotspots")]
         public short TotalHotspots { get; set; }
         [PgName("systemValue")]
-        public short SystemValue { get; set; }
+        public decimal SystemValue { get; set; }
         [PgName("blackHoleCount")]
         public short BlackHoleCount { get; set; }
         [PgName("neutronStarCount")]
@@ -57,7 +57,7 @@ namespace elite_dangerous_colonise.Models.Database_Types
         public UncolonisedDetailsInsertType() { }
         public UncolonisedDetailsInsertType(
             long systemID, DateTime lastUpdate, ReserveType reserveLevel, short landableCount, short walkableCount,
-            int distanceToSol, short totalHotspots, short systemValue, short blackHoleCount, short neutronStarCount, short whiteDwarves, short otherStarCount,
+            int distanceToSol, short totalHotspots, double systemValue, short blackHoleCount, short neutronStarCount, short whiteDwarves, short otherStarCount,
             short earthLikeCount, short waterWorldCount, short ammoniaWorldCount, short gasGiantCount, short highMetalContentCount, short metalRichCount,
             short rockyIceBodyCount, short rockBodyCount, short icyBodyCount, short organicCount, short geologicalsCount, short ringCount
         )
@@ -69,7 +69,7 @@ namespace elite_dangerous_colonise.Models.Database_Types
             WalkableCount = walkableCount;
             DistanceToSol = distanceToSol;
             TotalHotspots = totalHotspots;
-            SystemValue = systemValue;
+            SystemValue = (decimal)systemValue;
             BlackHoleCount = blackHoleCount;
             NeutronStarCount = neutronStarCount;
             WhiteDwarves = whiteDwarves;

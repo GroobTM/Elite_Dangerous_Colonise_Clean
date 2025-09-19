@@ -13,7 +13,7 @@ namespace elite_dangerous_colonise.Models.Database_Types
         public RingType Type { get; set; }
 
         public RingInsertType() { }
-        public RingInsertType(long systemID, long bodyID, string ringName, RingType ringType)
+        public RingInsertType(long systemID, string ringName, RingType ringType)
         {
             SystemID = systemID;
             RingName = ringName;

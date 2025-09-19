@@ -19,7 +19,7 @@ namespace elite_dangerous_colonise.Classes
 
 
         /// <summary>
-        /// Constructs a DatabaseBulkWriter.
+        /// Instantiates a DatabaseBulkWriter.
         /// </summary>
         /// <param name="dataSource"> The database datasource. </param>
         public DatabaseBulkWriter(NpgsqlDataSource dataSource)
@@ -35,17 +35,10 @@ namespace elite_dangerous_colonise.Classes
             this.verboseReporting = verboseReporting;
         }
 
-        /// <summary>
-        /// Bulk inserts records into StarSystems and SystemCoords
-        /// </summary>
-        /// <param name="conn"> The database connection. </param>
-        /// <param name="transaction"> The current transaction. </param>
-        /// <param name="dataLists"> The DatabaseDataLists object. </param>
-        /// <returns></returns>
-        private async Task InsertIntoStarSystemsBulk(NpgsqlConnection conn, NpgsqlTransaction transaction,
+        private async Task InsertStarSystemsBulk(NpgsqlConnection conn, NpgsqlTransaction transaction,
             DatabaseDataLists dataLists)
         {
-            await using (NpgsqlCommand command = new NpgsqlCommand("SELECT InsertIntoStarSystemsBulkFunc(@inputStarSystems)", conn, transaction))
+            await using (NpgsqlCommand command = new NpgsqlCommand("SELECT \"InsertStarSystemsBulk\"(@inputStarSystems)", conn, transaction))
             {
                 command.Parameters.AddWithValue("inputStarSystems", dataLists.StarSystems.ToArray());
 
@@ -53,17 +46,10 @@ namespace elite_dangerous_colonise.Classes
             }
         }
 
-        /// <summary>
-        /// Bulk inserts records into Stations and Factions.
-        /// </summary>
-        /// <param name="conn"> The database connection. </param>
-        /// <param name="transaction"> The current transaction. </param>
-        /// <param name="dataLists"> The DatabaseDataLists object. </param>
-        /// <returns></returns>
-        private async Task InsertIntoStationsBulk(NpgsqlConnection conn, NpgsqlTransaction transaction,
+        private async Task InsertStationsBulk(NpgsqlConnection conn, NpgsqlTransaction transaction,
             DatabaseDataLists dataLists)
         {
-            await using(NpgsqlCommand command = new NpgsqlCommand("SELECT InsertIntoStationsBulkFunc(@inputStations)", conn, transaction))
+            await using(NpgsqlCommand command = new NpgsqlCommand("SELECT \"InsertStationsBulk\"(@inputStations)", conn, transaction))
             {
                 command.Parameters.AddWithValue("inputStations", dataLists.Stations.ToArray());
 
@@ -71,35 +57,21 @@ namespace elite_dangerous_colonise.Classes
             }
         }
 
-        /// <summary>
-        /// Bulk inserts records into Bodies, BodyType, and ReserveType.
-        /// </summary>
-        /// <param name="conn"> The database connection. </param>
-        /// <param name="transaction"> The current transaction. </param>
-        /// <param name="dataLists"> The DatabaseDataLists object. </param>
-        /// <returns></returns>
-        private async Task InsertIntoBodiesBulk(NpgsqlConnection conn, NpgsqlTransaction transaction,
+        private async Task InsertUncolonisedStarSystemDetailsBulk(NpgsqlConnection conn, NpgsqlTransaction transaction,
             DatabaseDataLists dataLists)
         {
-            await using(NpgsqlCommand command = new NpgsqlCommand("SELECT InsertIntoBodiesBulkFunc(@inputBodies)", conn, transaction))
+            await using(NpgsqlCommand command = new NpgsqlCommand("SELECT \"InsertUncolonisedStarSystemDetailsBulk\"(@inputDetails)", conn, transaction))
             {
-                command.Parameters.AddWithValue("inputBodies", dataLists.Bodies.ToArray());
+                command.Parameters.AddWithValue("inputDetails", dataLists.UncolonisedDetails.ToArray());
 
                 await command.ExecuteNonQueryAsync();
             }
         }
 
-        /// <summary>
-        /// Bulk inserts records into Rings and RingType.
-        /// </summary>
-        /// <param name="conn"> The database connection. </param>
-        /// <param name="transaction"> The current transaction. </param>
-        /// <param name="dataLists"> The DatabaseDataLists object. </param>
-        /// <returns></returns>
-        private async Task InsertIntoRingsBulk(NpgsqlConnection conn, NpgsqlTransaction transaction,
+        private async Task InsertRingsBulk(NpgsqlConnection conn, NpgsqlTransaction transaction,
             DatabaseDataLists dataLists)
         {
-            await using(NpgsqlCommand command = new NpgsqlCommand("SELECT InsertIntoRingsBulkFunc(@inputRings)", conn, transaction))
+            await using(NpgsqlCommand command = new NpgsqlCommand("SELECT \"InsertRingsBulk\"(@inputRings)", conn, transaction))
             {
                 command.Parameters.AddWithValue("inputRings", dataLists.Rings.ToArray());
 
@@ -107,17 +79,10 @@ namespace elite_dangerous_colonise.Classes
             }
         }
 
-        /// <summary>
-        /// Bulk inserts records into Hotspots and HotspotType.
-        /// </summary>
-        /// <param name="conn"> The database connection. </param>
-        /// <param name="transaction"> The current transaction. </param>
-        /// <param name="dataLists"> The DatabaseDataLists object. </param>
-        /// <returns></returns>
-        private async Task InsertIntoHotspotsBulk(NpgsqlConnection conn, NpgsqlTransaction transaction,
+        private async Task InsertHotspotsBulk(NpgsqlConnection conn, NpgsqlTransaction transaction,
             DatabaseDataLists dataLists)
         {
-            await using (NpgsqlCommand command = new NpgsqlCommand("SELECT InsertIntoHotspotsBulkFunc(@inputHotspots)", conn, transaction))
+            await using (NpgsqlCommand command = new NpgsqlCommand("SELECT \"InsertHotspotsBulk\"(@inputHotspots)", conn, transaction))
             {
                 command.Parameters.AddWithValue("inputHotspots", dataLists.Hotspots.ToArray());
 
@@ -125,10 +90,6 @@ namespace elite_dangerous_colonise.Classes
             }
         }
 
-        /// <summary>
-        /// Reports the systems added in the latest bulk.
-        /// </summary>
-        /// <param name="insertedNames"> A list of system names. </param>
         private async Task ReportInsert(List<string> insertedNames)
         {
             if (verboseReporting)
@@ -140,10 +101,6 @@ namespace elite_dangerous_colonise.Classes
             }
         }
 
-        /// <summary>
-        /// Bulk inserts an entire DatabaseDataTables' data into the database.
-        /// </summary>
-        /// <param name="dataLists"> The DatabaseDataLists object. </param>
         private async Task<Task> BulkInsertIntoDatabase(DatabaseDataLists dataLists)
         {
             await using (NpgsqlConnection conn = await dataSource.OpenConnectionAsync())
@@ -152,11 +109,11 @@ namespace elite_dangerous_colonise.Classes
                 {
                     try
                     {
-                        await InsertIntoStarSystemsBulk(conn, transaction, dataLists);
-                        await InsertIntoStationsBulk(conn, transaction, dataLists);
-                        await InsertIntoBodiesBulk(conn, transaction, dataLists);
-                        await InsertIntoRingsBulk(conn, transaction, dataLists);
-                        await InsertIntoHotspotsBulk(conn, transaction, dataLists);
+                        await InsertStarSystemsBulk(conn, transaction, dataLists);
+                        await InsertStationsBulk(conn, transaction, dataLists);
+                        await InsertUncolonisedStarSystemDetailsBulk(conn, transaction, dataLists);
+                        await InsertRingsBulk(conn, transaction, dataLists);
+                        await InsertHotspotsBulk(conn, transaction, dataLists);
 
                         await transaction.CommitAsync();
                         recordsAddedOrUpdated += dataLists.Count();
@@ -184,7 +141,6 @@ namespace elite_dangerous_colonise.Classes
             return Task.CompletedTask;
         }
 
-        /// <summary> Reports number of records read/added/failed. </summary>
         private async Task ReportReading(CancellationToken token)
         {
             DateTime startTime = DateTime.Now;
@@ -215,9 +171,7 @@ namespace elite_dangerous_colonise.Classes
             }
         }
 
-        /// <summary>
-        /// Reads a Json file and inserts its data into the database.
-        /// </summary>
+        /// <summary> Reads a Json file and inserts its data into the database. </summary>
         /// <param name="filePath"> The file path of a Json file. </param>
         /// <remarks> This method reports it's progress periodically. </remarks>
         public async Task InsertJsonIntoDatabase(string filePath)
@@ -242,11 +196,11 @@ namespace elite_dangerous_colonise.Classes
                         if (Classes.JsonReader.InRangeOfSol(obj))
                         {
                             Classes.JsonReader readSystem = new Classes.JsonReader(obj.ToString());
-                            readSystem.PruneSystem();
 
-                            if (readSystem.IsInteresting())
+                            StarSystem? decodedSystem = readSystem.GetStarSystem();
+                            if (decodedSystem != null)
                             {
-                                readSystem.GetSystem().AddToDataLists(dataLists);
+                                decodedSystem.AddToDataLists(dataLists);
                             }
 
                             if (dataLists.Count() >= BULK_SIZE)
