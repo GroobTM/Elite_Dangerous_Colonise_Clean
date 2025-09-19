@@ -2,10 +2,10 @@
 {
     public class NearbyStarSystemsResult
     {
-        public Int64 ColonisedSystemID { get; set; }
-        public Int64 NearbySystemID { get; set; }
+        public long ColonisedSystemID { get; set; }
+        public long NearbySystemID { get; set; }
 
-        public NearbyStarSystemsResult(Int64 colonisedSystemID, Int64 nearbySystemID)
+        public NearbyStarSystemsResult(long colonisedSystemID, long nearbySystemID)
         {
             ColonisedSystemID = colonisedSystemID;
             NearbySystemID = nearbySystemID;

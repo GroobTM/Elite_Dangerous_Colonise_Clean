@@ -1,4 +1,4 @@
-CREATE OR REPLACE "InsertStarSystemsBulk"("inputStarSystems" "StarSystemType"[])
+CREATE OR REPLACE "InsertStarSystemsBulk"("inputStarSystems" "StarSystemInsertType"[])
 RETURNS VOID AS $$
 BEGIN
 	CREATE TEMP TABLE "inss" (
@@ -56,7 +56,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION "InsertStationsBulk"("inputStations" "StationType"[])
+CREATE OR REPLACE FUNCTION "InsertStationsBulk"("inputStations" "StationInsertType"[])
 RETURNS VOID AS $$
 BEGIN
 	CREATE TEMP TABLE ins (
@@ -121,7 +121,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION "InsertUncolonisedStarSystemDetailsBulk"("inputDetails" "UncolonisedDetailsType"[])
+CREATE OR REPLACE FUNCTION "InsertUncolonisedStarSystemDetailsBulk"("inputDetails" "UncolonisedDetailsInsertType"[])
 RETURNS VOID AS $$
 BEGIN
 	CREATE TEMP TABLE ind (
@@ -372,7 +372,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION "InsertRingsBulk"("inputRings" "RingType"[])
+CREATE OR REPLACE FUNCTION "InsertRingsBulk"("inputRings" "RingInsertType"[])
 RETURNS VOID AS $$
 BEGIN
 	CREATE TEMP TABLE inr (
@@ -412,7 +412,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION "InsertHotspotsBulk"("inputHotspots" "HotspotType"[])
+CREATE OR REPLACE FUNCTION "InsertHotspotsBulk"("inputHotspots" "HotspotInsertType"[])
 RETURNS VOID AS $$
 BEGIN
 	CREATE TEMP TABLE inh (
@@ -460,7 +460,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION "InsertColonisableStarSystemsBulk"("inputColonisables" "ColonisableType"[])
+CREATE OR REPLACE FUNCTION "InsertColonisableStarSystemsBulk"("inputColonisables" "ColonisableInsertType"[])
 RETURNS VOID AS $$
 BEGIN
 	CREATE TEMP TABLE inc (

@@ -1,101 +1,54 @@
-﻿using System.Data;
+﻿using elite_dangerous_colonise.Models.Database_Types;
 using System.Numerics;
-using elite_dangerous_colonise.Models.Database_Types;
 
 namespace elite_dangerous_colonise.Classes
 {
-    /// <summary>
-    /// Represents a star system. 
-    /// </summary>
-    public class StarSystem
+    /// <summary> Defines the StarSystem abstract class. </summary>
+    public abstract class StarSystem
     {
-        /// <summary> The system's Spansh ID. </summary>
-        public Int64 SystemID { get; private set; }
-        /// <summary> The system's name. </summary>
-        public string? Name { get; private set; }
-        /// <summary> If the system is colonised. </summary>
+        public long SystemID { get; private set; }
+        public string Name { get; private set; }
         public bool IsColonised { get; private set; }
-        /// <summary> The date the system was last marked as colonising. </summary>
-        public DateTime? ColonisingDate { get; private set; }
-        /// <summary> The system's Coordinates. </summary>
         public Vector3 Coordinates { get; private set; }
-        /// <summary> The bodies in the system. </summary>
-        public List<Body>? Bodies { get; private set; }
-        /// <summary> The orbital stations in the system. </summary>
-        public List<Station>? Stations { get; private set; } 
 
-        /// <summary>
-        /// Creates a system.
-        /// </summary>
+        /// <summary> Instantiates a StarSystem object. </summary>
         /// <param name="systemID"> The system's Spansh ID. </param>
-        /// <param name="coordinates"> The system's coordinates. </param>
-        public StarSystem(Int64 systemID, Vector3 coordinates)
-        {
-            SystemID = systemID;
-            Coordinates = coordinates;
-        }
-        /// <inheritdoc cref="StarSystem.StarSystem(Int64, Vector3)"/>
         /// <param name="name"> The name of the system. </param>
         /// <param name="isColonised"> If the system is colonised. </param>
-        /// <param name="bodies"> The bodies in the system. </param>
-        public StarSystem(Int64 systemID, string name, bool isColonised, Vector3 coordinates, List<Body> bodies)
-            :this(systemID, coordinates)
+        /// <param name="coordinates"> The system's coordinates. </param>
+        public StarSystem(long systemID, string name, bool isColonised, Vector3 coordinates)
         {
+            SystemID = systemID;
             Name = name;
             IsColonised = isColonised;
-            Bodies = bodies;
-        }
-        /// <inheritdoc cref="StarSystem.StarSystem(Int64, string, bool, Vector3, List{Body})"/>
-        /// <param name="stations"> The list of the system's stations. </param>
-        public StarSystem(Int64 systemID, string name, bool isColonised, Vector3 coordinates, List<Body> bodies,
-            List<Station>? stations) :
-            this(systemID, name, isColonised, coordinates, bodies)
-        {
-            Stations = stations;
-        }
-        /// <inheritdoc cref="StarSystem.StarSystem(Int64, string, bool, Vector3, List{Body})"/>
-        /// <param name="colonisingDate"> The date the system was last marked as being colonised. </param>
-        public StarSystem(Int64 systemID, string name, bool isColonised, DateTime? colonisingDate,
-            Vector3 coordinates, List<Body> bodies) :
-            this(systemID, name, isColonised, coordinates, bodies)
-        {
-            ColonisingDate = colonisingDate;
-        }
-        /// <inheritdoc cref="StarSystem.StarSystem(Int64, string, bool, Vector3, List{Body}, List{Station})"/>
-        /// <param name="colonisingDate"> The date the system was last marked as being colonised. </param>
-        public StarSystem(Int64 systemID, string name, bool isColonised, DateTime? colonisingDate,
-            Vector3 coordinates, List<Body> bodies, List<Station>? stations) :
-            this(systemID, name, isColonised, coordinates, bodies, stations)
-        {
-            ColonisingDate = colonisingDate;
+            Coordinates = coordinates;
         }
 
-        /// <summary>
-        /// Adds the System to the Systems List.
-        /// </summary>
-        private void AddSystemToDataList(DatabaseDataLists dataLists)
+        /// <summary> Adds the StarSystems to the StarSystems data list. </summary>
+        protected void AddSystemToDataList(DatabaseDataLists dataLists)
         {
-            dataLists.StarSystems.Add(new StarSystemsType(SystemID, Name, ColonisingDate, IsColonised,
+            dataLists.StarSystems.Add(new StarSystemInsertType(SystemID, Name, IsColonised,
                 (decimal)Coordinates.X, (decimal)Coordinates.Y, (decimal)Coordinates.Z));
         }
 
-        /// <summary>
-        /// Adds the System's Bodies and their components to their Lists.
-        /// </summary>
-        private void AddBodiesToDataList(DatabaseDataLists dataLists)
+        /// <summary> Adds the StarSystem and component objects to the datalists. </summary>
+        public abstract void AddToDataLists(DatabaseDataLists dataLists);
+    }
+
+    /// <summary> Defines the ColonisedStarSystem class. </summary>
+    public class ColonisedStarSystem : StarSystem
+    {
+        public List<Station>? Stations { get; private set; }
+
+        /// <summary> Instantiates a ColonisedStarSystem object. </summary>
+        /// <inheritdoc cref="StarSystem.StarSystem(long, string, bool, Vector3"/>
+        /// <param name="stations"> The list of the system's stations. </param>
+        public ColonisedStarSystem(long systemID, string name, Vector3 coordinates, List<Station>? stations) :
+            base(systemID, name, true, coordinates)
         {
-            if (Bodies != null)
-            {
-                foreach (Body body in Bodies)
-                {
-                    body.AddToDataLists(dataLists, SystemID);
-                }
-            }
+            Stations = stations;
         }
 
-        /// <summary>
-        /// Adds the System's Stations to the Station List.
-        /// </summary>
         private void AddStationsToDataList(DatabaseDataLists dataLists)
         {
             if (Stations != null)
@@ -107,21 +60,46 @@ namespace elite_dangerous_colonise.Classes
             }
         }
 
-        /// <summary>
-        /// Adds the System and its Bodies and Stations to their Lists.
-        /// </summary>
-        public void AddToDataLists(DatabaseDataLists dataLists)
+        /// <summary> Adds the StarSystem and its Stations to the data list. </summary>
+        public override void AddToDataLists(DatabaseDataLists dataLists)
         {
             AddSystemToDataList(dataLists);
+            AddStationsToDataList(dataLists);
+        }
+    }
 
-            if (IsColonised)
-            {
-                AddStationsToDataList(dataLists);
-            }
-            else
-            {
-                AddBodiesToDataList(dataLists);
-            }
+    /// <summary> Defines the UncolonisedStarSystem class. </summary>
+    public class UncolonisedStarSystem : StarSystem
+    {
+        public DateTime LastUpdate { get; set; }
+        public ReserveType ReserveLevel { get; set; }
+        public short LandableCount { get; set; }
+        public short WalkableCount { get; set; }
+        public List<Ring>? Rings { get; private set; }
+        public Bodies Bodies { get; private set; }
+
+        /// <summary> Instantiates a UncolonisedStarSystem object. </summary>
+        /// <inheritdoc cref="StarSystem.StarSystem(long, string, bool, Vector3"/>
+        /// <param name="lastUpdate"></param>
+        /// <param name="reserveLevel"></param>
+        /// <param name="landableCount"></param>
+        /// <param name="walkableCount"></param>
+        /// <param name="rings"></param>
+        public UncolonisedStarSystem(long systemID, string name, Vector3 coordinates, DateTime lastUpdate, ReserveType reserveLevel,
+            short landableCount, short walkableCount, List<Ring>? rings, Bodies bodies)
+            : base(systemID, name, false, coordinates)
+        {
+            LastUpdate = lastUpdate;
+            ReserveLevel = reserveLevel;
+            LandableCount = landableCount;
+            WalkableCount = walkableCount;
+            Rings = rings;
+            Bodies = bodies;
+        }
+
+        public override void AddToDataLists(DatabaseDataLists dataLists)
+        {
+            throw new NotImplementedException();
         }
     }
 }

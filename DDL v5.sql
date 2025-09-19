@@ -198,7 +198,7 @@ CREATE INDEX "idx_USSA_isClaimed" ON "UncolonisedStarSystemsAvailability"("isCla
 CREATE INDEX "idx_SS_systemCoords" ON "StarSystems" USING GIST("systemCoords");
 CREATE INDEX "idx_TM_trailblazerCoords" ON "TrailblazerMegaships" USING GIST("trailblazerCoords");
 
-CREATE TYPE "StarSystemType" AS (
+CREATE TYPE "StarSystemInsertType" AS (
     "systemID" BIGINT,
     "systemName" VARCHAR(75),
     "isColonised" BOOLEAN,
@@ -207,14 +207,14 @@ CREATE TYPE "StarSystemType" AS (
     "coordinateZ" NUMERIC(11, 5)
 );
 
-CREATE TYPE "StationType" AS (
+CREATE TYPE "StationInsertType" AS (
     "stationID" BIGINT,
     "systemID" BIGINT,
     "stationName" VARCHAR(75),
     "controllingFaction" VARCHAR(75)
 );
 
-CREATE TYPE "UncolonisedDetailsType" AS (
+CREATE TYPE "UncolonisedDetailsInsertType" AS (
 	"systemID" BIGINT,
 	"lastUpdated" TIMESTAMP,
 	"reserveLevel" "ReserveType",
@@ -241,20 +241,20 @@ CREATE TYPE "UncolonisedDetailsType" AS (
 	"ringCount" SMALLINT
 );
 
-CREATE TYPE "RingType" AS (
+CREATE TYPE "RingInsertType" AS (
 	"systemID" BIGINT,
 	"ringName" VARCHAR(75),
 	"ringType" "RingType"
 );
 
-CREATE TYPE "HotspotType" AS (
+CREATE TYPE "HotspotInsertType" AS (
 	"systemID" BIGINT,
 	"ringName" VARCHAR(75),
 	"hotspotType" "HotspotType",
 	"hotspotCount" SMALLINT
 );
 
-CREATE TYPE "ColonisableType" AS (
+CREATE TYPE "ColonisableInsertType" AS (
 	"colonisedSystemID" BIGINT,
 	"uncolonisedSystemID" BIGINT
 );

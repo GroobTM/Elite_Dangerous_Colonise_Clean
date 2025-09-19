@@ -2,7 +2,7 @@
 {
     public class StarSystemStagingResult
     {
-        public Int64 SystemID { get; set; }
+        public long SystemID { get; set; }
         public bool IsColonised { get; set; }
         public decimal CoordinateX { get; set; }
         public decimal CoordinateY { get; set; }

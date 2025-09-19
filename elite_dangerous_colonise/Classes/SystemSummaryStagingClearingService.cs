@@ -165,9 +165,9 @@ namespace elite_dangerous_colonise.Classes
         /// </summary>
         /// <param name="targetSystems"> A list of systems used to create the tree. </param>
         /// <returns> A Coordinate-ID dictionary and a KDTree. </returns>
-        private (Dictionary<(double, double, double), Int64>, KDTree) CreateKDTree(List<GetSystemSummaryResult> targetSystems)
+        private (Dictionary<(double, double, double), long>, KDTree) CreateKDTree(List<GetSystemSummaryResult> targetSystems)
         {
-            Dictionary<(double, double, double), Int64> coordinatesToSystemID = new Dictionary<(double, double, double), Int64>();
+            Dictionary<(double, double, double), long> coordinatesToSystemID = new Dictionary<(double, double, double), long>();
 
             KDTree kdTree = new KDTree(3);
 
@@ -194,11 +194,11 @@ namespace elite_dangerous_colonise.Classes
         /// <param name="sourceSystem"> The new system. </param>
         /// <param name="dictAndKDTree"> A coordinate-ID dictionary and a KDTree. </param>
         /// <returns> A list of nearby system combinations. </returns>
-        private List<NearbyStarSystemsResult> CreateLinksForSystem(StarSystemStagingResult sourceSystem, (Dictionary<(double, double, double), Int64>, KDTree) dictAndKDTree)
+        private List<NearbyStarSystemsResult> CreateLinksForSystem(StarSystemStagingResult sourceSystem, (Dictionary<(double, double, double), long>, KDTree) dictAndKDTree)
         {
             List<NearbyStarSystemsResult> nearbyStarSystems = new List<NearbyStarSystemsResult>();
 
-            (Dictionary<(double, double, double), Int64> targetSystemCoordsToIDs, KDTree targetSystemTree) = dictAndKDTree;
+            (Dictionary<(double, double, double), long> targetSystemCoordsToIDs, KDTree targetSystemTree) = dictAndKDTree;
 
             double[] sourceCoordinates = new double[3]
             {
@@ -211,7 +211,7 @@ namespace elite_dangerous_colonise.Classes
 
             foreach (NodeDistance<KDTreeNode> node in nearestNodes)
             {
-                if (targetSystemCoordsToIDs.TryGetValue((node.Node.Position[0], node.Node.Position[1], node.Node.Position[2]), out Int64 targetID))
+                if (targetSystemCoordsToIDs.TryGetValue((node.Node.Position[0], node.Node.Position[1], node.Node.Position[2]), out long targetID))
                 {
                     if (sourceSystem.SystemID != targetID)
                     {
@@ -239,8 +239,8 @@ namespace elite_dangerous_colonise.Classes
 
             if (stagedSystems.Any())
             {
-                (Dictionary<(double, double, double), Int64> colonisedSystemCoordsToIDs, KDTree colonisedSystemTree) = CreateKDTree(await SelectSystemSummary(conn, true));
-                (Dictionary<(double, double, double), Int64> uncolonisedSystemCoordsToIDs, KDTree uncolonisedSystemTree) = CreateKDTree(await SelectSystemSummary(conn, false));
+                (Dictionary<(double, double, double), long> colonisedSystemCoordsToIDs, KDTree colonisedSystemTree) = CreateKDTree(await SelectSystemSummary(conn, true));
+                (Dictionary<(double, double, double), long> uncolonisedSystemCoordsToIDs, KDTree uncolonisedSystemTree) = CreateKDTree(await SelectSystemSummary(conn, false));
 
 
                 foreach (StarSystemStagingResult stagedSystem in stagedSystems)

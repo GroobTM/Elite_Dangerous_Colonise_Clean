@@ -17,13 +17,15 @@ namespace elite_dangerous_colonise.Models.Json_Structure
         };
 
         [JsonProperty("id64")]
-        public required Int64 SystemID { get; set; }
+        public required long SystemID { get; set; }
         [JsonProperty("name")]
         public required string Name { get; set; }
         [JsonProperty("coords")]
         public required CoordinatesJson Coordinates { get; set; }
         [JsonProperty("government")]
         public string? Government { get; set; } = "None";
+        [JsonProperty("date")]
+        public DateTime LastUpdate { get; set; }
         [JsonProperty("bodies")]
         public required List<BodyJson> Bodies { get; set; }
         [JsonProperty("stations")]
@@ -60,26 +62,6 @@ namespace elite_dangerous_colonise.Models.Json_Structure
             }
 
             return false;
-        }
-
-        /// <summary>
-        /// If a construction ship is present in the system, gets its last update date.
-        /// </summary>
-        /// <returns> The date the systems construction ship was updated. </returns>
-        private DateTime? LastColonisingDate()
-        {
-            if (!IsColonised() && Stations != null && Stations.Count() > 0)
-            {
-                foreach (StationJson station in Stations)
-                {
-                    if (station.Name == "System Colonisation Ship" || station.Name.ToLower().Contains("colonisationship"))
-                    {
-                        return station.LastUpdate.DateTime;
-                    }
-                }
-            }
-
-            return null;
         }
 
         /// <summary>
@@ -148,13 +130,21 @@ namespace elite_dangerous_colonise.Models.Json_Structure
         /// <returns> A System object with the same values as this objects. </returns>
         public StarSystem ConvertToSystem()
         {
-            DateTime? lastColonisingDate = LastColonisingDate();
             RemoveMegaShips();
 
-            return new StarSystem(SystemID, Name, IsColonised(),
-                lastColonisingDate != null ? (DateTime)lastColonisingDate : null,
-                Coordinates.ConvertToVector(), ConvertToBodyList(),
-                StationJson.ConvertToStationList(Stations));
+            if (IsColonised())
+            {
+                return new ColonisedStarSystem(SystemID, Name, Coordinates.ConvertToVector(), StationJson.ConvertToStationList(Stations));
+            }
+            else
+            {
+                Database_Types.ReserveType reserveType = Database_Types.ReserveType.None;
+                short landableCount = 0;
+                short walkableCount = 0;
+                List<Ring> rings = new List<Ring>();
+                Bodies bodies = new Bodies();
+                return new UncolonisedStarSystem(SystemID, Name, Coordinates.ConvertToVector(), LastUpdate, reserveType, landableCount, walkableCount, rings, bodies);
+            }
         }
     }
 }

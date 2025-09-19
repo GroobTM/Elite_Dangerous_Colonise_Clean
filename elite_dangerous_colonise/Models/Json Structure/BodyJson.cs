@@ -10,17 +10,13 @@ namespace elite_dangerous_colonise.Models.Json_Structure
     {
 
         [JsonProperty("id64")]
-        public required Int64 BodyID { get; set; }
-        [JsonProperty("name")]
-        public required string Name { get; set; }
+        public required long BodyID { get; set; }
         [JsonProperty("subType")]
         public required string BodyType { get; set; }
         [JsonProperty("isLandable")]
         public bool IsLandable { get; set; } = false;
         [JsonProperty("reserveLevel")]
         public string? ReserveLevel { get; set; }
-        [JsonProperty("distanceToArrival")]
-        public required float DistanceToArrival { get; set; }
         [JsonProperty("gravity")]
         public float? Gravity { get; set; }
         [JsonProperty("surfaceTemperature")]
@@ -32,6 +28,10 @@ namespace elite_dangerous_colonise.Models.Json_Structure
         [JsonProperty("signals")]
         public SignalsCategoryJson? SignalCategory { get; set; }
 
+        /// <summary>
+        /// Checks if the planet can be disembarked on.
+        /// </summary>
+        /// <returns>If the planet can be disembarked on.</returns>
         public bool IsDisembarkable()
         {
             bool isDisembarkable = IsLandable;
@@ -75,8 +75,7 @@ namespace elite_dangerous_colonise.Models.Json_Structure
         /// <returns> A Body object with the same values as this objects. </returns>
         internal Body ConvertToBody()
         {
-            return new Body(BodyID, Name, BodyType, IsDisembarkable(), ReserveLevel, (int)Math.Round(DistanceToArrival),
-                ConvertToRingList());
+            return new Body(BodyID, BodyType, IsDisembarkable(), ReserveLevel, ConvertToRingList());
         }
     }
 }

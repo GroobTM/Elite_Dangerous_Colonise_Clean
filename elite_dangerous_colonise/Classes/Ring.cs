@@ -42,9 +42,9 @@ namespace elite_dangerous_colonise.Classes
         /// <summary>
         /// Adds the Ring to the Rings List.
         /// </summary>
-        private void AddRingToDataList(DatabaseDataLists dataLists, Int64 bodyID)
+        private void AddRingToDataList(DatabaseDataLists dataLists, long bodyID)
         {
-            dataLists.Rings.Add(new RingsType(RingID, bodyID, Name,
+            dataLists.Rings.Add(new RingInsertType(RingID, bodyID, Name,
                 RingType != null ? RingType : "None"));            
         }
 
@@ -57,7 +57,7 @@ namespace elite_dangerous_colonise.Classes
             {
                 foreach (KeyValuePair<string, short> hotspot in Hotspots)
                 {
-                    dataLists.Hotspots.Add(new HotspotsType(RingID,
+                    dataLists.Hotspots.Add(new HotspotInsertType(RingID,
                         hotspot.Key != null ? hotspot.Key : "None",
                         hotspot.Value));
                 }
@@ -68,7 +68,7 @@ namespace elite_dangerous_colonise.Classes
         /// Adds the Ring and its Hotspots values to their Lists.
         /// </summary>
         /// <param name="bodyID"> The ID of the Body the Ring surrounds. </param>
-        internal void AddToDataLists(DatabaseDataLists dataLists, Int64 bodyID)
+        internal void AddToDataLists(DatabaseDataLists dataLists, long bodyID)
         {
             AddRingToDataList(dataLists, bodyID);
             AddHotspotToDataList(dataLists);

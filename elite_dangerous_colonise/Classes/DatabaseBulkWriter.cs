@@ -1,7 +1,6 @@
 ﻿using Npgsql;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using NpgsqlTypes;
 
 namespace elite_dangerous_colonise.Classes
 {

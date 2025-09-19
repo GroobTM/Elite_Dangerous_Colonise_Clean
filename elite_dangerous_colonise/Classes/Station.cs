@@ -8,7 +8,7 @@ namespace elite_dangerous_colonise.Classes
     public class Station
     {
         /// <summary> The station's Spansh ID. </summary>
-        public Int64 StationID { get; private set; }
+        public long StationID { get; private set; }
         /// <summary> The station's name. </summary>
         public string Name { get; private set; }
         /// <summary> The station's controlling faction. </summary>
@@ -20,7 +20,7 @@ namespace elite_dangerous_colonise.Classes
         /// <param name="stationID"> The Spansh ID of the station. </param>
         /// <param name="name"> The name of the station. </param>
         /// <param name="faction"> The station's controlling faction. </param>
-        public Station(Int64 stationID, string name, string faction)
+        public Station(long stationID, string name, string faction)
         {
             StationID = stationID;
             Name = name;
@@ -31,9 +31,9 @@ namespace elite_dangerous_colonise.Classes
         /// Adds the Station to the Stations List.
         /// </summary>
         /// <param name="systemID"> The ID of the System the Station is in. </param>
-        internal void AddToDataList(DatabaseDataLists dataLists, Int64 systemID)
+        internal void AddToDataList(DatabaseDataLists dataLists, long systemID)
         {
-            dataLists.Stations.Add(new StationsType(StationID, systemID, Name, Faction != null ? Faction : "None"));
+            dataLists.Stations.Add(new StationInsertType(StationID, systemID, Name, Faction != null ? Faction : "None"));
         }
     }
 }

@@ -5,7 +5,7 @@ using Npgsql;
 using elite_dangerous_colonise.Classes;
 using elite_dangerous_colonise.Models.Database_Types;
 
-const bool DEBUG = false;
+const bool DEBUG = true;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,11 +46,15 @@ string connectionString = builder.Configuration.GetConnectionString("SystemsData
     ?? throw new InvalidOperationException("Connection string 'SystemsDatabase' not found.");
 
 NpgsqlDataSourceBuilder dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
-dataSourceBuilder.MapComposite<StarSystemsType>("starsystemstype");
-dataSourceBuilder.MapComposite<StationsType>("stationstype");
-dataSourceBuilder.MapComposite<BodiesType>("bodiestype");
-dataSourceBuilder.MapComposite<RingsType>("ringstype");
-dataSourceBuilder.MapComposite<HotspotsType>("hotspotstype");
+dataSourceBuilder.MapEnum<RingType>("RingType");
+dataSourceBuilder.MapEnum<HotspotType>("HotspotType");
+dataSourceBuilder.MapEnum<ReserveType>("ReserveType");
+dataSourceBuilder.MapComposite<StarSystemInsertType>("StarSystemInsertType");
+dataSourceBuilder.MapComposite<StationInsertType>("StationInsertType");
+dataSourceBuilder.MapComposite<RingInsertType>("RingInsertType");
+dataSourceBuilder.MapComposite<HotspotInsertType>("HotspotInsertType");
+dataSourceBuilder.MapComposite<UncolonisedDetailsInsertType>("UncolonisedDetailsInsertType");
+dataSourceBuilder.MapComposite<ColonisableInsertType>("ColonisableInsertType");
 
 NpgsqlDataSource dataSource = dataSourceBuilder.Build();
 builder.Services.AddSingleton(dataSource);
@@ -76,9 +80,6 @@ if (!DEBUG)
     // Configures the self ping background service.
     builder.Services.AddHttpClient();
     builder.Services.AddHostedService<SelfPingService>();
-
-    // Configures the AA system save background service.
-    builder.Services.AddHostedService<AASystemsSaveService>();
 }
 
 var app = builder.Build();

@@ -21,19 +21,8 @@ namespace elite_dangerous_colonise.Classes
             null
         };
 
-        /// <summary> Body types that are interesting. </summary>
-        private readonly string[] INTERESTING_TYPES =
-        {
-            "Black Hole",
-            "White Dwarf",
-            "Neutron Star",
-            "Ammonia world",
-            "Water world",
-            "Earth-like world"
-        };
-
         /// <summary> The max distance from SOL that systems will be saved. </summary>
-        private const int SOL_COLONY_RANGE = 1000;
+        private const int SOL_COLONY_RANGE = 2000;
 
         /// <summary> The system read from a Json file. </summary>
         private SystemJson deserializedSystem;
@@ -51,19 +40,6 @@ namespace elite_dangerous_colonise.Classes
                 ?? throw new InvalidOperationException("Deserialized failed: The JSON structure may be invalid.");
 
             deserializedSystem.MergeSystemAndBodyStationLists();
-        }
-
-        /// <summary> Removes all bodies from a system that are uninteresting. </summary>
-        /// <remarks> An interesting body is one that is a rare star, has rings, or is landable. </remarks>
-        private void PruneUninterestingBodies()
-        {
-            deserializedSystem.Bodies.RemoveAll(body => !(body.BodyType != null 
-                && INTERESTING_TYPES.Any(type => type.Contains(body.BodyType))
-                || body.Rings != null || body.IsDisembarkable()));
-            if (deserializedSystem.Bodies.Count == 0)
-            {
-                deserializedSystem.Bodies = null;
-            }
         }
 
         /// <summary> Removes invalid stations from the system. </summary>
@@ -84,7 +60,6 @@ namespace elite_dangerous_colonise.Classes
         public void PruneSystem()
         {
             PruneInvalidStations();
-            PruneUninterestingBodies();
         }
 
         /// <summary> Checks if the system is colonised or has interesting bodies. </summary>

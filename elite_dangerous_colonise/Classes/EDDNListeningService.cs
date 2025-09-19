@@ -87,7 +87,7 @@ namespace elite_dangerous_colonise.Classes
 
                 if (JsonReader.InRangeOfSol(coords))
                 {
-                    if (Int64.TryParse(message["SystemAddress"].ToString(), out Int64 systemID)
+                    if (long.TryParse(message["SystemAddress"].ToString(), out long systemID)
                         && DateTime.TryParse(message["timestamp"].ToString(), null, DateTimeStyles.AdjustToUniversal, out DateTime timestamp))
                     {
                         await UpdateColonisationDatabase(systemID, timestamp);
@@ -103,7 +103,7 @@ namespace elite_dangerous_colonise.Classes
             }
         }
 
-        private async Task UpdateColonisationDatabase(Int64 systemID, DateTime timestamp)
+        private async Task UpdateColonisationDatabase(long systemID, DateTime timestamp)
         {
             await using (NpgsqlConnection conn = await dataSource.OpenConnectionAsync())
             {
@@ -121,7 +121,7 @@ namespace elite_dangerous_colonise.Classes
         /// </summary>
         private async Task UpdateTrailblazer(JToken message)
         {
-            Int64[] validStations =
+            long[] validStations =
             {
                 129033207,
                 129032951,
@@ -133,7 +133,7 @@ namespace elite_dangerous_colonise.Classes
 
             try
             {
-                if (Int64.TryParse(message?["MarketID"].ToString(), out Int64 stationID) && validStations.Contains(stationID))
+                if (long.TryParse(message?["MarketID"].ToString(), out long stationID) && validStations.Contains(stationID))
                 {
                     Vector3 coords = ConvertJsonToVector(message);
                     string name = message["StationName"].ToString();
@@ -152,7 +152,7 @@ namespace elite_dangerous_colonise.Classes
             }
         }
 
-        private async Task UpdateTrailblazerDatabase(Int64 trailblazerID, string trailblazerName, Vector3 coordinates, DateTime timestamp)
+        private async Task UpdateTrailblazerDatabase(long trailblazerID, string trailblazerName, Vector3 coordinates, DateTime timestamp)
         {
             await using (NpgsqlConnection conn = await dataSource.OpenConnectionAsync())
             {
@@ -178,7 +178,7 @@ namespace elite_dangerous_colonise.Classes
 
                 if (JsonReader.InRangeOfSol(coords))
                 {
-                    if (Int64.TryParse(message["SystemAddress"].ToString(), out Int64 systemID)
+                    if (long.TryParse(message["SystemAddress"].ToString(), out long systemID)
                         && DateTime.TryParse(message["timestamp"].ToString(), null, DateTimeStyles.AdjustToUniversal, out DateTime timestamp))
                     {
                         await RemoveClaimFromDatabase(systemID, timestamp);
@@ -194,7 +194,7 @@ namespace elite_dangerous_colonise.Classes
             }
         }
 
-        private async Task RemoveClaimFromDatabase(Int64 systemID, DateTime timestamp)
+        private async Task RemoveClaimFromDatabase(long systemID, DateTime timestamp)
         {
             await using (NpgsqlConnection conn = await dataSource.OpenConnectionAsync())
             {
