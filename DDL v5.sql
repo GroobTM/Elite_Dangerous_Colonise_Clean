@@ -1,55 +1,55 @@
 BEGIN TRANSACTION;
 
 CREATE TYPE "ReserveType" AS ENUM (
-	'None',
-	'Major',
-	'Common',
-	'Low',
-	'Depleted',
-	'Pristine'
+	"None",
+	"Major",
+	"Common",
+	"Low",
+	"Depleted",
+	"Pristine"
 );
 
 CREATE TYPE "RingType" AS ENUM (
-	'Rocky',
-	'MetalRich',
-	'Icy',
-	'Metallic'
+	"Rocky",
+	"MetalRich",
+	"Icy",
+	"Metallic"
 );
 
 CREATE TYPE "HotspotType" AS ENUM (
-	'Alexandrite',
-	'Bauxite',
-	'Benitoite',
-	'Bromellite',
-	'Cobalt',
-	'Coltan',
-	'Gallite',
-	'Gold',
-	'Grandidierite',
-	'HydrogenPeroxide',
-	'Indite',
-	'Lepidolite',
-	'LiquidOxygen',
-	'LithiumHydroxide',
-	'LowTemperatureDiamond',
-	'MethaneClathrate',
-	'MethanolMonohydrateCrystals',
-	'Monazite',
-	'Musgravite',
-	'Opal',
-	'Osmium',
-	'Painite',
-	'Palladium',
-	'Platinum',
-	'Praseodymium',
-	'Rhodplumsite',
-	'Rutile',
-	'Samarium',
-	'Serendibite',
-	'Silver',
-	'Tritium',
-	'Uraninite',
-	'Water'
+	"Alexandrite",
+	"Bauxite",
+	"Benitoite",
+	"Bromellite",
+	"Cobalt",
+	"Coltan",
+	"Gallite",
+	"Gold",
+	"Grandidierite",
+	"HydrogenPeroxide",
+	"Indite",
+	"Lepidolite",
+	"LiquidOxygen",
+	"LithiumHydroxide",
+	"LowTemperatureDiamond",
+	"MethaneClathrate",
+	"MethanolMonohydrateCrystals",
+	"Monazite",
+	"Musgravite",
+	"Opal",
+	"Osmium",
+	"Painite",
+	"Palladium",
+	"Platinum",
+	"Praseodymium",
+	"Rhodplumsite",
+	"Rutile",
+	"Samarium",
+	"Serendibite",
+	"Silver",
+	"Tritium",
+	"Uraninite",
+	"Water"
 );
 
 CREATE TABLE "Factions" (
@@ -75,7 +75,7 @@ CREATE TABLE "Stations" (
 
 CREATE TABLE "UncolonisedStarSystems" (
 	"systemID" BIGINT PRIMARY KEY,
-	"lastUpdated" TIMESTAMP NOT NULL,
+	"lastUpdated" TIMESTAMPTZ NOT NULL,
 	"reserveLevel" "ReserveType" NOT NULL,
 	"landableCount" SMALLINT NOT NULL,
 	"walkableCount" SMALLINT NOT NULL,
@@ -87,12 +87,12 @@ CREATE TABLE "UncolonisedStarSystems" (
 
 CREATE TABLE "UncolonisedStarSystemsAvailability" (
 	"systemID" BIGINT PRIMARY KEY,
-	"isLocked" BOOLEAN NOT NULL,
-	"isClaimed" BOOLEAN NOT NULL,
-	"lockReportCount" SMALLINT NOT NULL,
-	"claimReportCount" SMALLINT NOT NULL,
-	"lockReportDate" TIMESTAMP,
-	"claimReportDate" TIMESTAMP,
+	"isLocked" BOOLEAN NOT NULL DEFAULT FALSE,
+	"isClaimed" BOOLEAN NOT NULL DEFAULT FALSE,
+	"lockReportCount" SMALLINT NOT NULL DEFAULT 0,
+	"claimReportCount" SMALLINT NOT NULL DEFAULT 0,
+	"lockReportDate" TIMESTAMPTZ DEFAULT NULL,
+	"claimReportDate" TIMESTAMPTZ DEFAULT NULL,
 	FOREIGN KEY ("systemID") REFERENCES "StarSystems"("systemID") ON DELETE CASCADE
 );
 
@@ -138,7 +138,7 @@ CREATE TABLE "TrailblazerMegaships" (
 	"trailblazerID" BIGINT PRIMARY KEY,
 	"trailblazerName" VARCHAR(25) NOT NULL,
 	"trailblazerCoords" GEOMETRY(PointZ, 0) NOT NULL,
-	"lastUpdate" TIMESTAMP NOT NULL
+	"lastUpdate" TIMESTAMPTZ NOT NULL
 );
 
 CREATE TABLE "ColonisableStarSystems" (
@@ -156,6 +156,11 @@ CREATE TABLE "TrailblazerDistances" (
 	PRIMARY KEY ("uncolonisedSystemID", "trailblazerID"),
 	FOREIGN KEY ("uncolonisedSystemID") REFERENCES "UncolonisedStarSystems"("systemID") ON DELETE CASCADE,
 	FOREIGN KEY ("trailblazerID") REFERENCES "TrailblazerMegaships"("trailblazerID") ON DELETE CASCADE
+);
+
+CREATE TABLE "StagedStarSystems" (
+	"systemID" BIGINT PRIMARY KEY,
+	FOREIGN KEY ("systemID") REFERENCES "StarSystems"("systemID") ON DELETE CASCADE
 );
 
 CREATE INDEX "idx_F_factionName" ON "Factions"("factionName");
@@ -215,7 +220,7 @@ CREATE TYPE "StationInsertType" AS (
 
 CREATE TYPE "UncolonisedDetailsInsertType" AS (
 	"systemID" BIGINT,
-	"lastUpdated" TIMESTAMP,
+	"lastUpdated" TIMESTAMPTZ,
 	"reserveLevel" "ReserveType",
 	"landableCount" SMALLINT,
 	"walkableCount" SMALLINT,
