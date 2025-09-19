@@ -1,4 +1,4 @@
-CREATE OR REPLACE "InsertStarSystemsBulk"("inputStarSystems" "StarSystemInsertType"[])
+CREATE OR REPLACE FUNCTION "InsertStarSystemsBulk"("inputStarSystems" "StarSystemInsertType"[])
 RETURNS VOID AS $$
 BEGIN
 	CREATE TEMP TABLE "inss" (
@@ -107,13 +107,13 @@ BEGIN
 	ON CONFLICT ("stationID") DO UPDATE
 	SET
 		"stationName" = EXCLUDED."stationName",
-		"controllingFaction" = EXCLUDED."controllingFaction";
+		"controllingFaction" = EXCLUDED."controllingFaction"
 	WHERE (
 		"Stations"."stationName",
 		"Stations"."controllingFaction"
 	)
 	IS DISTINCT FROM (
-		EXCLUDED."stationName"
+		EXCLUDED."stationName",
 		EXCLUDED."controllingFaction"
 	);
 	
@@ -330,7 +330,7 @@ BEGIN
 		"icyBodyCount" = EXCLUDED."icyBodyCount",
 		"organicCount" = EXCLUDED."organicCount",
 		"geologicalsCount" = EXCLUDED."geologicalsCount",
-		"ringCount" = EXCLUDED."ringCount";
+		"ringCount" = EXCLUDED."ringCount"
 	WHERE (
 		"ColonyOverrideCounts"."blackHoleCount",
 		"ColonyOverrideCounts"."neutronStarCount",
@@ -453,7 +453,7 @@ BEGIN
 	INNER JOIN "Rings" r ON inh."systemID" = r."systemID" AND inh."ringName" = r."ringName"
 	ON CONFLICT ("ringID", "hotspotType") DO UPDATE
 	SET
-		"hotspotCount" = EXCLUDED."hotspotCount";
+		"hotspotCount" = EXCLUDED."hotspotCount"
 	WHERE "Hotspots"."hotspotCount" != EXCLUDED."hotspotCount";
 
 	DROP TABLE inh;
@@ -545,10 +545,9 @@ BEGIN
 		"distanceBetween"
 	)
 	SELECT
-		css."uncolonisedSystemID"
+		css."uncolonisedSystemID",
 		tm."trailblazerID",
 		ST_3DDistance(ss."systemCoords", tm."trailblazerCoords")
-	)
 	FROM "TrailblazerMegaships" tm
 	CROSS JOIN (
 		SELECT DISTINCT "uncolonisedSystemID"

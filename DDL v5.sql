@@ -61,8 +61,7 @@ CREATE TABLE "StarSystems" (
 	"systemID" BIGINT PRIMARY KEY,
 	"systemName" VARCHAR(75) NOT NULL,
 	"systemCoords" GEOMETRY(PointZ, 0) NOT NULL,
-	"isColonised" BOOLEAN NOT NULL,
-	FOREIGN KEY ("systemID") REFERENCES "StarSystemCoords"("systemID") ON DELETE CASCADE
+	"isColonised" BOOLEAN NOT NULL
 );
 
 CREATE TABLE "Stations" (
@@ -152,10 +151,10 @@ CREATE TABLE "ColonisableStarSystems" (
 
 CREATE TABLE "TrailblazerDistances" (
 	"uncolonisedSystemID" BIGINT,
-	"trailblazerID" BIGINT NOT NULL,
+	"trailblazerID" BIGINT,
 	"distanceBetween" INT NOT NULL,
-	PRIMARY KEY ("colonisedSystemID", "uncolonisedSystemID"),
-	FOREIGN KEY ("uncolonisedSystemID") REFERENCES "ColonisableStarSystems"("uncolonisedSystemID") ON DELETE CASCADE,
+	PRIMARY KEY ("uncolonisedSystemID", "trailblazerID"),
+	FOREIGN KEY ("uncolonisedSystemID") REFERENCES "UncolonisedStarSystems"("systemID") ON DELETE CASCADE,
 	FOREIGN KEY ("trailblazerID") REFERENCES "TrailblazerMegaships"("trailblazerID") ON DELETE CASCADE
 );
 
