@@ -22,6 +22,7 @@ RETURNS TRIGGER AS $$
 BEGIN
 	IF OLD."isColonised" = FALSE AND NEW."isColonised" = TRUE THEN
 		DELETE FROM "UncolonisedStarSystems" uss WHERE uss."systemID" = NEW."systemID";
+		DELETE FROM "UncolonisedStarSystemsAvailability" ussa WHERE ussa."systemID" = NEW."systemID";
 	END IF;
 	
 	RETURN NULL;
