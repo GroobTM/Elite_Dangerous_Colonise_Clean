@@ -564,19 +564,19 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION "SelectStarSystems"("getColonised" BOOLEAN)
 RETURNS TABLE (
 	"systemID" BIGINT,
-	"coordinateX" NUMERIC(11, 5),
-	"coordinateY" NUMERIC(11, 5),
-	"coordinateZ" NUMERIC(11, 5)
+	"coordinateX" DOUBLE PRECISION,
+	"coordinateY" DOUBLE PRECISION,
+	"coordinateZ" DOUBLE PRECISION
 ) AS $$
 BEGIN
 	RETURN QUERY
 	SELECT 
-		"systemID",
-		ST_X("systemCoords") AS "coordinateX",
-		ST_Y("systemCoords") AS "coordinateY",
-		ST_Z("systemCoords") AS "coordinateZ"
-	FROM "StarSystems"
-	WHERE "isColonised" = "getColonised";
+		ss."systemID",
+		ST_X(ss."systemCoords") AS "coordinateX",
+		ST_Y(ss."systemCoords") AS "coordinateY",
+		ST_Z(ss."systemCoords") AS "coordinateZ"
+	FROM "StarSystems" ss
+	WHERE ss."isColonised" = "getColonised";
 END;
 $$ LANGUAGE plpgsql;
 
@@ -584,9 +584,9 @@ CREATE OR REPLACE FUNCTION "SelectStagedStarSystems"()
 RETURNS TABLE (
 	"systemID" BIGINT,
 	"isColonised" BOOLEAN,
-	"coordinateX" NUMERIC(11, 5),
-	"coordinateY" NUMERIC(11, 5),
-	"coordinateZ" NUMERIC(11, 5)
+	"coordinateX" DOUBLE PRECISION,
+	"coordinateY" DOUBLE PRECISION,
+	"coordinateZ" DOUBLE PRECISION
 ) AS $$
 BEGIN
 	RETURN QUERY

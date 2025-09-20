@@ -4,12 +4,12 @@
     {
         public long SystemID { get; set; }
         public bool IsColonised { get; set; }
-        public decimal CoordinateX { get; set; }
-        public decimal CoordinateY { get; set; }
-        public decimal CoordinateZ { get; set; }
+        public double CoordinateX { get; set; }
+        public double CoordinateY { get; set; }
+        public double CoordinateZ { get; set; }
 
-        public StarSystemStagingResult(long systemID, bool isColonised, decimal coordinateX,
-            decimal coordinateY, decimal coordinateZ)
+        public StarSystemStagingResult(long systemID, bool isColonised, double coordinateX,
+            double coordinateY, double coordinateZ)
         {
             SystemID = systemID;
             IsColonised = isColonised;
@@ -20,12 +20,12 @@
 
         public double[] GetCoordinateList()
         {
-            return new double[3]
-            {
-                (double)CoordinateX,
-                (double)CoordinateY,
-                (double)CoordinateZ
-            };
+            return
+            [
+                CoordinateX,
+                CoordinateY,
+                CoordinateZ
+            ];
         }
     }
 }

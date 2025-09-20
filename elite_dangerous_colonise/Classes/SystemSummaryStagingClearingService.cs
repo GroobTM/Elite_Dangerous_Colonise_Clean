@@ -36,9 +36,9 @@ namespace elite_dangerous_colonise.Classes
                     results.Add(new StarSystemStagingResult(
                         reader.GetInt64(0),
                         reader.GetBoolean(1),
-                        reader.GetDecimal(2),
-                        reader.GetDecimal(3),
-                        reader.GetDecimal(4)
+                        reader.GetDouble(2),
+                        reader.GetDouble(3),
+                        reader.GetDouble(4)
                     ));
                 }
             }
@@ -60,9 +60,9 @@ namespace elite_dangerous_colonise.Classes
                     {
                         results.Add(new SelectStagedStarSystemsResult(
                             reader.GetInt64(0),
-                            reader.GetDecimal(1),
-                            reader.GetDecimal(2),
-                            reader.GetDecimal(3)
+                            reader.GetDouble(1),
+                            reader.GetDouble(2),
+                            reader.GetDouble(3)
                         ));
                     }
                 }
@@ -99,12 +99,7 @@ namespace elite_dangerous_colonise.Classes
 
             foreach (SelectStagedStarSystemsResult targetSystem in targetSystems)
             {
-                double[] coordinates = new double[3]
-                {
-                    (double)targetSystem.CoordinateX,
-                    (double)targetSystem.CoordinateY,
-                    (double)targetSystem.CoordinateZ
-                };
+                double[] coordinates = targetSystem.GetCoordinateList();
 
                 coordinatesToSystemID[(coordinates[0], coordinates[1], coordinates[2])] = targetSystem.SystemID;
 

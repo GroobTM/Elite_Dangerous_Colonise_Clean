@@ -3,17 +3,27 @@
     public class SelectStagedStarSystemsResult
     {
         public long SystemID { get; set; }
-        public decimal CoordinateX { get; set; }
-        public decimal CoordinateY { get; set; }
-        public decimal CoordinateZ { get; set; }
+        public double CoordinateX { get; set; }
+        public double CoordinateY { get; set; }
+        public double CoordinateZ { get; set; }
 
-        public SelectStagedStarSystemsResult(long systemID, decimal coordinateX, decimal coordinateY,
-            decimal coordinateZ)
+        public SelectStagedStarSystemsResult(long systemID, double coordinateX, double coordinateY,
+            double coordinateZ)
         {
             SystemID = systemID;
             CoordinateX = coordinateX;
             CoordinateY = coordinateY;
             CoordinateZ = coordinateZ;
+        }
+
+        public double[] GetCoordinateList()
+        {
+            return
+            [
+                CoordinateX,
+                CoordinateY,
+                CoordinateZ
+            ];
         }
     }
 }
