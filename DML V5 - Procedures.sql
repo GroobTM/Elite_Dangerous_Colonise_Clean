@@ -519,19 +519,13 @@ BEGIN
 	)
 	ON CONFLICT ("trailblazerID") DO UPDATE
 	SET
-		"trailblazerCoordX" = EXCLUDED."trailblazerCoordX",
-		"trailblazerCoordY" = EXCLUDED."trailblazerCoordY",
-		"trailblazerCoordZ" = EXCLUDED."trailblazerCoordZ",
+		"trailblazerCoords" = EXCLUDED."trailblazerCoords",
 		"lastUpdate" = EXCLUDED."lastUpdate"
 	WHERE (
-		"TrailblazerMegaships"."trailblazerCoordX",
-		"TrailblazerMegaships"."trailblazerCoordY",
-		"TrailblazerMegaships"."trailblazerCoordZ"
+		"TrailblazerMegaships"."trailblazerCoords"
 	)
 	IS DISTINCT FROM (
-		EXCLUDED."trailblazerCoordX",
-		EXCLUDED."trailblazerCoordY",
-		EXCLUDED."trailblazerCoordZ"
+		EXCLUDED."trailblazerCoords"
 	);
 END;
 $$ LANGUAGE plpgsql;
