@@ -600,3 +600,30 @@ BEGIN
 	INNER JOIN "StarSystems" ss ON sss."systemID" = ss."systemID";
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION "ClaimStarSystem"("inputSystemID" BIGINT, "inputClaimDate" TIMESTAMPTZ)
+RETURNS VOID AS $$
+BEGIN
+	UPDATE "UncolonisedStarSystemsAvailability"
+	SET
+		"isClaimed" = TRUE,
+		"claimReportDate" = "inputClaimDate"
+	WHERE "systemID" = "inputSystemID"
+	AND "isClaimed" = FALSE
+	AND "inputClaimDate" > "claimReportDate";
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION "UnclaimStarSystem"("inputSystemID" BIGINT, "inputUnclaimDate" TIMESTAMPTZ)
+RETURNS VOID AS $$
+BEGIN
+	UPDATE "UncolonisedStarSystemsAvailability"
+	SET
+		"isClaimed" = FALSE,
+		"claimReportCount" = 0,
+		"claimReportDate" = NULL
+	WHERE "systemID" = "inputSystemID"
+	AND "isClaimed" = TRUE
+	AND "inputUnclaimDate" > "claimReportDate";
+END;
+$$ LANGUAGE plpgsql;

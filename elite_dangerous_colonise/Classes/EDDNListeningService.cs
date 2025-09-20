@@ -107,10 +107,10 @@ namespace elite_dangerous_colonise.Classes
         {
             await using (NpgsqlConnection conn = await dataSource.OpenConnectionAsync())
             {
-                await using NpgsqlCommand command = new NpgsqlCommand("SELECT UpdateSystemColonisationStateFunc(@inputSystemID, @inputUpdateDate)", conn);
+                await using NpgsqlCommand command = new NpgsqlCommand("SELECT \"ClaimStarSystem\"(@inputSystemID, @inputClaimDate)", conn);
                 
                 command.Parameters.AddWithValue("inputSystemID", NpgsqlDbType.Bigint, systemID);
-                command.Parameters.AddWithValue("inputUpdateDate", NpgsqlDbType.Timestamp, timestamp);
+                command.Parameters.AddWithValue("inputClaimDate", NpgsqlDbType.TimestampTz, timestamp);
 
                 await command.ExecuteNonQueryAsync();
             }
@@ -157,14 +157,14 @@ namespace elite_dangerous_colonise.Classes
             await using (NpgsqlConnection conn = await dataSource.OpenConnectionAsync())
             {
                 await using NpgsqlCommand command = new NpgsqlCommand(
-                    "SELECT InsertTrailblazerMegashipFunc(@inputID, @inputName, @inputCoordinateX, @inputCoordinateY, @inputCoordinateZ, @inputUpdateDate)", conn);
+                    "SELECT InsertTrailblazerMegaship(@inputID, @inputName, @inputCoordinateX, @inputCoordinateY, @inputCoordinateZ, @inputUpdateDate)", conn);
 
                 command.Parameters.AddWithValue("inputID", NpgsqlDbType.Bigint, trailblazerID);
                 command.Parameters.AddWithValue("inputName", NpgsqlDbType.Varchar, trailblazerName);
                 command.Parameters.AddWithValue("inputCoordinateX", NpgsqlDbType.Numeric, coordinates.X);
                 command.Parameters.AddWithValue("inputCoordinateY", NpgsqlDbType.Numeric, coordinates.Y);
                 command.Parameters.AddWithValue("inputCoordinateZ", NpgsqlDbType.Numeric, coordinates.Z);
-                command.Parameters.AddWithValue("inputUpdateDate", NpgsqlDbType.Timestamp, timestamp);
+                command.Parameters.AddWithValue("inputUpdateDate", NpgsqlDbType.TimestampTz, timestamp);
 
                 await command.ExecuteNonQueryAsync();
             }
@@ -198,10 +198,10 @@ namespace elite_dangerous_colonise.Classes
         {
             await using (NpgsqlConnection conn = await dataSource.OpenConnectionAsync())
             {
-                await using NpgsqlCommand command = new NpgsqlCommand("SELECT UnclaimSystemFunc(@inputSystemID, @inputUpdateDate)", conn);
+                await using NpgsqlCommand command = new NpgsqlCommand("SELECT \"UnclaimStarSystem\"(@inputSystemID, @inputUnclaimDate)", conn);
 
                 command.Parameters.AddWithValue("inputSystemID", NpgsqlDbType.Bigint, systemID);
-                command.Parameters.AddWithValue("inputUpdateDate", NpgsqlDbType.Timestamp, timestamp);
+                command.Parameters.AddWithValue("inputUnclaimDate", NpgsqlDbType.TimestampTz, timestamp);
 
                 await command.ExecuteNonQueryAsync();
             }
