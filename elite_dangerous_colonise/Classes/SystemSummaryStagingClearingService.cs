@@ -1,15 +1,12 @@
-﻿using System.Data;
-using Microsoft.AspNetCore.SignalR;
-using Accord.Collections;
+﻿using Accord.Collections;
 using elite_dangerous_colonise.Models.Database_Results;
+using elite_dangerous_colonise.Models.Database_Types;
+using Microsoft.AspNetCore.SignalR;
 using Npgsql;
-using System.Text;
 
 namespace elite_dangerous_colonise.Classes
 {
-    /// <summary>
-    /// Defines a SystemSummaryStagingClearingService service.
-    /// </summary>
+    /// <summary> Defines a SystemSummaryStagingClearingService service. </summary>
     public class SystemSummaryStagingClearingService : BackgroundService
     {
         private const double COLONISATION_RANGE = 15;
@@ -18,9 +15,7 @@ namespace elite_dangerous_colonise.Classes
         private readonly SpanshDataDumpDownloadService spanshService;
         private readonly IHubContext<UpdateHub> hubContext;
 
-        /// <summary>
-        /// Creates a SystemSummaryStagingClearingService object.
-        /// </summary>
+        /// <summary> Instantiates a SystemSummaryStagingClearingService object. </summary>
         public SystemSummaryStagingClearingService(NpgsqlDataSource dataSource, SpanshDataDumpDownloadService spanshService,
             IHubContext<UpdateHub> hubContext)
         {
@@ -29,15 +24,11 @@ namespace elite_dangerous_colonise.Classes
             this.hubContext = hubContext;
         }
 
-        /// <summary>
-        /// Gets all the staged systems from the database.
-        /// </summary>
-        /// <returns> A list of staged systems. </returns>
         private async Task<List<StarSystemStagingResult>> SelectSystemSummaryStaging(NpgsqlConnection conn)
         {
             List<StarSystemStagingResult> results = new List<StarSystemStagingResult>();
 
-            await using (NpgsqlCommand command = new NpgsqlCommand("SELECT * FROM StarSystemStaging", conn))
+            await using (NpgsqlCommand command = new NpgsqlCommand("SELECT * FROM \"SelectStagedStarSystems\"()", conn))
             await using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
             {
                 while (await reader.ReadAsync())
@@ -47,8 +38,7 @@ namespace elite_dangerous_colonise.Classes
                         reader.GetBoolean(1),
                         reader.GetDecimal(2),
                         reader.GetDecimal(3),
-                        reader.GetDecimal(4),
-                        reader.GetString(5)
+                        reader.GetDecimal(4)
                     ));
                 }
             }
@@ -56,16 +46,11 @@ namespace elite_dangerous_colonise.Classes
             return results;
         }
 
-        /// <summary>
-        /// Gets all the colonised or uncolonised system summaries from the database.
-        /// </summary>
-        /// <param name="getColonised"> If the method should get colonised or uncolonised systems. </param>
-        /// <returns> A list of system summaries. </returns>
-        private async Task<List<GetSystemSummaryResult>> SelectSystemSummary(NpgsqlConnection conn, bool getColonised)
+        private async Task<List<SelectStagedStarSystemsResult>> SelectSystemSummary(NpgsqlConnection conn, bool getColonised)
         {
-            List<GetSystemSummaryResult> results = new List<GetSystemSummaryResult>();
+            List<SelectStagedStarSystemsResult> results = new List<SelectStagedStarSystemsResult>();
 
-            await using (NpgsqlCommand command = new NpgsqlCommand("SELECT * FROM GetSystemSummaryFunc(@getColonised)", conn))
+            await using (NpgsqlCommand command = new NpgsqlCommand("SELECT * FROM \"SelectStarSystems\"(@getColonised)", conn))
             {
                 command.Parameters.AddWithValue("getColonised", getColonised);
 
@@ -73,7 +58,7 @@ namespace elite_dangerous_colonise.Classes
                 {
                     while (await reader.ReadAsync())
                     {
-                        results.Add(new GetSystemSummaryResult(
+                        results.Add(new SelectStagedStarSystemsResult(
                             reader.GetInt64(0),
                             reader.GetDecimal(1),
                             reader.GetDecimal(2),
@@ -86,13 +71,9 @@ namespace elite_dangerous_colonise.Classes
             return results;
         }
 
-        /// <summary>
-        /// Removes the star system from StarSystemStaging.
-        /// </summary>
-        /// <param name="starSystem">The system to remove.</param>
-        private async Task RemoveFromStaging(NpgsqlConnection conn, StarSystemStagingResult starSystem)
+        private async Task RemoveStagedStarSystems(NpgsqlConnection conn, StarSystemStagingResult starSystem)
         {
-            await using (NpgsqlCommand command = new NpgsqlCommand("DELETE FROM StarSystemStaging WHERE systemID = @systemID", conn))
+            await using (NpgsqlCommand command = new NpgsqlCommand("DELETE FROM \"StagedStarSystems\" WHERE \"systemID\" = @systemID", conn))
             {
                 command.Parameters.AddWithValue("systemID", starSystem.SystemID);
 
@@ -100,78 +81,23 @@ namespace elite_dangerous_colonise.Classes
             }
         }
 
-        /// <summary>
-        /// Removes the star system's nearby ID records from NearbyStarSystems.
-        /// </summary>
-        /// <param name="starSystem">The system to remove the IDs of.</param>
-        private async Task RemoveNearbyIDs(NpgsqlConnection conn, StarSystemStagingResult starSystem)
+        private async Task InsertNearbySystems(NpgsqlConnection conn, List<ColonisableInsertType> colonisableStarSystems)
         {
-            await using (NpgsqlCommand command = new NpgsqlCommand("DELETE FROM NearbyStarSystems WHERE nearbySystemID = @systemID", conn))
+            await using (NpgsqlCommand command = new NpgsqlCommand("SELECT \"InsertColonisableStarSystemsBulk\"(@inputColonisables)", conn))
             {
-                command.Parameters.AddWithValue("systemID", starSystem.SystemID);
+                command.Parameters.AddWithValue("inputColonisables", colonisableStarSystems.ToArray());
 
                 await command.ExecuteNonQueryAsync();
             }
         }
-
-        /// <summary>
-        /// Removes the star system's nearby ID records from NearbyStarSystems.
-        /// </summary>
-        /// <param name="starSystem">The system to remove the bodies of.</param>
-        private async Task RemoveOldBodies(NpgsqlConnection conn, StarSystemStagingResult starSystem)
-        {
-            await using (NpgsqlCommand command = new NpgsqlCommand("DELETE FROM Bodies WHERE systemID = @systemID", conn))
-            {
-                command.Parameters.AddWithValue("systemID", starSystem.SystemID);
-
-                await command.ExecuteNonQueryAsync();
-            }
-        }
-
-        /// <summary>
-        /// Inserts a batch of system combinations into the NearbyStarSystems tables.
-        /// </summary>
-        /// <param name="nearbySystems"> A list of system combinations to insert. </param>
-        private async Task InsertNearbySystems(NpgsqlConnection conn, List<NearbyStarSystemsResult> nearbySystems)
-        {
-            StringBuilder sb = new StringBuilder("INSERT INTO NearbyStarSystems (colonisedSystemID, nearbySystemID) VALUES ");
-            List<NpgsqlParameter> parameters = new List<NpgsqlParameter>();
-
-            for (int i = 0; i < nearbySystems.Count; i++)
-            {
-                sb.Append($"(@colonisedSystemID_{i}, @nearbySystemID_{i})");
-
-                if (i < nearbySystems.Count - 1)
-                {
-                    sb.Append(", ");
-                }
-
-                parameters.Add(new NpgsqlParameter($"colonisedSystemID_{i}", nearbySystems[i].ColonisedSystemID));
-                parameters.Add(new NpgsqlParameter($"nearbySystemID_{i}", nearbySystems[i].NearbySystemID));
-            }
-
-            sb.Append(" ON CONFLICT (colonisedSystemID, nearbySystemID) DO NOTHING");
-
-            await using (NpgsqlCommand command = new NpgsqlCommand(sb.ToString(), conn))
-            {
-                command.Parameters.AddRange(parameters.ToArray());
-
-                await command.ExecuteNonQueryAsync();
-            }
-        }
-
-        /// <summary>
-        /// Creates a KDTree for a list of systems.
-        /// </summary>
-        /// <param name="targetSystems"> A list of systems used to create the tree. </param>
-        /// <returns> A Coordinate-ID dictionary and a KDTree. </returns>
-        private (Dictionary<(double, double, double), long>, KDTree) CreateKDTree(List<GetSystemSummaryResult> targetSystems)
+        
+        private (Dictionary<(double, double, double), long>, KDTree) CreateKDTree(List<SelectStagedStarSystemsResult> targetSystems)
         {
             Dictionary<(double, double, double), long> coordinatesToSystemID = new Dictionary<(double, double, double), long>();
 
             KDTree kdTree = new KDTree(3);
 
-            foreach (GetSystemSummaryResult targetSystem in targetSystems)
+            foreach (SelectStagedStarSystemsResult targetSystem in targetSystems)
             {
                 double[] coordinates = new double[3]
                 {
@@ -188,24 +114,13 @@ namespace elite_dangerous_colonise.Classes
             return (coordinatesToSystemID, kdTree);
         }
 
-        /// <summary>
-        /// Creates a list of system combinations for systems in range of the new system.
-        /// </summary>
-        /// <param name="sourceSystem"> The new system. </param>
-        /// <param name="dictAndKDTree"> A coordinate-ID dictionary and a KDTree. </param>
-        /// <returns> A list of nearby system combinations. </returns>
-        private List<NearbyStarSystemsResult> CreateLinksForSystem(StarSystemStagingResult sourceSystem, (Dictionary<(double, double, double), long>, KDTree) dictAndKDTree)
+        private List<ColonisableInsertType> CreateLinksForSystem(StarSystemStagingResult sourceSystem, (Dictionary<(double, double, double), long>, KDTree) dictAndKDTree)
         {
-            List<NearbyStarSystemsResult> nearbyStarSystems = new List<NearbyStarSystemsResult>();
+            List<ColonisableInsertType> colonisableStarSystems = new List<ColonisableInsertType>();
 
             (Dictionary<(double, double, double), long> targetSystemCoordsToIDs, KDTree targetSystemTree) = dictAndKDTree;
 
-            double[] sourceCoordinates = new double[3]
-            {
-                (double)sourceSystem.CoordinateX,
-                (double)sourceSystem.CoordinateY,
-                (double)sourceSystem.CoordinateZ
-            };
+            double[] sourceCoordinates = sourceSystem.GetCoordinateList();
 
             List<NodeDistance<KDTreeNode>> nearestNodes = targetSystemTree.Nearest(sourceCoordinates, radius: COLONISATION_RANGE);
 
@@ -217,22 +132,19 @@ namespace elite_dangerous_colonise.Classes
                     {
                         if (sourceSystem.IsColonised)
                         {
-                            nearbyStarSystems.Add(new NearbyStarSystemsResult(sourceSystem.SystemID, targetID));
+                            colonisableStarSystems.Add(new ColonisableInsertType(sourceSystem.SystemID, targetID));
                         }
                         else
                         {
-                            nearbyStarSystems.Add(new NearbyStarSystemsResult(targetID, sourceSystem.SystemID));
+                            colonisableStarSystems.Add(new ColonisableInsertType(targetID, sourceSystem.SystemID));
                         }
                     }
                 }
             }
 
-            return nearbyStarSystems;
+            return colonisableStarSystems;
         }
 
-        /// <summary>
-        /// Processes all the staged systems and moves them to the StarSystemSummary table and adds any links to the NearbyStarSystem table.
-        /// </summary>
         private async Task ProcessStagedSystemSummaries(NpgsqlConnection conn)
         {
             List<StarSystemStagingResult> stagedSystems = await SelectSystemSummaryStaging(conn);
@@ -245,49 +157,33 @@ namespace elite_dangerous_colonise.Classes
 
                 foreach (StarSystemStagingResult stagedSystem in stagedSystems)
                 {
-                    List<NearbyStarSystemsResult> nearbyStarSystems = new List<NearbyStarSystemsResult>();
+                    List<ColonisableInsertType> colonisableStarSystems = new List<ColonisableInsertType>();
 
                     if (stagedSystem.IsColonised)
                     {
-                        nearbyStarSystems = CreateLinksForSystem(stagedSystem, (uncolonisedSystemCoordsToIDs, uncolonisedSystemTree));
+                        colonisableStarSystems = CreateLinksForSystem(stagedSystem, (uncolonisedSystemCoordsToIDs, uncolonisedSystemTree));
                     }
                     else
                     {
-                        nearbyStarSystems = CreateLinksForSystem(stagedSystem, (colonisedSystemCoordsToIDs, colonisedSystemTree));
+                        colonisableStarSystems = CreateLinksForSystem(stagedSystem, (colonisedSystemCoordsToIDs, colonisedSystemTree));
                     }
                             
                     using (NpgsqlTransaction transaction = await conn.BeginTransactionAsync())
                     {
                         try
                         {
-                            await RemoveFromStaging(conn, stagedSystem);
+                            await RemoveStagedStarSystems(conn, stagedSystem);
 
-                            if (stagedSystem.QueryType == "UPDATE")
+                            if (colonisableStarSystems.Count > 0)
                             {
-                                await RemoveOldBodies(conn, stagedSystem);
-                                await RemoveNearbyIDs(conn, stagedSystem);
-                            }
-                            else if (stagedSystem.QueryType != "INSERT")
-                            {
-                                throw new InvalidQueryTypeException($"System {stagedSystem.SystemID} has invalid QueryType {stagedSystem.QueryType}." +
-                                    $"\r\nFurther staging processing blocked. Manual fix required in database.");
-                            }
-
-                            if (nearbyStarSystems.Count > 0)
-                            {
-                                await InsertNearbySystems(conn, nearbyStarSystems);
+                                await InsertNearbySystems(conn, colonisableStarSystems);
                             }
 
                             await transaction.CommitAsync();
 
-                            Logger.LogInformation("System Summary Staging Clearing Service", 3, $"System {stagedSystem.SystemID} moved to StarSystemSummary.");
+                            Logger.LogInformation("System Summary Staging Clearing Service", 3, $"System {stagedSystem.SystemID} moved to ColonisableStarSystems.");
 
-                            double[] coordinates = new double[3]
-                            {
-                                (double)stagedSystem.CoordinateX,
-                                (double)stagedSystem.CoordinateY,
-                                (double)stagedSystem.CoordinateZ
-                            };
+                            double[] coordinates = stagedSystem.GetCoordinateList();
 
                             if (stagedSystem.IsColonised)
                             {
@@ -301,11 +197,6 @@ namespace elite_dangerous_colonise.Classes
 
                                 uncolonisedSystemTree.Add(coordinates);
                             }
-                        }
-                        catch (InvalidQueryTypeException ex)
-                        {
-                            await transaction.RollbackAsync();
-                            Logger.LogError("System Summary Staging Clearing Service", 5, ex);
                         }
                         catch (NpgsqlException ex)
                         {
@@ -324,25 +215,11 @@ namespace elite_dangerous_colonise.Classes
 
         }
 
-        /// <summary>
-        /// Calculates the values for the NearbyStarSystemValue table.
-        /// </summary>
-        /// <returns></returns>
-        private async Task CalculateNearbyStarSystemValue(NpgsqlConnection conn)
-        {
-            Logger.LogInformation("System Summary Staging Clearing Service", 9, "Updating Systems values table.");
-
-            await using (NpgsqlCommand command = new NpgsqlCommand("SELECT CalculateNearbyStarSystemsValuesFunc()", conn))
-            {
-                await command.ExecuteNonQueryAsync();
-            }
-        }
-
         private async Task CalculateTrailblazerDistances(NpgsqlConnection conn)
         {
             Logger.LogInformation("System Summary Staging Clearing Service", 10, "Updating Trailblazers distance table.");
 
-            await using (NpgsqlCommand command = new NpgsqlCommand("SELECT CalculateTrailblazerDistancesFunc()", conn))
+            await using (NpgsqlCommand command = new NpgsqlCommand("SELECT InsertTrailblazerDistances()", conn))
             {
                 await command.ExecuteNonQueryAsync();
             }
@@ -352,7 +229,6 @@ namespace elite_dangerous_colonise.Classes
         {
             await using (NpgsqlTransaction transaction = await conn.BeginTransactionAsync())
             {
-                await CalculateNearbyStarSystemValue(conn);
                 await CalculateTrailblazerDistances(conn);
 
                 await transaction.CommitAsync();
@@ -361,9 +237,6 @@ namespace elite_dangerous_colonise.Classes
             }
         }
 
-        /// <summary>
-        /// Runs the background service on event invoke.
-        /// </summary>
         private async Task OnDataDumpProcessingComplete(object? sender, EventArgs e)
         {
             Logger.LogInformation("System Summary Staging Clearing Service", 1, "Running staged system processing.");
@@ -390,9 +263,6 @@ namespace elite_dangerous_colonise.Classes
             }
         }
 
-        /// <summary>
-        /// Starts the background service.
-        /// </summary>
         protected override Task ExecuteAsync(CancellationToken cancellationToken)
         {
             Logger.LogInformation("System Summary Staging Clearing Service", 0, "Staging Clearing Service starting.");
@@ -402,9 +272,7 @@ namespace elite_dangerous_colonise.Classes
             return Task.CompletedTask;
         }
 
-        /// <summary>
-        /// Stops the background service.
-        /// </summary>
+        /// <summary> Stops the background service. </summary>
         /// <returns> A completed task. </returns>
         public override Task StopAsync(CancellationToken cancellationToken)
         { 
@@ -413,15 +281,6 @@ namespace elite_dangerous_colonise.Classes
             Logger.LogInformation("System Summary Staging Clearing Service", 8, "Staging Clearing Service stopped.");
 
             return Task.CompletedTask;
-        }
-
-        /// <summary>
-        /// Defines a InvalidQueryTypeException exception.
-        /// </summary>
-        private class InvalidQueryTypeException : Exception 
-        {
-            public InvalidQueryTypeException() : base() { }
-            public InvalidQueryTypeException(string message) : base(message) { }
         }
     }
 }
