@@ -37,7 +37,8 @@ CREATE OR REPLACE FUNCTION "TriggerAddNewSystemToStaging"()
 RETURNS TRIGGER AS $$
 BEGIN
 	INSERT INTO "StagedStarSystems" ("systemID")
-	VALUES (NEW."systemID");
+	VALUES (NEW."systemID")
+	ON CONFLICT("systemID") DO NOTHING;
 	
 	RETURN NULL;
 END;
@@ -53,7 +54,8 @@ RETURNS TRIGGER AS $$
 BEGIN
 	IF OLD."isColonised" = FALSE AND NEW."isColonised" = TRUE THEN
 		INSERT INTO "StagedStarSystems" ("systemID")
-		VALUES (NEW."systemID");
+		VALUES (NEW."systemID")
+		ON CONFLICT("systemID") DO NOTHING;
 	END IF;
 	
 	RETURN NULL;
