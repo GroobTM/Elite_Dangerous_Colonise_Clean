@@ -533,44 +533,24 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION "InsertTrailblazerDistances"()
 RETURNS VOID AS $$
 BEGIN
+	WITH "UncalculatedDistances" AS (
+		SELECT DISTINCT css."uncolonisedSystemID"
+		FROM "ColonisableStarSystems" css
+		LEFT JOIN "TrailblazerDistances" td ON css."uncolonisedSystemID" = td."uncolonisedSystemID"
+		WHERE td."uncolonisedSystemID" IS NULL
+	)
 	INSERT INTO "TrailblazerDistances" (
 		"uncolonisedSystemID",
 		"trailblazerID",
 		"distanceBetween"
 	)
 	SELECT
-		css."uncolonisedSystemID",
+		ud."uncolonisedSystemID",
 		tm."trailblazerID",
 		ST_3DDistance(ss."systemCoords", tm."trailblazerCoords")
-	FROM "TrailblazerMegaships" tm
-	CROSS JOIN (
-		SELECT DISTINCT "uncolonisedSystemID"
-		FROM "ColonisableStarSystems"
-		WHERE "uncolonisedSystemID" NOT IN (
-			SELECT DISTINCT "uncolonisedSystemID"
-			FROM "TrailblazerDistances"
-		)
-	) AS css
-	INNER JOIN "StarSystems" ss ON css."uncolonisedSystemID" = ss."systemID";
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION "SelectStarSystems"("getColonised" BOOLEAN)
-RETURNS TABLE (
-	"systemID" BIGINT,
-	"coordinateX" DOUBLE PRECISION,
-	"coordinateY" DOUBLE PRECISION,
-	"coordinateZ" DOUBLE PRECISION
-) AS $$
-BEGIN
-	RETURN QUERY
-	SELECT 
-		ss."systemID",
-		ST_X(ss."systemCoords") AS "coordinateX",
-		ST_Y(ss."systemCoords") AS "coordinateY",
-		ST_Z(ss."systemCoords") AS "coordinateZ"
-	FROM "StarSystems" ss
-	WHERE ss."isColonised" = "getColonised";
+	FROM "UncalculatedDistances" ud	
+	CROSS JOIN "TrailblazerMegaships" tm
+	INNER JOIN "StarSystems" ss ON ud."uncolonisedSystemID" = ss."systemID";
 END;
 $$ LANGUAGE plpgsql;
 
@@ -600,27 +580,6 @@ BEGIN
 	AND target."isColonised" = NOT "insertColonised"
 	AND source."systemID" != target."systemID"
 	ON CONFLICT("colonisedSystemID", "uncolonisedSystemID") DO NOTHING;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION "SelectStagedStarSystems"()
-RETURNS TABLE (
-	"systemID" BIGINT,
-	"isColonised" BOOLEAN,
-	"coordinateX" DOUBLE PRECISION,
-	"coordinateY" DOUBLE PRECISION,
-	"coordinateZ" DOUBLE PRECISION
-) AS $$
-BEGIN
-	RETURN QUERY
-	SELECT 
-		sss."systemID",
-		ss."isColonised",
-		ST_X(ss."systemCoords") AS "coordinateX",
-		ST_Y(ss."systemCoords") AS "coordinateY",
-		ST_Z(ss."systemCoords") AS "coordinateZ"
-	FROM "StagedStarSystems" sss
-	INNER JOIN "StarSystems" ss ON sss."systemID" = ss."systemID";
 END;
 $$ LANGUAGE plpgsql;
 

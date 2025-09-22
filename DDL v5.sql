@@ -194,6 +194,7 @@ CREATE INDEX "idx_R_systemID" ON "Rings"("systemID");
 CREATE INDEX "idx_H_ringID" ON "Hotspots"("ringID");
 CREATE INDEX "idx_CSS_colonisedSystemID" ON "ColonisableStarSystems"("colonisedSystemID");
 CREATE INDEX "idx_CSS_uncolonisedSystemID" ON "ColonisableStarSystems"("uncolonisedSystemID");
+CREATE INDEX "idx_TD_uncolonisedSystemID" ON "TrailblazerDistances"("uncolonisedSystemID");
 CREATE INDEX "idx_TD_trailblazerID" ON "TrailblazerDistances"("trailblazerID");
 CREATE INDEX "idx_TD_distanceBetween" ON "TrailblazerDistances"("distanceBetween");
 
