@@ -5,7 +5,7 @@ using Npgsql;
 using elite_dangerous_colonise.Classes;
 using elite_dangerous_colonise.Models.Database_Types;
 
-const bool DEBUG = true;
+const bool DEBUG = false;
 
 var builder = WebApplication.CreateBuilder(args);
 

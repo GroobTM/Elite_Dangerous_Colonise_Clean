@@ -165,6 +165,7 @@ CREATE TABLE "StagedStarSystems" (
 
 CREATE INDEX "idx_F_factionName" ON "Factions"("factionName");
 CREATE INDEX "idx_SS_systemName" ON "StarSystems"("systemName");
+CREATE INDEX "idx_SS_isColonised" ON "StarSystems"("isColonised");
 CREATE INDEX "idx_S_systemID" ON "Stations"("systemID");
 CREATE INDEX "idx_S_controllingFaction" ON "Stations"("controllingFaction");
 CREATE INDEX "idx_USS_lastUpdated" ON "UncolonisedStarSystems"("lastUpdated");

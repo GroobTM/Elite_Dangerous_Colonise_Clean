@@ -547,7 +547,7 @@ BEGIN
 		SELECT DISTINCT "uncolonisedSystemID"
 		FROM "ColonisableStarSystems"
 		WHERE "uncolonisedSystemID" NOT IN (
-			SELECT "uncolonisedSystemID"
+			SELECT DISTINCT "uncolonisedSystemID"
 			FROM "TrailblazerDistances"
 		)
 	) AS css
@@ -571,6 +571,35 @@ BEGIN
 		ST_Z(ss."systemCoords") AS "coordinateZ"
 	FROM "StarSystems" ss
 	WHERE ss."isColonised" = "getColonised";
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION "InsertColonisableStarSystemsFromStaged"("insertColonised" BOOLEAN)
+RETURNS VOID AS $$
+BEGIN
+	INSERT INTO "ColonisableStarSystems" (
+		"colonisedSystemID",
+		"uncolonisedSystemID"
+	)
+	SELECT
+		CASE
+			WHEN "insertColonised"
+				THEN source."systemID"
+				ELSE target."systemID"
+		END AS "colonisedSystemID",
+		
+		CASE
+			WHEN "insertColonised"
+				THEN target."systemID"
+				ELSE source."systemID"
+		END AS "colonisedSystemID"
+	FROM "StagedStarSystems" sss
+	INNER JOIN "StarSystems" source ON sss."systemID" = source."systemID"
+	INNER JOIN "StarSystems" target ON ST_DWithin(source."systemCoords", target."systemCoords", 15)
+	WHERE source."isColonised" = "insertColonised"
+	AND target."isColonised" = NOT "insertColonised"
+	AND source."systemID" != target."systemID"
+	ON CONFLICT("colonisedSystemID", "uncolonisedSystemID") DO NOTHING;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -604,7 +633,7 @@ BEGIN
 		"claimReportDate" = "inputClaimDate"
 	WHERE "systemID" = "inputSystemID"
 	AND "isClaimed" = FALSE
-	AND "inputClaimDate" > "claimReportDate";
+	AND ("inputClaimDate" > "claimReportDate" OR "claimReportDate" IS NULL);
 END;
 $$ LANGUAGE plpgsql;
 
@@ -615,7 +644,7 @@ BEGIN
 	SET
 		"isClaimed" = FALSE,
 		"claimReportCount" = 0,
-		"claimReportDate" = NULL
+		"claimReportDate" = "inputUnclaimDate"
 	WHERE "systemID" = "inputSystemID"
 	AND "isClaimed" = TRUE
 	AND "inputUnclaimDate" > "claimReportDate";

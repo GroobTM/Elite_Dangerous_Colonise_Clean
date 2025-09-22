@@ -7,14 +7,10 @@ using NetMQ;
 using Newtonsoft.Json.Linq;
 using Npgsql;
 using NpgsqlTypes;
-using System;
-using NuGet.Packaging.Signing;
 
 namespace elite_dangerous_colonise.Classes
 {
-    /// <summary>
-    /// Defines a EDDNListeningService.
-    /// </summary>
+    /// <summary> Defines a EDDNListeningService. </summary>
     public class EDDNListeningService : BackgroundService
     {
         private const string EDDN_ADDRESS = "tcp://eddn.edcd.io:9500";
@@ -24,9 +20,7 @@ namespace elite_dangerous_colonise.Classes
         private List<Task> colonyShipUpdates = new List<Task>();
         private List<Task> trailblazerUpdates = new List<Task>();
 
-        /// <summary>
-        /// Creates a EDDNListeningService object.
-        /// </summary>
+        /// <summary> Instantiates a EDDNListeningService object. </summary>
         public EDDNListeningService(NpgsqlDataSource dataSource)
         {
             this.dataSource = dataSource;
@@ -52,11 +46,6 @@ namespace elite_dangerous_colonise.Classes
             return messageStationName.Contains("Trailblazer");
         }
 
-        /// <summary>
-        /// Decompresses the recieved message.
-        /// </summary>
-        /// <param name="compressedMessage"> The compressed message byte array. </param>
-        /// <returns> The decompressed message string. </returns>
         private async Task<string> DecompressMessage(byte[] compressedMessage)
         {
             return await Task.Run(() =>
@@ -76,9 +65,6 @@ namespace elite_dangerous_colonise.Classes
             return new Vector3(coords[0], coords[1], coords[2]);
         }
 
-        /// <summary>
-        /// Sends a database update query to update the colonisation status of known systems.
-        /// </summary>
         private async Task UpdateColonisingTracker(JToken message)
         {
             try
@@ -90,6 +76,7 @@ namespace elite_dangerous_colonise.Classes
                     if (long.TryParse(message["SystemAddress"].ToString(), out long systemID)
                         && DateTime.TryParse(message["timestamp"].ToString(), null, DateTimeStyles.AdjustToUniversal, out DateTime timestamp))
                     {
+                        timestamp = DateTime.SpecifyKind(timestamp, DateTimeKind.Utc);
                         await UpdateColonisationDatabase(systemID, timestamp);
 
                         Logger.LogInformation("EDDN Listening Service", 1, $"Updating system {systemID}.");
@@ -116,9 +103,6 @@ namespace elite_dangerous_colonise.Classes
             }
         }
 
-        /// <summary>
-        /// Sends a database insert/update query to insert/update the position of the Trailblazer megaships.
-        /// </summary>
         private async Task UpdateTrailblazer(JToken message)
         {
             long[] validStations =
@@ -140,6 +124,7 @@ namespace elite_dangerous_colonise.Classes
 
                     if (DateTime.TryParse(message["timestamp"].ToString(), null, DateTimeStyles.AdjustToUniversal, out DateTime timestamp))
                     {
+                        timestamp = DateTime.SpecifyKind(timestamp, DateTimeKind.Utc);
                         await UpdateTrailblazerDatabase(stationID, name, coords, timestamp);
 
                         Logger.LogInformation("EDDN Listening Service", 8, $"Updating {name}.");
@@ -157,7 +142,7 @@ namespace elite_dangerous_colonise.Classes
             await using (NpgsqlConnection conn = await dataSource.OpenConnectionAsync())
             {
                 await using NpgsqlCommand command = new NpgsqlCommand(
-                    "SELECT InsertTrailblazerMegaship(@inputID, @inputName, @inputCoordinateX, @inputCoordinateY, @inputCoordinateZ, @inputUpdateDate)", conn);
+                    "SELECT \"InsertTrailblazerMegaship\"(@inputID, @inputName, @inputCoordinateX, @inputCoordinateY, @inputCoordinateZ, @inputUpdateDate)", conn);
 
                 command.Parameters.AddWithValue("inputID", NpgsqlDbType.Bigint, trailblazerID);
                 command.Parameters.AddWithValue("inputName", NpgsqlDbType.Varchar, trailblazerName);
@@ -207,9 +192,6 @@ namespace elite_dangerous_colonise.Classes
             }
         }
 
-        /// <summary>
-        /// Listens to the EDDN socket for journal events and updates the database with the colonisation status of systems.
-        /// </summary>
         private async Task ListenToEDDN(CancellationToken cancellationToken)
         {
             using (SubscriberSocket subscriber = new SubscriberSocket())
@@ -260,9 +242,6 @@ namespace elite_dangerous_colonise.Classes
             }
         }
 
-        /// <summary>
-        /// Runs the ListenToEDDN method on a new thread.
-        /// </summary>
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
             await Task.Run(() => ListenToEDDN(cancellationToken), cancellationToken);
