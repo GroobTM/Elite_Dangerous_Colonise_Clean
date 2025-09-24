@@ -108,6 +108,8 @@ namespace elite_dangerous_colonise.Classes
                 RingCount * MEH_WEIGHT;
         }
 
+        /// <summary> Adds the BodyCount to the data lists. </summary>
+        /// <param name="starSystem"> The system that has the BodyCount object. </param>
         public void AddToDataLists(DatabaseDataLists dataLists, UncolonisedStarSystem starSystem)
         {
             dataLists.UncolonisedDetails.Add(
@@ -138,6 +140,28 @@ namespace elite_dangerous_colonise.Classes
                     RingCount
                 )
             );
+        }
+
+        /// <summary> Checks if the system has no bodies and less than or equal to 5 boring stars. </summary>
+        public bool IsBoringlyEmpty()
+        {
+            return
+                BlackHoleCount == 0
+                && NeutronStarCount == 0
+                && WhiteDwarves == 0
+                && OtherStarCount <= 5
+                && EarthLikeCount == 0
+                && WaterWorldCount == 0
+                && AmmoniaWorldCount == 0
+                && GasGiantCount == 0
+                && HighMetalContentCount == 0
+                && MetalRichCount == 0
+                && RockyIceBodyCount == 0
+                && RockBodyCount == 0
+                && IcyBodyCount == 0
+                && OrganicCount == 0
+                && GeologicalsCount == 0
+                && RingCount == 0;
         }
     }
 }

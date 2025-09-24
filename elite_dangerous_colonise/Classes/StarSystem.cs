@@ -147,9 +147,12 @@ namespace elite_dangerous_colonise.Classes
 
         public override void AddToDataLists(DatabaseDataLists dataLists)
         {
-            AddSystemToDataList(dataLists);
-            AddSystemDetailsToDataLists(dataLists);
-            AddRingsToDataList(dataLists);
+            if (SystemValue > 0 || !BodyCounts.IsBoringlyEmpty())
+            {
+                AddSystemToDataList(dataLists);
+                AddSystemDetailsToDataLists(dataLists);
+                AddRingsToDataList(dataLists);
+            }
         }
     }
 }
