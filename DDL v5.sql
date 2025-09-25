@@ -163,6 +163,20 @@ CREATE TABLE "StagedStarSystems" (
 	FOREIGN KEY ("systemID") REFERENCES "StarSystems"("systemID") ON DELETE CASCADE
 );
 
+CREATE MATERIALIZED VIEW "DistinctColonisableStarSystems" AS
+SELECT DISTINCT "uncolonisedSystemID" FROM "ColonisableStarSystems";
+
+CREATE MATERIALIZED VIEW "DistinctColonisableStarSystemsCount" AS
+SELECT 0::SMALLINT AS "key", COUNT("uncolonisedSystemID") "totalCount"
+FROM "DistinctColonisableStarSystems" dcss
+WHERE EXISTS (
+	SELECT 1
+	FROM "UncolonisedStarSystemsAvailability" ussa
+	WHERE ussa."systemID" = dcss."uncolonisedSystemID"
+	AND ussa."isLocked" = FALSE
+	AND ussa."isClaimed" = FALSE
+);
+
 CREATE INDEX "idx_F_factionName" ON "Factions"("factionName");
 CREATE INDEX "idx_SS_systemName" ON "StarSystems"("systemName");
 CREATE INDEX "idx_SS_isColonised" ON "StarSystems"("isColonised");
@@ -198,11 +212,13 @@ CREATE INDEX "idx_TD_uncolonisedSystemID" ON "TrailblazerDistances"("uncolonised
 CREATE INDEX "idx_TD_trailblazerID" ON "TrailblazerDistances"("trailblazerID");
 CREATE INDEX "idx_TD_distanceBetween" ON "TrailblazerDistances"("distanceBetween");
 
-CREATE INDEX "idx_USSA_isLocked" ON "UncolonisedStarSystemsAvailability"("isLocked") WHERE "isLocked" = TRUE;
-CREATE INDEX "idx_USSA_isClaimed" ON "UncolonisedStarSystemsAvailability"("isClaimed") WHERE "isClaimed" = TRUE;
+CREATE INDEX "idx_USSA_isLocked_isClaimed" ON "UncolonisedStarSystemsAvailability"("isLocked", "isClaimed");
 
 CREATE INDEX "idx_SS_systemCoords" ON "StarSystems" USING GIST("systemCoords");
 CREATE INDEX "idx_TM_trailblazerCoords" ON "TrailblazerMegaships" USING GIST("trailblazerCoords");
+
+CREATE UNIQUE INDEX "idx_DCSS_uncolonisedSystemID" ON "DistinctColonisableStarSystems"("uncolonisedSystemID");
+CREATE UNIQUE INDEX "idx_DCSSC_key" ON "DistinctColonisableStarSystemsCount"("key");
 
 CREATE TYPE "StarSystemInsertType" AS (
     "systemID" BIGINT,

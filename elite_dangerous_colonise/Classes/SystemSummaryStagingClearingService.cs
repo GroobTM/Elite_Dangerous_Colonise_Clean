@@ -71,10 +71,20 @@ namespace elite_dangerous_colonise.Classes
             }
         }
 
+        private async Task RefreshDistinctColonisableStarSystems(NpgsqlConnection conn)
+        {
+            Logger.LogInformation("System Summary Staging Clearing Service", 9, "Refreshing DistinctColonisableStarSystems view.");
+
+            await using (NpgsqlCommand command = new NpgsqlCommand("REFRESH MATERIALIZED VIEW \"DistinctColonisableStarSystems\"", conn))
+            {
+                await command.ExecuteNonQueryAsync();
+            }
+        }
         private async Task RefreshValuesTables(NpgsqlConnection conn)
         {
             await using (NpgsqlTransaction transaction = await conn.BeginTransactionAsync())
             {
+                await RefreshDistinctColonisableStarSystems(conn);
                 await CalculateTrailblazerDistances(conn);
 
                 await transaction.CommitAsync();

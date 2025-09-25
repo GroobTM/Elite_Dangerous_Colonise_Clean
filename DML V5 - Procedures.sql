@@ -609,3 +609,135 @@ BEGIN
 	AND "inputUnclaimDate" > "claimReportDate";
 END;
 $$ LANGUAGE plpgsql;
+
+
+WITH "TopResults" AS (
+	SELECT DISTINCT 
+		css."uncolonisedSystemID",
+		ss."systemName",
+		ss."systemCoords",
+		uss."lastUpdated",
+		uss."reserveLevel",
+		uss."landableCount",
+		uss."walkableCount",
+		uss."distanceToSol",
+		uss."totalHotspots",
+		uss."systemValue",
+		coc."blackHoleCount",
+		coc."neutronStarCount",
+		coc."whiteDwarves",
+		coc."otherStarCount",
+		coc."earthLikeCount",
+		coc."waterWorldCount",
+		coc."ammoniaWorldCount",
+		coc."gasGiantCount",
+		coc."highMetalContentCount",
+		coc."metalRichCount",
+		coc."rockyIceBodyCount",
+		coc."rockBodyCount",
+		coc."icyBodyCount",
+		coc."organicCount",
+		coc."geologicalsCount",
+		coc."ringCount"
+	FROM "ColonisableStarSystems" css
+	INNER JOIN "StarSystems" ss ON css."uncolonisedSystemID" = ss."systemID"
+	INNER JOIN "UncolonisedStarSystems" uss ON css."uncolonisedSystemID" = uss."systemID"
+	INNER JOIN "ColonyOverrideCounts" coc ON css."uncolonisedSystemID" = coc."systemID"
+	INNER JOIN "UncolonisedStarSystemsAvailability" ussa ON css."uncolonisedSystemID" = ussa."systemID"
+	WHERE ussa."isLocked" = FALSE
+	AND ussa."isClaimed" = FALSE
+	ORDER BY uss."systemValue" DESC
+	LIMIT 100
+)
+SELECT jsonb_build_object(
+	'totalResults', (SELECT "totalCount" FROM "DistinctColonisableStarSystemsCount"),
+	'results', jsonb_agg(
+		jsonb_build_object(
+			'systemID', tr."uncolonisedSystemID",
+			'systemName', tr."systemName",
+			'lastUpdate', tr."lastUpdated",
+			'distanceToSol', tr."distanceToSol",
+			'coordinates', jsonb_build_object(
+					'coordinateX', ST_X(tr."systemCoords"),
+					'coordinateY', ST_Y(tr."systemCoords"),
+					'coordinateZ', ST_Z(tr."systemCoords")
+				),
+			'systemValue', tr."systemValue",
+			'systemCounts', jsonb_build_object(
+				'blackHoleCount', tr."blackHoleCount",
+				'neutronStarCount', tr."neutronStarCount",
+				'whiteDwarves', tr."whiteDwarves",
+				'otherStarCount', tr."otherStarCount",
+				'earthLikeCount', tr."earthLikeCount",
+				'waterWorldCount', tr."waterWorldCount",
+				'ammoniaWorldCount', tr."ammoniaWorldCount",
+				'gasGiantCount', tr."gasGiantCount",
+				'highMetalContentCount', tr."highMetalContentCount",
+				'metalRichCount', tr."metalRichCount",
+				'rockyIceBodyCount',tr."rockyIceBodyCount",
+				'rockBodyCount', tr."rockBodyCount",
+				'icyBodyCount', tr."icyBodyCount",
+				'organicCount', tr."organicCount",
+				'geologicalsCount', tr."geologicalsCount",
+				'ringCount', tr."ringCount",
+				'totalHotspots', tr."totalHotspots"
+			),
+			'rings', (
+				SELECT jsonb_agg(
+					jsonb_build_object(
+						'ringName', r."ringName",
+						'ringType', r."ringType",
+						'hotspots', (
+							SELECT jsonb_agg(
+								jsonb_build_object(
+									'hotspotType', h."hotspotType",
+									'hotspotCount', h."hotspotCount"
+								)
+							)
+							FROM "Hotspots" h
+							WHERE h."ringID" = r."ringID"
+						)
+					)
+				)
+				FROM "Rings" r
+				WHERE r."systemID" = tr."uncolonisedSystemID"
+			),
+			'trailblazers', (
+				SELECT jsonb_agg(
+					jsonb_build_object(
+						'trailblazerID', tm."trailblazerID",
+						'trailblazerName', tm."trailblazerName",
+						'distanceBetween', td."distanceBetween"
+					)
+				)
+				FROM "TrailblazerDistances" td
+				INNER JOIN "TrailblazerMegaships" tm ON td."trailblazerID" = tm."trailblazerID"
+				WHERE td."uncolonisedSystemID" = tr."uncolonisedSystemID"
+			),
+			'colonisedSystems', (
+				SELECT jsonb_agg(
+					jsonb_build_object(
+						'colonisedSystemID', css."colonisedSystemID",
+						'systemName', ss."systemName",
+						'stations', (
+							SELECT jsonb_agg(
+								jsonb_build_object(
+									'stationID', s."stationID",
+									'stationName', s."stationName",
+									'controllingFaction', f."factionName"
+								)
+							)
+							FROM "Stations" s
+							INNER JOIN "Factions" f ON s."controllingFaction" = f."factionID"
+							WHERE s."systemID" = css."colonisedSystemID"
+						)
+					)
+				)
+				FROM "ColonisableStarSystems" css
+				INNER JOIN "StarSystems" ss ON css."colonisedSystemID" = ss."systemID"
+				WHERE css."uncolonisedSystemID" = tr."uncolonisedSystemID"
+			)
+		)
+	)
+)
+FROM "TopResults" tr
