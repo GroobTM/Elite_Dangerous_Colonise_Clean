@@ -610,134 +610,399 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-
-WITH "TopResults" AS (
-	SELECT DISTINCT 
-		css."uncolonisedSystemID",
-		ss."systemName",
-		ss."systemCoords",
-		uss."lastUpdated",
-		uss."reserveLevel",
-		uss."landableCount",
-		uss."walkableCount",
-		uss."distanceToSol",
-		uss."totalHotspots",
-		uss."systemValue",
-		coc."blackHoleCount",
-		coc."neutronStarCount",
-		coc."whiteDwarves",
-		coc."otherStarCount",
-		coc."earthLikeCount",
-		coc."waterWorldCount",
-		coc."ammoniaWorldCount",
-		coc."gasGiantCount",
-		coc."highMetalContentCount",
-		coc."metalRichCount",
-		coc."rockyIceBodyCount",
-		coc."rockBodyCount",
-		coc."icyBodyCount",
-		coc."organicCount",
-		coc."geologicalsCount",
-		coc."ringCount"
-	FROM "ColonisableStarSystems" css
-	INNER JOIN "StarSystems" ss ON css."uncolonisedSystemID" = ss."systemID"
-	INNER JOIN "UncolonisedStarSystems" uss ON css."uncolonisedSystemID" = uss."systemID"
-	INNER JOIN "ColonyOverrideCounts" coc ON css."uncolonisedSystemID" = coc."systemID"
-	INNER JOIN "UncolonisedStarSystemsAvailability" ussa ON css."uncolonisedSystemID" = ussa."systemID"
-	WHERE ussa."isLocked" = FALSE
-	AND ussa."isClaimed" = FALSE
-	ORDER BY uss."systemValue" DESC
-	LIMIT 100
+CREATE OR REPLACE FUNCTION "SelectSearchedColonisedSystems" (
+	"inputSystemName" VARCHAR(75),
+	"inputFactionName" VARCHAR(75)
 )
-SELECT jsonb_build_object(
-	'totalResults', (SELECT "totalCount" FROM "DistinctColonisableStarSystemsCount"),
-	'results', jsonb_agg(
-		jsonb_build_object(
-			'systemID', tr."uncolonisedSystemID",
-			'systemName', tr."systemName",
-			'lastUpdate', tr."lastUpdated",
-			'distanceToSol', tr."distanceToSol",
-			'coordinates', jsonb_build_object(
-					'coordinateX', ST_X(tr."systemCoords"),
-					'coordinateY', ST_Y(tr."systemCoords"),
-					'coordinateZ', ST_Z(tr."systemCoords")
+RETURNS TABLE("colonisedSystemID" BIGINT) AS $$
+DECLARE
+	"queryString" TEXT;
+BEGIN
+	"queryString" := '
+		SELECT dcss."colonisedSystemID"
+		FROM "DistinctColonisedStarSystems" dcss';
+	
+	IF "inputSystemName" IS NOT NULL AND "inputFactionName" IS NOT NULL THEN
+		"queryString" := "queryString" || '
+			INNER JOIN "Stations" s ON dcss."colonisedSystemID" = s."systemID"
+			INNER JOIN "Factions" f ON s."controllingFaction" = f."factionID"
+			WHERE dcss."systemName" ILIKE $1 || ''%''
+			AND f."factionName" ILIKE $2 || ''%''';
+			
+			RETURN QUERY EXECUTE "queryString"
+			USING "inputSystemName", "inputFactionName";
+	
+	ELSIF "inputSystemName" IS NOT NULL THEN
+		"queryString" := "queryString" || '
+			WHERE dcss."systemName" ILIKE $1 || ''%''';
+			
+			RETURN QUERY EXECUTE "queryString"
+			USING "inputSystemName";
+	
+	ELSIF "inputFactionName" IS NOT NULL THEN
+		"queryString" := "queryString" || '
+			INNER JOIN "Stations" s ON dcss."colonisedSystemID" = s."systemID"
+			INNER JOIN "Factions" f ON s."controllingFaction" = f."factionID"
+			WHERE f."factionName" ILIKE $1 || ''%''';
+			
+			RETURN QUERY EXECUTE "queryString"
+			USING "inputFactionName";
+	
+	ELSE
+		RETURN QUERY EXECUTE "queryString";
+	
+	END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION "SelectSearchResults" (
+	"sortOrder" "ResultOrderType",
+	"pageNo" INT,
+	"resultsPerPage" SMALLINT,
+	"includeClaimed" BOOLEAN,
+	"inputSystemName" VARCHAR(75),
+	"inputFactionName" VARCHAR(75),
+	"inputMinBlackHoles" SMALLINT,
+	"inputMaxBlackHoles" SMALLINT,
+	"inputMinNeutronStars" SMALLINT,
+	"inputMaxNeutronStars" SMALLINT,
+	"inputMinWhiteDwarves" SMALLINT,
+	"inputMaxWhiteDwarves" SMALLINT,
+	"inputMinOtherStars" SMALLINT,
+	"inputMaxOtherStars" SMALLINT,
+	"inputMinEarthLikes" SMALLINT,
+	"inputMaxEarthLikes" SMALLINT,
+	"inputMinWaterWorlds" SMALLINT,
+	"inputMaxWaterWorlds" SMALLINT,
+	"inputMinAmmoniaWorlds" SMALLINT,
+	"inputMaxAmmoniaWorlds" SMALLINT,
+	"inputMinGasGiants" SMALLINT,
+	"inputMaxGasGiants" SMALLINT,
+	"inputMinHighMetalContents" SMALLINT,
+	"inputMaxHighMetalContents" SMALLINT,
+	"inputMinMetalRichs" SMALLINT,
+	"inputMaxMetalRichs" SMALLINT,
+	"inputMinRockyIces" SMALLINT,
+	"inputMaxRockyIces" SMALLINT,
+	"inputMinRocks" SMALLINT,
+	"inputMaxRocks" SMALLINT,
+	"inputMinIcys" SMALLINT,
+	"inputMaxIcys" SMALLINT,
+	"inputMinOrganics" SMALLINT,
+	"inputMaxOrganics" SMALLINT,
+	"inputMinGeologicals" SMALLINT,
+	"inputMaxGeologicals" SMALLINT,
+	"inputMinRings" SMALLINT,
+	"inputMaxRings" SMALLINT,
+	"inputMinLandables" SMALLINT,
+	"inputMaxLandables" SMALLINT,
+	"inputMinWalkable" SMALLINT,
+	"inputMaxWalkable" SMALLINT,
+	"inputMaxDistanceToSol" INT
+)
+RETURNS jsonb AS $$
+DECLARE
+	"queryString" TEXT;
+	"result" jsonb;
+BEGIN
+	"queryString" := 'WITH';
+
+
+	IF "inputSystemName" IS NOT NULL OR "inputFactionName" IS NOT NULL THEN
+		"queryString" := "queryString" || '
+			"ColonisedSearchResults" AS (
+				SELECT DISTINCT "uncolonisedSystemID"
+				FROM "ColonisableStarSystems"
+				WHERE "colonisedSystemID" IN (
+					SELECT "colonisedSystemID"
+					FROM "SelectSearchedColonisedSystems"($41, $42)
+				)
+			),';
+	END IF;
+	
+	"queryString" := "queryString" || '
+		"TopResults" AS (
+			SELECT 
+				duss."uncolonisedSystemID",
+				ss."systemName",
+				ss."systemCoords",
+				uss."lastUpdated",
+				uss."reserveLevel",
+				uss."landableCount",
+				uss."walkableCount",
+				uss."distanceToSol",
+				uss."totalHotspots",
+				uss."systemValue",
+				coc."blackHoleCount",
+				coc."neutronStarCount",
+				coc."whiteDwarves",
+				coc."otherStarCount",
+				coc."earthLikeCount",
+				coc."waterWorldCount",
+				coc."ammoniaWorldCount",
+				coc."gasGiantCount",
+				coc."highMetalContentCount",
+				coc."metalRichCount",
+				coc."rockyIceBodyCount",
+				coc."rockBodyCount",
+				coc."icyBodyCount",
+				coc."organicCount",
+				coc."geologicalsCount",
+				coc."ringCount"';
+				
+	IF "sortOrder" = 'DistanceToTrailblazer' THEN
+		"queryString" := "queryString" || '
+				, ctbss."distanceToTrailblazer"';
+	END IF;
+	
+	"queryString" := "queryString" || '
+			FROM "DistinctUncolonisedStarSystems" duss
+			INNER JOIN "StarSystems" ss ON duss."uncolonisedSystemID" = ss."systemID"
+			INNER JOIN "UncolonisedStarSystems" uss ON duss."uncolonisedSystemID" = uss."systemID"
+			INNER JOIN "ColonyOverrideCounts" coc ON duss."uncolonisedSystemID" = coc."systemID"
+			INNER JOIN "UncolonisedStarSystemsAvailability" ussa ON duss."uncolonisedSystemID" = ussa."systemID"';
+			
+	IF "sortOrder" = 'DistanceToTrailblazer' THEN
+		"queryString" := "queryString" || '
+			INNER JOIN "ClosestTrailblazerByStarSystem" ctbss ON dcss."uncolonisedSystemID" = ctbss."uncolonisedSystemID"';
+	END IF;
+			
+	"queryString" := "queryString" || '
+			WHERE';
+	
+	IF "inputSystemName" IS NOT NULL OR "inputFactionName" IS NOT NULL THEN
+		"queryString" := "queryString" || '
+			"uncolonisedSystemID" IN (
+				SELECT "uncolonisedSystemID"
+				FROM "ColonisedSearchResults"
+			)
+			AND';
+	END IF;
+	
+	IF NOT "includeClaimed" THEN
+		"queryString" := "queryString" || '
+			ussa."isClaimed" = FALSE
+			AND';
+	END IF;
+	
+	"queryString" := "queryString" || '
+			ussa."isLocked" = FALSE
+			AND coc."blackHoleCount" >= $1 AND coc."blackHoleCount" <= $2
+			AND coc."neutronStarCount" >= $3 AND coc."neutronStarCount" <= $4
+			AND coc."whiteDwarves" >= $5 AND coc."whiteDwarves" <= $6
+			AND coc."otherStarCount" >= $7 AND coc."otherStarCount" <= $8
+			AND coc."earthLikeCount" >= $9 AND coc."earthLikeCount" <= $10
+			AND coc."waterWorldCount" >= $11 AND coc."waterWorldCount" <= $12
+			AND coc."ammoniaWorldCount" >= $13 AND coc."ammoniaWorldCount" <= $14
+			AND coc."gasGiantCount" >= $15 AND coc."gasGiantCount" <= $16
+			AND coc."highMetalContentCount" >= $17 AND coc."highMetalContentCount" <= $18
+			AND coc."metalRichCount" >= $19 AND coc."metalRichCount" <= $20
+			AND coc."rockyIceBodyCount" >= $21 AND coc."rockyIceBodyCount" <= $22
+			AND coc."rockBodyCount" >= $23 AND coc."rockBodyCount" <= $24
+			AND coc."icyBodyCount" >= $25 AND coc."icyBodyCount" <= $26
+			AND coc."organicCount" >= $27 AND coc."organicCount" <= $28
+			AND coc."geologicalsCount" >= $29 AND coc."geologicalsCount" <= $30
+			AND coc."ringCount" >= $31 AND coc."ringCount" <= $32
+			AND uss."landableCount" >= $33 AND uss."landableCount" <= $34
+			AND uss."walkableCount" >= $35 AND uss."walkableCount" <= $36
+			AND uss."distanceToSol" <= $37
+			ORDER BY
+				CASE WHEN $38 = ''SystemValue'' THEN uss."systemValue" END DESC,
+				CASE WHEN $38 = ''MostWalkables'' THEN uss."walkableCount" END DESC,
+				CASE WHEN $38 = ''DistanceToSol'' THEN uss."distanceToSol" END ASC,
+				CASE WHEN $38 = ''MostHotspots'' THEN uss."totalHotspots" END DESC';
+			
+	IF "sortOrder" = 'DistanceToTrailblazer' THEN
+		"queryString" := "queryString" || '
+				CASE WHEN $38 = ''DistanceToTrailblazer'' THEN ctbss."distanceToTrailblazer" END ASC';
+	END IF;
+	
+	"queryString" := "queryString" || '
+			OFFSET (($39 - 1) * $40) ROWS
+			LIMIT $40
+		)
+		SELECT jsonb_agg(
+			jsonb_build_object(
+				''systemID'', tr."uncolonisedSystemID",
+				''systemName'', tr."systemName",
+				''lastUpdate'', tr."lastUpdated",
+				''distanceToSol'', tr."distanceToSol",
+				''coordinates'', jsonb_build_object(
+						''coordinateX'', ST_X(tr."systemCoords"),
+						''coordinateY'', ST_Y(tr."systemCoords"),
+						''coordinateZ'', ST_Z(tr."systemCoords")
+					),
+				''systemValue'', tr."systemValue",
+				''systemCounts'', jsonb_build_object(
+					''blackHoleCount'', tr."blackHoleCount",
+					''neutronStarCount'', tr."neutronStarCount",
+					''whiteDwarves'', tr."whiteDwarves",
+					''otherStarCount'', tr."otherStarCount",
+					''earthLikeCount'', tr."earthLikeCount",
+					''waterWorldCount'', tr."waterWorldCount",
+					''ammoniaWorldCount'', tr."ammoniaWorldCount",
+					''gasGiantCount'', tr."gasGiantCount",
+					''highMetalContentCount'', tr."highMetalContentCount",
+					''metalRichCount'', tr."metalRichCount",
+					''rockyIceBodyCount'',tr."rockyIceBodyCount",
+					''rockBodyCount'', tr."rockBodyCount",
+					''icyBodyCount'', tr."icyBodyCount",
+					''organicCount'', tr."organicCount",
+					''geologicalsCount'', tr."geologicalsCount",
+					''ringCount'', tr."ringCount",
+					''totalHotspots'', tr."totalHotspots"
 				),
-			'systemValue', tr."systemValue",
-			'systemCounts', jsonb_build_object(
-				'blackHoleCount', tr."blackHoleCount",
-				'neutronStarCount', tr."neutronStarCount",
-				'whiteDwarves', tr."whiteDwarves",
-				'otherStarCount', tr."otherStarCount",
-				'earthLikeCount', tr."earthLikeCount",
-				'waterWorldCount', tr."waterWorldCount",
-				'ammoniaWorldCount', tr."ammoniaWorldCount",
-				'gasGiantCount', tr."gasGiantCount",
-				'highMetalContentCount', tr."highMetalContentCount",
-				'metalRichCount', tr."metalRichCount",
-				'rockyIceBodyCount',tr."rockyIceBodyCount",
-				'rockBodyCount', tr."rockBodyCount",
-				'icyBodyCount', tr."icyBodyCount",
-				'organicCount', tr."organicCount",
-				'geologicalsCount', tr."geologicalsCount",
-				'ringCount', tr."ringCount",
-				'totalHotspots', tr."totalHotspots"
-			),
-			'rings', (
-				SELECT jsonb_agg(
-					jsonb_build_object(
-						'ringName', r."ringName",
-						'ringType', r."ringType",
-						'hotspots', (
-							SELECT jsonb_agg(
-								jsonb_build_object(
-									'hotspotType', h."hotspotType",
-									'hotspotCount', h."hotspotCount"
+				''rings'', (
+					SELECT jsonb_agg(
+						jsonb_build_object(
+							''ringName'', r."ringName",
+							''ringType'', r."ringType",
+							''hotspots'', (
+								SELECT jsonb_agg(
+									jsonb_build_object(
+										''hotspotType'', h."hotspotType",
+										''hotspotCount'', h."hotspotCount"
+									)
 								)
+								FROM "Hotspots" h
+								WHERE h."ringID" = r."ringID"
 							)
-							FROM "Hotspots" h
-							WHERE h."ringID" = r."ringID"
 						)
 					)
-				)
-				FROM "Rings" r
-				WHERE r."systemID" = tr."uncolonisedSystemID"
-			),
-			'trailblazers', (
-				SELECT jsonb_agg(
-					jsonb_build_object(
-						'trailblazerID', tm."trailblazerID",
-						'trailblazerName', tm."trailblazerName",
-						'distanceBetween', td."distanceBetween"
-					)
-				)
-				FROM "TrailblazerDistances" td
-				INNER JOIN "TrailblazerMegaships" tm ON td."trailblazerID" = tm."trailblazerID"
-				WHERE td."uncolonisedSystemID" = tr."uncolonisedSystemID"
-			),
-			'colonisedSystems', (
-				SELECT jsonb_agg(
-					jsonb_build_object(
-						'colonisedSystemID', css."colonisedSystemID",
-						'systemName', ss."systemName",
-						'stations', (
-							SELECT jsonb_agg(
-								jsonb_build_object(
-									'stationID', s."stationID",
-									'stationName', s."stationName",
-									'controllingFaction', f."factionName"
-								)
-							)
-							FROM "Stations" s
-							INNER JOIN "Factions" f ON s."controllingFaction" = f."factionID"
-							WHERE s."systemID" = css."colonisedSystemID"
+					FROM "Rings" r
+					WHERE r."systemID" = tr."uncolonisedSystemID"
+				),
+				''trailblazers'', (
+					SELECT jsonb_agg(
+						jsonb_build_object(
+							''trailblazerID'', tm."trailblazerID",
+							''trailblazerName'', tm."trailblazerName",
+							''distanceBetween'', td."distanceBetween"
 						)
 					)
+					FROM "TrailblazerDistances" td
+					INNER JOIN "TrailblazerMegaships" tm ON td."trailblazerID" = tm."trailblazerID"
+					WHERE td."uncolonisedSystemID" = tr."uncolonisedSystemID"
+				),
+				''colonisedSystems'', (
+					SELECT jsonb_agg(
+						jsonb_build_object(
+							''colonisedSystemID'', css."colonisedSystemID",
+							''systemName'', ss."systemName",
+							''stations'', (
+								SELECT jsonb_agg(
+									jsonb_build_object(
+										''stationID'', s."stationID",
+										''stationName'', s."stationName",
+										''controllingFaction'', f."factionName"
+									)
+								)
+								FROM "Stations" s
+								INNER JOIN "Factions" f ON s."controllingFaction" = f."factionID"
+								WHERE s."systemID" = css."colonisedSystemID"
+							)
+						)
+					)
+					FROM "ColonisableStarSystems" css
+					INNER JOIN "StarSystems" ss ON css."colonisedSystemID" = ss."systemID"
+					WHERE css."uncolonisedSystemID" = tr."uncolonisedSystemID"
 				)
-				FROM "ColonisableStarSystems" css
-				INNER JOIN "StarSystems" ss ON css."colonisedSystemID" = ss."systemID"
-				WHERE css."uncolonisedSystemID" = tr."uncolonisedSystemID"
 			)
 		)
-	)
-)
-FROM "TopResults" tr
+		FROM "TopResults" tr';
+		
+	IF "inputSystemName" IS NOT NULL OR "inputFactionName" IS NOT NULL THEN
+		EXECUTE "queryString" INTO "result"
+		USING 
+		"inputMinBlackHoles", 
+		"inputMaxBlackHoles", 
+		"inputMinNeutronStars",
+		"inputMaxNeutronStars",
+		"inputMinWhiteDwarves",
+		"inputMaxWhiteDwarves",
+		"inputMinOtherStars",
+		"inputMaxOtherStars",
+		"inputMinEarthLikes",
+		"inputMaxEarthLikes",
+		"inputMinWaterWorlds",
+		"inputMaxWaterWorlds",
+		"inputMinAmmoniaWorlds",
+		"inputMaxAmmoniaWorlds",
+		"inputMinGasGiants",
+		"inputMaxGasGiants",
+		"inputMinHighMetalContents",
+		"inputMaxHighMetalContents",
+		"inputMinMetalRichs",
+		"inputMaxMetalRichs",
+		"inputMinRockyIces",
+		"inputMaxRockyIces",
+		"inputMinRocks",
+		"inputMaxRocks",
+		"inputMinIcys",
+		"inputMaxIcys",
+		"inputMinOrganics",
+		"inputMaxOrganics",
+		"inputMinGeologicals",
+		"inputMaxGeologicals",
+		"inputMinRings",
+		"inputMaxRings",
+		"inputMinLandables",
+		"inputMaxLandables",
+		"inputMinWalkable",
+		"inputMaxWalkable",
+		"inputMaxDistanceToSol",
+		"sortOrder",
+		"pageNo",
+		"resultsPerPage",
+		"inputSystemName",
+		"inputFactionName";
+	
+	ELSE
+		EXECUTE "queryString" INTO "result"
+		USING 
+		"inputMinBlackHoles", 
+		"inputMaxBlackHoles", 
+		"inputMinNeutronStars",
+		"inputMaxNeutronStars",
+		"inputMinWhiteDwarves",
+		"inputMaxWhiteDwarves",
+		"inputMinOtherStars",
+		"inputMaxOtherStars",
+		"inputMinEarthLikes",
+		"inputMaxEarthLikes",
+		"inputMinWaterWorlds",
+		"inputMaxWaterWorlds",
+		"inputMinAmmoniaWorlds",
+		"inputMaxAmmoniaWorlds",
+		"inputMinGasGiants",
+		"inputMaxGasGiants",
+		"inputMinHighMetalContents",
+		"inputMaxHighMetalContents",
+		"inputMinMetalRichs",
+		"inputMaxMetalRichs",
+		"inputMinRockyIces",
+		"inputMaxRockyIces",
+		"inputMinRocks",
+		"inputMaxRocks",
+		"inputMinIcys",
+		"inputMaxIcys",
+		"inputMinOrganics",
+		"inputMaxOrganics",
+		"inputMinGeologicals",
+		"inputMaxGeologicals",
+		"inputMinRings",
+		"inputMaxRings",
+		"inputMinLandables",
+		"inputMaxLandables",
+		"inputMinWalkable",
+		"inputMaxWalkable",
+		"inputMaxDistanceToSol",
+		"sortOrder",
+		"pageNo",
+		"resultsPerPage";
+	
+	END IF;
+	
+	RETURN "result";
+END;
+$$ LANGUAGE plpgsql;

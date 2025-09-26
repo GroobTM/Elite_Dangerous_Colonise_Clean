@@ -1,55 +1,63 @@
 BEGIN TRANSACTION;
 
+CREATE TYPE "ResultOrderType" AS ENUM (
+	'SystemValue',
+	'MostWalkables',
+	'DistanceToSol',
+	'DistanceToTrailblazer',
+	'MostHotspots'
+);
+
 CREATE TYPE "ReserveType" AS ENUM (
-	"None",
-	"Major",
-	"Common",
-	"Low",
-	"Depleted",
-	"Pristine"
+	'None',
+	'Major',
+	'Common',
+	'Low',
+	'Depleted',
+	'Pristine'
 );
 
 CREATE TYPE "RingType" AS ENUM (
-	"Rocky",
-	"MetalRich",
-	"Icy",
-	"Metallic"
+	'Rocky',
+	'MetalRich',
+	'Icy',
+	'Metallic'
 );
 
 CREATE TYPE "HotspotType" AS ENUM (
-	"Alexandrite",
-	"Bauxite",
-	"Benitoite",
-	"Bromellite",
-	"Cobalt",
-	"Coltan",
-	"Gallite",
-	"Gold",
-	"Grandidierite",
-	"HydrogenPeroxide",
-	"Indite",
-	"Lepidolite",
-	"LiquidOxygen",
-	"LithiumHydroxide",
-	"LowTemperatureDiamond",
-	"MethaneClathrate",
-	"MethanolMonohydrateCrystals",
-	"Monazite",
-	"Musgravite",
-	"Opal",
-	"Osmium",
-	"Painite",
-	"Palladium",
-	"Platinum",
-	"Praseodymium",
-	"Rhodplumsite",
-	"Rutile",
-	"Samarium",
-	"Serendibite",
-	"Silver",
-	"Tritium",
-	"Uraninite",
-	"Water"
+	'Alexandrite',
+	'Bauxite',
+	'Benitoite',
+	'Bromellite',
+	'Cobalt',
+	'Coltan',
+	'Gallite',
+	'Gold',
+	'Grandidierite',
+	'HydrogenPeroxide',
+	'Indite',
+	'Lepidolite',
+	'LiquidOxygen',
+	'LithiumHydroxide',
+	'LowTemperatureDiamond',
+	'MethaneClathrate',
+	'MethanolMonohydrateCrystals',
+	'Monazite',
+	'Musgravite',
+	'Opal',
+	'Osmium',
+	'Painite',
+	'Palladium',
+	'Platinum',
+	'Praseodymium',
+	'Rhodplumsite',
+	'Rutile',
+	'Samarium',
+	'Serendibite',
+	'Silver',
+	'Tritium',
+	'Uraninite',
+	'Water'
 );
 
 CREATE TABLE "Factions" (
@@ -163,19 +171,31 @@ CREATE TABLE "StagedStarSystems" (
 	FOREIGN KEY ("systemID") REFERENCES "StarSystems"("systemID") ON DELETE CASCADE
 );
 
-CREATE MATERIALIZED VIEW "DistinctColonisableStarSystems" AS
+CREATE MATERIALIZED VIEW "DistinctColonisedStarSystems" AS
+SELECT DISTINCT ON (css."colonisedSystemID")
+	css."colonisedSystemID",
+	ss."systemName"
+FROM "ColonisableStarSystems" css
+INNER JOIN "StarSystems" ss ON css."colonisedSystemID" = ss."systemID";
+
+CREATE MATERIALIZED VIEW "DistinctUncolonisedStarSystems" AS
 SELECT DISTINCT "uncolonisedSystemID" FROM "ColonisableStarSystems";
 
-CREATE MATERIALIZED VIEW "DistinctColonisableStarSystemsCount" AS
-SELECT 0::SMALLINT AS "key", COUNT("uncolonisedSystemID") "totalCount"
-FROM "DistinctColonisableStarSystems" dcss
-WHERE EXISTS (
-	SELECT 1
-	FROM "UncolonisedStarSystemsAvailability" ussa
-	WHERE ussa."systemID" = dcss."uncolonisedSystemID"
-	AND ussa."isLocked" = FALSE
-	AND ussa."isClaimed" = FALSE
-);
+CREATE MATERIALIZED VIEW "ClosestTrailblazerByStarSystem" AS
+SELECT 
+	"uncolonisedSystemID",
+    "distanceBetween" "distanceToTrailblazer"
+FROM (
+	SELECT DISTINCT ON ("uncolonisedSystemID")
+	    "uncolonisedSystemID",
+	    "distanceBetween"
+	FROM
+	    "TrailblazerDistances"
+	ORDER BY
+	    "uncolonisedSystemID",
+	    "distanceBetween" ASC
+) as "ClosestTrailblazer"
+ORDER BY "distanceToTrailblazer" ASC;
 
 CREATE INDEX "idx_F_factionName" ON "Factions"("factionName");
 CREATE INDEX "idx_SS_systemName" ON "StarSystems"("systemName");
@@ -211,14 +231,18 @@ CREATE INDEX "idx_CSS_uncolonisedSystemID" ON "ColonisableStarSystems"("uncoloni
 CREATE INDEX "idx_TD_uncolonisedSystemID" ON "TrailblazerDistances"("uncolonisedSystemID");
 CREATE INDEX "idx_TD_trailblazerID" ON "TrailblazerDistances"("trailblazerID");
 CREATE INDEX "idx_TD_distanceBetween" ON "TrailblazerDistances"("distanceBetween");
+CREATE INDEX "idx_DCSS_systemName" ON "DistinctColonisedStarSystems"("systemName");
+
 
 CREATE INDEX "idx_USSA_isLocked_isClaimed" ON "UncolonisedStarSystemsAvailability"("isLocked", "isClaimed");
 
 CREATE INDEX "idx_SS_systemCoords" ON "StarSystems" USING GIST("systemCoords");
 CREATE INDEX "idx_TM_trailblazerCoords" ON "TrailblazerMegaships" USING GIST("trailblazerCoords");
 
-CREATE UNIQUE INDEX "idx_DCSS_uncolonisedSystemID" ON "DistinctColonisableStarSystems"("uncolonisedSystemID");
+CREATE UNIQUE INDEX "idx_DCSS_colonisedSystemID" ON "DistinctColonisedStarSystems"("colonisedSystemID");
+CREATE UNIQUE INDEX "idx_DUSS_uncolonisedSystemID" ON "DistinctUncolonisedStarSystems"("uncolonisedSystemID");
 CREATE UNIQUE INDEX "idx_DCSSC_key" ON "DistinctColonisableStarSystemsCount"("key");
+CREATE UNIQUE INDEX "idx_CTBSS_uncolonisedSystemID" ON "ClosestTrailblazerByStarSystem"("uncolonisedSystemID");
 
 CREATE TYPE "StarSystemInsertType" AS (
     "systemID" BIGINT,

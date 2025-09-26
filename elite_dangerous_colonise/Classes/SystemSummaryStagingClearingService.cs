@@ -71,20 +71,43 @@ namespace elite_dangerous_colonise.Classes
             }
         }
 
-        private async Task RefreshDistinctColonisableStarSystems(NpgsqlConnection conn)
+        private async Task RefreshDistinctColonisedStarSystems(NpgsqlConnection conn)
         {
-            Logger.LogInformation("System Summary Staging Clearing Service", 9, "Refreshing DistinctColonisableStarSystems view.");
+            Logger.LogInformation("System Summary Staging Clearing Service", 9, "Refreshing DistinctColonisedStarSystems view.");
 
-            await using (NpgsqlCommand command = new NpgsqlCommand("REFRESH MATERIALIZED VIEW \"DistinctColonisableStarSystems\"", conn))
+            await using (NpgsqlCommand command = new NpgsqlCommand("REFRESH MATERIALIZED VIEW \"DistinctColonisedStarSystems\"", conn))
             {
                 await command.ExecuteNonQueryAsync();
             }
         }
+
+        private async Task RefreshDistinctUncolonisedStarSystems(NpgsqlConnection conn)
+        {
+            Logger.LogInformation("System Summary Staging Clearing Service", 9, "Refreshing DistinctUncolonisedStarSystems view.");
+
+            await using (NpgsqlCommand command = new NpgsqlCommand("REFRESH MATERIALIZED VIEW \"DistinctUncolonisedStarSystems\"", conn))
+            {
+                await command.ExecuteNonQueryAsync();
+            }
+        }
+
+        private async Task RefreshClosestTrailblazerByStarSystem(NpgsqlConnection conn)
+        {
+            Logger.LogInformation("System Summary Staging Clearing Service", 9, "Refreshing ClosestTrailblazerByStarSystem view.");
+
+            await using (NpgsqlCommand command = new NpgsqlCommand("REFRESH MATERIALIZED VIEW \"ClosestTrailblazerByStarSystem\"", conn))
+            {
+                await command.ExecuteNonQueryAsync();
+            }
+        }
+
         private async Task RefreshValuesTables(NpgsqlConnection conn)
         {
             await using (NpgsqlTransaction transaction = await conn.BeginTransactionAsync())
             {
-                await RefreshDistinctColonisableStarSystems(conn);
+                await RefreshDistinctColonisedStarSystems(conn);
+                await RefreshDistinctUncolonisedStarSystems(conn);
+                await RefreshClosestTrailblazerByStarSystem(conn);
                 await CalculateTrailblazerDistances(conn);
 
                 await transaction.CommitAsync();
