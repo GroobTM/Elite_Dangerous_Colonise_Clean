@@ -626,15 +626,15 @@ BEGIN
 		"queryString" := "queryString" || '
 			INNER JOIN "Stations" s ON dcss."colonisedSystemID" = s."systemID"
 			INNER JOIN "Factions" f ON s."controllingFaction" = f."factionID"
-			WHERE dcss."systemName" ILIKE $1 || ''%''
-			AND f."factionName" ILIKE $2 || ''%''';
+			WHERE dcss."systemName" = $1
+			AND f."factionName" = $2';
 			
 			RETURN QUERY EXECUTE "queryString"
 			USING "inputSystemName", "inputFactionName";
 	
 	ELSIF "inputSystemName" IS NOT NULL THEN
 		"queryString" := "queryString" || '
-			WHERE dcss."systemName" ILIKE $1 || ''%''';
+			WHERE dcss."systemName" = $1';
 			
 			RETURN QUERY EXECUTE "queryString"
 			USING "inputSystemName";
@@ -643,7 +643,7 @@ BEGIN
 		"queryString" := "queryString" || '
 			INNER JOIN "Stations" s ON dcss."colonisedSystemID" = s."systemID"
 			INNER JOIN "Factions" f ON s."controllingFaction" = f."factionID"
-			WHERE f."factionName" ILIKE $1 || ''%''';
+			WHERE f."factionName" = $1';
 			
 			RETURN QUERY EXECUTE "queryString"
 			USING "inputFactionName";
@@ -1006,3 +1006,55 @@ BEGIN
 	RETURN "result";
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION "SelectFactionNamesJson"()
+RETURNS jsonb AS $$
+	SELECT json_agg(to_json("factionName"))
+	FROM (
+		SELECT "factionName"
+		FROM "Factions"
+		ORDER BY "factionName" ASC
+	) as "factionNames";
+$$ LANGUAGE sql;
+
+CREATE OR REPLACE FUNCTION "SelectColonisedSystemNamesJson"("name" VARCHAR(75))
+RETURNS jsonb AS $$
+	SELECT json_agg(
+		jsonb_build_object(
+			'name', "systemName"
+		)
+	)
+	FROM (
+		SELECT "systemName"
+		FROM "StarSystems"
+		WHERE "isColonised" = TRUE
+		AND "systemName" ILIKE '%' || "name" || '%'
+		LIMIT 100
+	) as "systemNames";
+$$ LANGUAGE sql;
+
+
+SELECT 
+	MAX("landableCount"),
+	MAX("walkableCount"),
+	MAX("distanceToSol"),
+	MAX("totalHotspots"),
+	MAX("blackHoleCount"),
+	MAX("neutronStarCount"),
+	MAX("whiteDwarves"),
+	MAX("otherStarCount"),
+	MAX("earthLikeCount"),
+	MAX("waterWorldCount"),
+	MAX("ammoniaWorldCount"),
+	MAX("gasGiantCount"),
+	MAX("highMetalContentCount"),
+	MAX("metalRichCount"),
+	MAX("rockyIceBodyCount"),
+	MAX("rockBodyCount"),
+	MAX("icyBodyCount"),
+	MAX("organicCount"),
+	MAX("geologicalsCount"),
+	MAX("ringCount")
+FROM "DistinctUncolonisedStarSystems" duss
+INNER JOIN "ColonyOverrideCounts" coc ON duss."uncolonisedSystemID" = coc."systemID"
+INNER JOIN "UncolonisedStarSystems" uss  ON duss."uncolonisedSystemID" = uss."systemID";

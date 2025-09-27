@@ -8,8 +8,29 @@
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/preline@3.2.3/dist/preline.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@@preline/range-slider@3.2.3/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/nouislider@15.8.1/dist/nouislider.min.js"></script>
     <script src="~/js/index.js" asp-append-version="true"></script>
-    
+    <script>
+        HSStaticMethods.autoInit();
+    </script>
+
+    <script>
+        window.addEventListener('load', () => {
+          (function () {
+            const range = document.querySelector('#hs-pass-values-to-html-elements');
+            const rangeInstance = new HSRangeSlider(range);
+            const min = document.querySelector('#hs-pass-values-to-html-elements-min-target');
+            const max = document.querySelector('#hs-pass-values-to-html-elements-max-target');
+
+            range.noUiSlider.on('update', (values) => {
+              min.innerText = rangeInstance.formattedValue[0];
+              max.innerText = rangeInstance.formattedValue[1];
+            });
+          })();
+        });
+    </script>
 }
 
 <aside class="mt-3 w-full rounded-md bg-[#F0F0F0]">
@@ -17,25 +38,23 @@
 </aside>
 <section class="mt-3 w-full rounded-md bg-[#F0F0F0] p-3">
     <form id="systems_search" method="GET">
-        <div class="flex flex-col justify-between gap-3 lg:gap-15 lg:flex-row">
-            <div class="relative flex-1">
-                <input asp-for="ColonisedSystem" type="text" id="colonised_system" class="border-1 peer block w-full appearance-none rounded-lg border-[#0F0F0F] bg-white px-2.5 pt-4 pb-2.5 pl-4 text-[#0F0F0F] shadow-sm focus:outline-none focus:ring-0 focus:border-[#F07B05]" placeholder=" " maxlength="75"/>
-                <label for="colonised_system" class="absolute start-2 top-2 z-10 origin-[0] -translate-y-4 scale-85 transform cursor-text rounded-3xl bg-white px-2 text-[#0F0F0F] duration-200 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:px-2 peer-focus:p-1 peer-focus:shadow-sm peer-focus:top-0 peer-focus:scale-85 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Colonised System (Optional)</label>
-                <label for="colonised_system" id="clear_button" class="absolute top-1 right-2 z-10 cursor-pointer text-3xl">&times;</label>
+        <div class="flex flex-col justify-between gap-3 lg:flex-row lg:gap-5">
+            <div id="colonised_system_search" class="relative flex-1">
+                <div class="relative">
+                    <input asp-for="ColonisedSystem" type="text" role="combobox" id="colonised_system" class="peer block w-full appearance-none rounded-lg border-1 border-[#0F0F0F] bg-white px-2.5 pt-4 pb-2.5 pl-4 text-[#0F0F0F] shadow-sm focus:border-[#F07B05] focus:ring-0 focus:outline-none" placeholder=" " maxlength="75" data-hs-combo-box-input="" />
+                    <label for="colonised_system" class="absolute start-2 top-2 z-10 origin-[0] -translate-y-4 scale-85 transform cursor-text rounded-3xl bg-white px-2 text-[#0F0F0F] duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-0 peer-focus:-translate-y-4 peer-focus:scale-85 peer-focus:p-1 peer-focus:px-2 peer-focus:shadow-sm rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4">Colonised System (Optional)</label>
+                    <label for="colonised_system" id="clear_button" class="absolute top-1 right-2 z-10 cursor-pointer text-3xl">&times;</label>
+                </div>
+                <div class="absolute z-50 !mt-0 max-h-55 w-full overflow-y-auto rounded-lg border-1 border-[#BCBCBC] bg-white shadow-lg" style="display: none;" role="listbox" data-hs-combo-box-output=""></div>
             </div>
             <div class="relative flex-1">
-                <input asp-for="Faction" type="text" id="faction" class="border-1 peer block w-full appearance-none rounded-lg border-[#0F0F0F] bg-white px-2.5 pt-4 pb-2.5 pl-4 text-[#0F0F0F] shadow-sm focus:outline-none focus:ring-0 focus:border-[#F07B05]" placeholder=" " maxlength="75" />
-                <label for="faction" class="absolute start-2 top-2 z-10 origin-[0] -translate-y-4 scale-85 transform cursor-text rounded-3xl bg-white px-2 text-[#0F0F0F] duration-200 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:p-1 peer-focus:shadow-sm peer-focus:px-2 peer-focus:top-0 peer-focus:scale-85 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Faction (Optional)</label>
-                <label for="faction" id="clear_button" class="absolute top-1 right-2 z-10 cursor-pointer text-3xl">&times;</label>
-            </div>
-            <div class="relative flex-1">
-                <select asp-for="SortOrder" id="sortOrder" class="border-1 block w-full cursor-pointer appearance-none rounded-lg border-[#0F0F0F] bg-white px-2.5 pt-4 pb-2.5 pl-4 text-[#0F0F0F] shadow-sm focus:outline-none focus:ring-0 focus:border-[#F07B05]">
-                    <option value="totalValue">Combined Value</option>
-                    <option value="landableBodies">Most Landable Bodies</option>
-                    <option value="hotspots">Most Hotspots</option>
+                <select asp-for="SortOrder" id="sortOrder" class="block w-full cursor-pointer appearance-none rounded-lg border-1 border-[#0F0F0F] bg-white px-2.5 pt-4 pb-2.5 pl-4 text-[#0F0F0F] shadow-sm focus:border-[#F07B05] focus:ring-0 focus:outline-none">
+                    <option value="SystemValue">System Value</option>
+                    <option value="MostWalkables">Most Walkable Bodies</option>
+                    <option value="MostHotspots">Most Hotspots</option>
                     <option value="bodyValue">Notable Body Value</option>
-                    <option value="solDistance">Distance to Sol</option>
-                    <option value="trailblazerDistance">Distance to Trailblazer Megaship</option>
+                    <option value="DistanceToSol">Distance to Sol</option>
+                    <option value="DistanceToTrailblazer">Distance to Trailblazer Megaship</option>
                 </select>
                 <label for="sortOrder" class="pointer-events-none absolute start-2 top-2 z-10 origin-[0] -translate-y-4 scale-85 rounded-3xl bg-white px-2 text-[#0F0F0F]">Sort Order</label>
                 <svg class="pointer-events-none absolute top-5 right-3 z-10 h-4 w-4 shrink-0 rotate-180 text-[#0F0F0F]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
@@ -43,28 +62,84 @@
                 </svg>
             </div>
         </div>
-        <div class="relative mt-3 flex flex-1 items-center justify-end gap-5">
-            <div class="flex items-center">
-                <input asp-for="IncludeClaimed" type="checkbox" id="include_claimed" value="include" class="h-6 w-6 cursor-pointer accent-[#0F0F0F] shadow-sm" />
-                <label for="include_claimed" class="ml-2 cursor-pointer text-sm text-[#0F0F0F] sm:text-base">Include Claimed Systems</label>
-            </div>
-            <div class="grid w-45">
-                <input type="submit" id="search" class="border-1 col-3 col-start-1 row-start-1 row-end-2 block w-full cursor-pointer rounded-lg border-[#0F0F0F] bg-[#0F0F0F] px-2.5 pt-3 pb-3 text-left shadow-sm" value="" />
-                <label for="search" class="pointer-events-none z-10 col-3 col-start-1 row-start-1 row-end-2 flex w-full items-center justify-center gap-5">
-                    <span class="text-[#F0F0F0]">Search</span>
-                    <img src="~/images/courier.svg" class="z-10 h-8 sm:h-10" />
+        <div class="relative mt-3 flex flex-col-reverse gap-2 md:flex-row">
+            <div class="grid w-full md:w-45">
+                <input type="button" id="" class="col-3 col-start-1 row-start-1 row-end-2 block w-full cursor-pointer rounded-lg border-1 border-[#0F0F0F] bg-[#0F0F0F] px-2.5 pt-3 pb-3 text-left shadow-sm hover:border-[#F07B05] hover:bg-[#F07B05]" value="" />
+                <label for="search" class="pointer-events-none relative z-10 col-3 col-start-1 row-start-1 row-end-2 flex w-full items-center justify-center gap-5 text-[#F0F0F0]">
+                    <span>More Options</span>
+                    <svg class="absolute top-5 right-10 h-3 w-3 shrink-0 rotate-180 transition-transform duration-200 md:relative md:top-0.5 md:right-auto" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5" />
+                    </svg>
                 </label>
+            </div>
+            <div class="flex flex-1 items-center justify-end gap-5">
+                <div class="flex items-center">
+                    <input asp-for="IncludeClaimed" type="checkbox" id="include_claimed" value="include" class="h-6 w-6 cursor-pointer accent-[#0F0F0F] shadow-sm" />
+                    <label for="include_claimed" class="ml-2 cursor-pointer text-sm text-[#0F0F0F] sm:text-base">Include Claimed Systems</label>
+                </div>
+                <div class="grid w-45">
+                    <input type="submit" id="search" class="col-3 col-start-1 row-start-1 row-end-2 block w-full cursor-pointer rounded-lg border-1 border-[#0F0F0F] bg-[#0F0F0F] px-2.5 pt-3 pb-3 text-left shadow-sm" value="" />
+                    <label for="search" class="pointer-events-none z-10 col-3 col-start-1 row-start-1 row-end-2 flex w-full items-center justify-center gap-5">
+                        <span class="text-[#F0F0F0]">Search</span>
+                        <img src="~/images/courier.svg" class="z-10 h-8 sm:h-10" />
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="mt-3 grid grid-cols-2 gap-x-5">
+            <div id="faction_search" class="relative flex-1">
+                <div class="relative">
+                    <input asp-for="Faction" type="text" role="combobox" id="faction" class="peer block w-full appearance-none rounded-lg border-1 border-[#0F0F0F] bg-white px-2.5 pt-4 pb-2.5 pl-4 text-[#0F0F0F] shadow-sm focus:border-[#F07B05] focus:ring-0 focus:outline-none" placeholder=" " maxlength="75" data-hs-combo-box-input="" />
+                    <label for="faction" class="absolute start-2 top-2 z-10 origin-[0] -translate-y-4 scale-85 transform cursor-text rounded-3xl bg-white px-2 text-[#0F0F0F] duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-0 peer-focus:-translate-y-4 peer-focus:scale-85 peer-focus:p-1 peer-focus:px-2 peer-focus:shadow-sm rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4">Faction (Optional)</label>
+                    <label for="faction" id="clear_button" class="absolute top-1 right-2 z-10 cursor-pointer text-3xl">&times;</label>
+                </div>
+                <div class="absolute z-50 !mt-0 max-h-55 w-full overflow-y-auto rounded-lg border-1 border-[#BCBCBC] bg-white shadow-lg" style="display: none;" role="listbox" data-hs-combo-box-output=""></div>
+            </div>
+
+            <div>
+                <div class="flex w-full content-between">
+                    <span class="w-100">Max Distance From Sol</span>
+                    <div class="mb-5 flex w-full flex-row-reverse">
+                        <div class="flex items-center text-sm dark:text-neutral-200">
+                            <div id="hs-pass-values-to-html-elements-min-target" class="min-w-10 text-center">250</div>
+                            -
+                            <div id="hs-pass-values-to-html-elements-max-target" class="min-w-10 text-center">750</div>
+                        </div>
+                    </div>
+                </div>
+                <label class="sr-only">Example range</label>
+                <div id="hs-pass-values-to-html-elements" class="--prevent-on-load-init" data-hs-range-slider='{
+                  "start": [250, 750],
+                  "range": {
+                    "min": 0,
+                    "max": 1000
+                  },
+                  "formatter": {
+                    "type": "integer",
+                    "prefix": ""
+                  },
+                  "connect": true,
+                  "cssClasses": {
+                    "target": "relative h-2 rounded-full bg-gray-100 dark:bg-neutral-700",
+                    "base": "size-full relative z-1",
+                    "origin": "absolute top-0 end-0 size-full origin-[0_0] rounded-full",
+                    "handle": "absolute top-1/2 end-0 size-4.5 bg-white border-4 border-blue-600 rounded-full cursor-pointer translate-x-2/4 -translate-y-2/4 dark:border-blue-500",
+                    "connects": "relative z-0 size-full rounded-full overflow-hidden",
+                    "connect": "absolute top-0 end-0 z-1 size-full bg-blue-600 origin-[0_0] dark:bg-blue-500",
+                    "touchArea": "absolute -inset-1"
+                  }
+                }'></div>
             </div>
         </div>
     </form>
 </section>
 <section class="relative mt-3 mb-3 w-full rounded-md bg-[#F0F0F0] p-3">
-    <div class="flex flex-col gap-3 md:justify-between md:gap-0 md:flex-row">
+    <div class="flex flex-col gap-3 md:flex-row md:justify-between md:gap-0">
         <h1 class="text-center text-xl text-[#0F0F0F] md:text-left">Colonisation Candidates</h1>
         <div class="flex flex-col gap-4 md:flex-row">
             <div class="flex items-center justify-center gap-2">
                 <label id="results_per_page_lbl" class="text-sm text-[#0F0F0F]">Results per page</label>
-                <select id="results_per_page" class="min-h-full cursor-pointer rounded-md border border-[#0F0F0F] bg-white p-2.5 text-center text-sm text-[#0F0F0F] shadow-sm transition-all hover:shadow-lg hover:text-[#F0F0F0] hover:bg-slate-800 hover:border-[#0F0F0F] focus:text-[#F0F0F0] focus:bg-[#0F0F0F] focus:border-[#0F0F0F] active:border-[#0F0F0F] active:text-[#F0F0F0] active:bg-[#0F0F0F] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
+                <select id="results_per_page" class="min-h-full cursor-pointer rounded-md border border-[#0F0F0F] bg-white p-2.5 text-center text-sm text-[#0F0F0F] shadow-sm transition-all hover:border-[#0F0F0F] hover:bg-slate-800 hover:text-[#F0F0F0] hover:shadow-lg focus:border-[#0F0F0F] focus:bg-[#0F0F0F] focus:text-[#F0F0F0] active:border-[#0F0F0F] active:bg-[#0F0F0F] active:text-[#F0F0F0] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
                     <option value="5">5</option>
                     <option value="10" selected>10</option>
                     <option value="20">20</option>
@@ -72,21 +147,21 @@
                 </select>
             </div>
             <div class="flex justify-center gap-2">
-                <button id="previous_page" class="cursor-pointer rounded-md border border-[#0F0F0F] bg-white p-2.5 text-center text-sm text-[#0F0F0F] shadow-sm transition-all hover:shadow-lg hover:text-[#F0F0F0] hover:bg-slate-800 hover:border-[#0F0F0F] focus:text-[#F0F0F0] focus:bg-[#0F0F0F] focus:border-[#0F0F0F] active:border-[#0F0F0F] active:text-[#F0F0F0] active:bg-[#0F0F0F] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button">
+                <button id="previous_page" class="cursor-pointer rounded-md border border-[#0F0F0F] bg-white p-2.5 text-center text-sm text-[#0F0F0F] shadow-sm transition-all hover:border-[#0F0F0F] hover:bg-slate-800 hover:text-[#F0F0F0] hover:shadow-lg focus:border-[#0F0F0F] focus:bg-[#0F0F0F] focus:text-[#F0F0F0] active:border-[#0F0F0F] active:bg-[#0F0F0F] active:text-[#F0F0F0] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
                         <path fill-rule="evenodd" d="M11.03 3.97a.75.75 0 0 1 0 1.06l-6.22 6.22H21a.75.75 0 0 1 0 1.5H4.81l6.22 6.22a.75.75 0 1 1-1.06 1.06l-7.5-7.5a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
                     </svg>
                 </button>
                 <div>
-                    <button id="select_page_btn" class="h-11 w-36 cursor-pointer rounded-md border border-[#0F0F0F] bg-white p-2.5 text-center text-sm text-[#0F0F0F] shadow-sm transition-all hover:shadow-lg hover:text-[#F0F0F0] hover:bg-[#0F0F0F] hover:border-[#0F0F0F] focus:text-[#F0F0F0] focus:bg-[#0F0F0F] focus:border-[#0F0F0F] active:border-[#0F0F0F] active:text-[#F0F0F0] active:bg-[#0F0F0F] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button">
+                    <button id="select_page_btn" class="h-11 w-36 cursor-pointer rounded-md border border-[#0F0F0F] bg-white p-2.5 text-center text-sm text-[#0F0F0F] shadow-sm transition-all hover:border-[#0F0F0F] hover:bg-[#0F0F0F] hover:text-[#F0F0F0] hover:shadow-lg focus:border-[#0F0F0F] focus:bg-[#0F0F0F] focus:text-[#F0F0F0] active:border-[#0F0F0F] active:bg-[#0F0F0F] active:text-[#F0F0F0] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button">
                         Page <strong id="current_page">0</strong>&nbsp;of&nbsp;<strong id="max_pages">0</strong>
                     </button>
                     <form id="select_page_form" class="hidden" autocomplete="off">
-                        <input type="number" class="h-11 w-36 cursor-pointer rounded-md border border-[#0F0F0F] bg-white p-2.5 text-center text-sm text-[#0F0F0F] shadow-sm transition-all hover:shadow-lg hover:text-[#F0F0F0] hover:bg-[#0F0F0F] hover:border-[#0F0F0F] focus:outline-none focus:ring-0 focus:border-[#F07B05] active:border-[#0F0F0F] active:text-[#F0F0F0] active:bg-[#0F0F0F] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" min="1" placeholder="Jump to Page" required />
+                        <input type="number" class="h-11 w-36 cursor-pointer rounded-md border border-[#0F0F0F] bg-white p-2.5 text-center text-sm text-[#0F0F0F] shadow-sm transition-all hover:border-[#0F0F0F] hover:bg-[#0F0F0F] hover:text-[#F0F0F0] hover:shadow-lg focus:border-[#F07B05] focus:ring-0 focus:outline-none active:border-[#0F0F0F] active:bg-[#0F0F0F] active:text-[#F0F0F0] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" min="1" placeholder="Jump to Page" required />
                         <input type="submit" class="hidden" />
                     </form>
                 </div>
-                <button id="next_page" class="cursor-pointer rounded-md border border-[#0F0F0F] bg-white p-2.5 text-center text-sm text-[#0F0F0F] shadow-sm transition-all hover:shadow-lg hover:text-[#F0F0F0] hover:bg-[#0F0F0F] hover:border-[#0F0F0F] focus:text-[#F0F0F0] focus:bg-[#0F0F0F] focus:border-[#0F0F0F] active:border-[#0F0F0F] active:text-[#F0F0F0] active:bg-[#0F0F0F] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button">
+                <button id="next_page" class="cursor-pointer rounded-md border border-[#0F0F0F] bg-white p-2.5 text-center text-sm text-[#0F0F0F] shadow-sm transition-all hover:border-[#0F0F0F] hover:bg-[#0F0F0F] hover:text-[#F0F0F0] hover:shadow-lg focus:border-[#0F0F0F] focus:bg-[#0F0F0F] focus:text-[#F0F0F0] active:border-[#0F0F0F] active:bg-[#0F0F0F] active:text-[#F0F0F0] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
                         <path fill-rule="evenodd" d="M12.97 3.97a.75.75 0 0 1 1.06 0l7.5 7.5a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 1 1-1.06-1.06l6.22-6.22H3a.75.75 0 0 1 0-1.5h16.19l-6.22-6.22a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
                     </svg>
@@ -125,4 +200,3 @@
         </div>
     </div>
 </section>
-

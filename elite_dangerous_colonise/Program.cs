@@ -5,7 +5,7 @@ using Npgsql;
 using elite_dangerous_colonise.Classes;
 using elite_dangerous_colonise.Models.Database_Types;
 
-const bool DEBUG = false;
+const bool DEBUG = true;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +19,9 @@ builder.Configuration
 
 // Adds the RazorPages service.
 builder.Services.AddRazorPages();
+
+// Adds the Controllers service.
+builder.Services.AddControllers();
 
 // Adds the SignalR service.
 builder.Services.AddSignalR();
@@ -59,7 +62,6 @@ dataSourceBuilder.MapComposite<ColonisableInsertType>("ColonisableInsertType");
 NpgsqlDataSource dataSource = dataSourceBuilder.Build();
 builder.Services.AddSingleton(dataSource);
 
-// Registers Classes
 builder.Services.AddScoped<DatabaseBulkWriter>(provider =>
 {
     return new DatabaseBulkWriter(dataSource, DEBUG);
@@ -98,11 +100,19 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
+//app.UseStaticFiles(new StaticFileOptions
+//{
+//    FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "node_modules")),
+//    RequestPath = "/node_modules"
+//});
+
 app.UseRouting();
 
 app.UseAuthorization();
 
 app.MapRazorPages();
+
+app.MapControllers();
 
 app.MapHub<UpdateHub>("/updateHub");
 

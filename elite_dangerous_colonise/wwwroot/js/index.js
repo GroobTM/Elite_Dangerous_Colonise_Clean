@@ -67,7 +67,58 @@ function StartCountdown() {
     }, 1000);
 }
 
-// Search Form Functions
+
+
+$(function () {
+    $("#colonised_system_search").each(function () {
+        new HSComboBox(this, {
+            apiUrl: "/api/ColonisedSystemNames",
+            apiSearchQuery: "query",
+            outputItemTemplate: `
+                <div class="w-full cursor-pointer px-4 py-2 text-[#0F0F0F] hover:bg-[#E1E1E1]" data-hs-combo-box-output-item>
+                    <div class="flex justify-between items-center w-full">
+                        <div>
+                            <div data-hs-combo-box-output-item-field="name" data-hs-combo-box-search-text data-hs-combo-box-value></div>
+                        </div>
+                    </div>
+                </div>
+            `
+        });
+    });
+
+    const systemComboBoxInput = $("#colonised_system_search [data-hs-combo-box-input]");
+
+    systemComboBoxInput.on("input", function () {
+        if ($(this).val() === "") {
+            HSComboBox.getInstance("#colonised_system_search").setValue(null);
+        }
+    });
+
+    $("#faction_search").each(function () {
+        new HSComboBox(this, {
+            apiUrl: "/api/FactionNames",
+            apiSearchQuery: "query",
+            outputItemTemplate: `
+                <div class="w-full cursor-pointer px-4 py-2 text-[#0F0F0F] hover:bg-[#E1E1E1]" data-hs-combo-box-output-item>
+                    <div class="flex justify-between items-center w-full">
+                        <div>
+                            <div data-hs-combo-box-output-item-field="name" data-hs-combo-box-search-text data-hs-combo-box-value></div>
+                        </div>
+                    </div>
+                </div>
+            `
+        });
+    });
+
+    const factionComboBoxInput = $("#faction_search [data-hs-combo-box-input]");
+
+    factionComboBoxInput.on("input", function () {
+        if ($(this).val() === "") {
+            HSComboBox.getInstance("#faction_search").setValue(null);
+        }
+    });
+});
+
 $(document).on("click", "#clear_button", function () {
     $("#" + $(this).attr("for")).val("");
 });

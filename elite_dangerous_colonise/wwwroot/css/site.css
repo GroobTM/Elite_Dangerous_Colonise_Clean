@@ -1,5 +1,10 @@
 ﻿@import "tailwindcss";
 
+@source "../../node_modules/preline/dist/*.js";
+@import "../../node_modules/preline/variants.css";
+
+@plugin "@tailwindcss/forms";
+
 @font-face {
     font-family: "EUROCAPS";
     src: url("../fonts/EUROCAPS.TTF");
