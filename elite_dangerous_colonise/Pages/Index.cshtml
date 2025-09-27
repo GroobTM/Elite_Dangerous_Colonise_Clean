@@ -1,4 +1,6 @@
 ﻿@page
+@using System.Text.RegularExpressions
+@using elite_dangerous_colonise.Models.Database_Types
 @model IndexModel
 @{
     ViewData["Title"] = "Home Page";
@@ -759,7 +761,19 @@
                 </div>
             </div>
             <span class="m-0 h-1 rounded-full bg-[#DFDFDF] lg:col-start-1 lg:col-end-3"></span>
+            <div class="relative col-span-2">
+                <span class="relative p-3">Available Hotspots</span>
+                <select id="hotspot_select" multiple=""> 
+                    @{
+                        Array values = Enum.GetValues(typeof(HotspotType));
 
+                        foreach (HotspotType value in values)
+                        {
+                            <option value="@value" data-hs-select-option='{"description": "@value"}'>@Regex.Replace(value.ToString(), "(\\B[A-Z])", " $1")</option>
+                        }
+                    }
+                </select>
+            </div>
         </div>
     </form>
 </section>
