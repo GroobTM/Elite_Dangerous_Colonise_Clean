@@ -147,7 +147,7 @@ namespace elite_dangerous_colonise.Classes
 
         public override void AddToDataLists(DatabaseDataLists dataLists)
         {
-            if (SystemValue > 0 || !BodyCounts.IsBoringlyEmpty())
+            if (SystemValue > 0 && !BodyCounts.IsBoringlyEmpty())
             {
                 AddSystemToDataList(dataLists);
                 AddSystemDetailsToDataLists(dataLists);
