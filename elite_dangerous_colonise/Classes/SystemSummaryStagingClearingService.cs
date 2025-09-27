@@ -101,14 +101,27 @@ namespace elite_dangerous_colonise.Classes
             }
         }
 
+        private async Task RefreshMaxSearchValues(NpgsqlConnection conn)
+        {
+            Logger.LogInformation("System Summary Staging Clearing Service", 9, "Refreshing MaxSearchValues view.");
+
+            await using (NpgsqlCommand command = new NpgsqlCommand("REFRESH MATERIALIZED VIEW \"MaxSearchValues\"", conn))
+            {
+                await command.ExecuteNonQueryAsync();
+            }
+        }
+
         private async Task RefreshValuesTables(NpgsqlConnection conn)
         {
             await using (NpgsqlTransaction transaction = await conn.BeginTransactionAsync())
             {
                 await RefreshDistinctColonisedStarSystems(conn);
                 await RefreshDistinctUncolonisedStarSystems(conn);
-                await RefreshClosestTrailblazerByStarSystem(conn);
+                await RefreshMaxSearchValues(conn);
+
                 await CalculateTrailblazerDistances(conn);
+                await RefreshClosestTrailblazerByStarSystem(conn);
+                
 
                 await transaction.CommitAsync();
 

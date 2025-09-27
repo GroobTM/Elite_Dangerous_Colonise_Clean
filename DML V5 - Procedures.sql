@@ -1034,27 +1034,3 @@ RETURNS jsonb AS $$
 $$ LANGUAGE sql;
 
 
-SELECT 
-	MAX("landableCount"),
-	MAX("walkableCount"),
-	MAX("distanceToSol"),
-	MAX("totalHotspots"),
-	MAX("blackHoleCount"),
-	MAX("neutronStarCount"),
-	MAX("whiteDwarves"),
-	MAX("otherStarCount"),
-	MAX("earthLikeCount"),
-	MAX("waterWorldCount"),
-	MAX("ammoniaWorldCount"),
-	MAX("gasGiantCount"),
-	MAX("highMetalContentCount"),
-	MAX("metalRichCount"),
-	MAX("rockyIceBodyCount"),
-	MAX("rockBodyCount"),
-	MAX("icyBodyCount"),
-	MAX("organicCount"),
-	MAX("geologicalsCount"),
-	MAX("ringCount")
-FROM "DistinctUncolonisedStarSystems" duss
-INNER JOIN "ColonyOverrideCounts" coc ON duss."uncolonisedSystemID" = coc."systemID"
-INNER JOIN "UncolonisedStarSystems" uss  ON duss."uncolonisedSystemID" = uss."systemID";

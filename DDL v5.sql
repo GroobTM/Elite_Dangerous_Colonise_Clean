@@ -197,6 +197,32 @@ FROM (
 ) as "ClosestTrailblazer"
 ORDER BY "distanceToTrailblazer" ASC;
 
+CREATE MATERIALIZED VIEW "MaxSearchValues" AS
+SELECT 
+	MAX("landableCount") "landableCount",
+	MAX("walkableCount") "walkableCount",
+	MAX("distanceToSol") "distanceToSol",
+	MAX("totalHotspots") "totalHotspots",
+	MAX("blackHoleCount") "blackHoleCount",
+	MAX("neutronStarCount") "neutronStarCount",
+	MAX("whiteDwarves") "whiteDwarves",
+	MAX("otherStarCount") "otherStarCount",
+	MAX("earthLikeCount") "earthLikeCount",
+	MAX("waterWorldCount") "waterWorldCount",
+	MAX("ammoniaWorldCount") "ammoniaWorldCount",
+	MAX("gasGiantCount") "gasGiantCount",
+	MAX("highMetalContentCount") "highMetalContentCount",
+	MAX("metalRichCount") "metalRichCount",
+	MAX("rockyIceBodyCount") "rockyIceBodyCount",
+	MAX("rockBodyCount") "rockBodyCount",
+	MAX("icyBodyCount") "icyBodyCount",
+	MAX("organicCount") "organicCount",
+	MAX("geologicalsCount") "geologicalsCount",
+	MAX("ringCount") "ringCount"
+FROM "DistinctUncolonisedStarSystems" duss
+INNER JOIN "ColonyOverrideCounts" coc ON duss."uncolonisedSystemID" = coc."systemID"
+INNER JOIN "UncolonisedStarSystems" uss  ON duss."uncolonisedSystemID" = uss."systemID";
+
 CREATE INDEX "idx_F_factionName" ON "Factions"("factionName");
 CREATE INDEX "idx_SS_systemName" ON "StarSystems"("systemName");
 CREATE INDEX "idx_SS_isColonised" ON "StarSystems"("isColonised");

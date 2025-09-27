@@ -159,7 +159,7 @@ namespace elite_dangerous_colonise.Models.Json_Structure
             {
                 bodyCount.BinBodyTypes(body.BodyType);
                 bodyCount.OrganicCount += body.SignalCategory?.SignalTypes.GetValueOrDefault("$SAA_SignalType_Biological;", (short)0) ?? 0;
-                bodyCount.GeologicalsCount += body.SignalCategory?.SignalTypes.GetValueOrDefault("SAA_SignalType_Geological;", (short)0) ?? 0;
+                bodyCount.GeologicalsCount += body.SignalCategory?.SignalTypes.GetValueOrDefault("$SAA_SignalType_Geological;", (short)0) ?? 0;
                 bodyCount.RingCount += (short)(body.Rings?.Count() ?? 0);
             }
 
