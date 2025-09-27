@@ -68,55 +68,81 @@ function StartCountdown() {
 }
 
 
+// Search Bar Functions
+
+function SetupSearchInput(id, api) {
+    $("#" + id).each(function () {
+        new HSComboBox(this, {
+            apiUrl: api,
+            apiSearchQuery: "query",
+            outputItemTemplate: `
+                <div class="w-full cursor-pointer px-4 py-2 text-[#0F0F0F] hover:bg-[#E1E1E1]" data-hs-combo-box-output-item>
+                    <div class="flex justify-between items-center w-full">
+                        <div>
+                            <div data-hs-combo-box-output-item-field="name" data-hs-combo-box-search-text data-hs-combo-box-value></div>
+                        </div>
+                    </div>
+                </div>
+            `
+        });
+    });
+
+    const comboBoxInput = $("#" + id + " [data-hs-combo-box-input]");
+
+    comboBoxInput.on("input", function () {
+        if ($(this).val() === "") {
+            HSComboBox.getInstance("#" + id).setValue(null);
+        }
+    });
+}
+
+function SetupMaxDistanceFromSolSlider() {
+    const distanceFromSolSlider = document.querySelector("#distance_from_sol_slider");
+    const distanceFromSolValue = document.querySelector("#distance_from_sol_value");
+    const distanceFromSolSliderInstance = new HSRangeSlider(distanceFromSolSlider);
+
+    distanceFromSolSlider.noUiSlider.on("update", function (values) {
+        distanceFromSolValue.textContent = Math.trunc(values[0]) + " ly";
+    });
+}
+
+function SetupGenericSlider(sliderID, valueID) {
+    const slider = document.querySelector("#" + sliderID);
+    const value = document.querySelector("#" + valueID);
+    const sliderInstance = new HSRangeSlider(slider);
+
+    slider.noUiSlider.on("update", function (values) {
+        value.textContent = Math.trunc(values[0]) + " - " + Math.trunc(values[1]);
+    });
+}
 
 $(function () {
-    $("#colonised_system_search").each(function () {
-        new HSComboBox(this, {
-            apiUrl: "/api/ColonisedSystemNames",
-            apiSearchQuery: "query",
-            outputItemTemplate: `
-                <div class="w-full cursor-pointer px-4 py-2 text-[#0F0F0F] hover:bg-[#E1E1E1]" data-hs-combo-box-output-item>
-                    <div class="flex justify-between items-center w-full">
-                        <div>
-                            <div data-hs-combo-box-output-item-field="name" data-hs-combo-box-search-text data-hs-combo-box-value></div>
-                        </div>
-                    </div>
-                </div>
-            `
-        });
-    });
+    SetupSearchInput("colonised_system_search", "/api/ColonisedSystemNames");
+    SetupSearchInput("faction_search", "/api/FactionNames");
+    SetupMaxDistanceFromSolSlider();
+    SetupGenericSlider("landable_bodies_slider", "landable_bodies_value");
+    SetupGenericSlider("walkable_bodies_slider", "walkable_bodies_value");
+    SetupGenericSlider("black_holes_slider", "black_holes_value");
+    SetupGenericSlider("neutron_stars_slider", "neutron_stars_value");
+    SetupGenericSlider("white_dwarves_slider", "white_dwarves_value");
+    SetupGenericSlider("other_stars_slider", "other_stars_value");
+    SetupGenericSlider("earth_likes_slider", "earth_likes_value");
+    SetupGenericSlider("water_worlds_slider", "water_worlds_value");
+    SetupGenericSlider("ammonia_worlds_slider", "ammonia_worlds_value");
+    SetupGenericSlider("gas_giants_slider", "gas_giants_value");
+    SetupGenericSlider("high_metal_content_slider", "high_metal_content_value");
+    SetupGenericSlider("metal_rich_slider", "metal_rich_value");
+    SetupGenericSlider("rocky_ice_world_slider", "rocky_ice_world_value");
+    SetupGenericSlider("rocky_bodies_slider", "rocky_bodies_value");
+    SetupGenericSlider("icy_bodies_slider", "icy_bodies_value");
+    SetupGenericSlider("rings_slider", "rings_value");
+    SetupGenericSlider("geologicals_slider", "geologicals_value");
+    SetupGenericSlider("organics_slider", "organics_value");
+});
 
-    const systemComboBoxInput = $("#colonised_system_search [data-hs-combo-box-input]");
-
-    systemComboBoxInput.on("input", function () {
-        if ($(this).val() === "") {
-            HSComboBox.getInstance("#colonised_system_search").setValue(null);
-        }
-    });
-
-    $("#faction_search").each(function () {
-        new HSComboBox(this, {
-            apiUrl: "/api/FactionNames",
-            apiSearchQuery: "query",
-            outputItemTemplate: `
-                <div class="w-full cursor-pointer px-4 py-2 text-[#0F0F0F] hover:bg-[#E1E1E1]" data-hs-combo-box-output-item>
-                    <div class="flex justify-between items-center w-full">
-                        <div>
-                            <div data-hs-combo-box-output-item-field="name" data-hs-combo-box-search-text data-hs-combo-box-value></div>
-                        </div>
-                    </div>
-                </div>
-            `
-        });
-    });
-
-    const factionComboBoxInput = $("#faction_search [data-hs-combo-box-input]");
-
-    factionComboBoxInput.on("input", function () {
-        if ($(this).val() === "") {
-            HSComboBox.getInstance("#faction_search").setValue(null);
-        }
-    });
+$("#more_options_button").on("click", function () {
+    $("#more_options_icon").toggleClass("rotate-180");
+    $("#more_options").toggleClass("hidden grid");
 });
 
 $(document).on("click", "#clear_button", function () {

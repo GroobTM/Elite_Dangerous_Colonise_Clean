@@ -1,8 +1,9 @@
+using elite_dangerous_colonise.Classes;
+using elite_dangerous_colonise.Models.Database_Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json.Linq;
 using Npgsql;
-using elite_dangerous_colonise.Classes;
 
 
 namespace elite_dangerous_colonise.Pages;
@@ -11,6 +12,8 @@ public class IndexModel : PageModel
 {
     private readonly NpgsqlDataSource dataSource;
     private readonly ILogger<IndexModel> _logger;
+
+    public SelectMaxSearchValuesResult MaxValues { get; private set; }
 
     [BindProperty]
     public string ColonisedSystem { get; set; }
@@ -30,14 +33,69 @@ public class IndexModel : PageModel
         this.dataSource = dataSource;
     }
 
-    public void OnGet()
+    public async Task<IActionResult> OnGet()
     {
+        try
+        {
+            MaxValues = await SelectMaxSearchValues();
 
+            return Page();
+        }
+        catch (NpgsqlException ex)
+        {
+            Logger.LogError("Index Page", 0, "A database error occurred.", ex);
+
+            return RedirectToPage("/Error", new { statusCode = 500 });
+        }
+
+        catch (Exception ex)
+        {
+            Logger.LogError("Index Page", 1, ex);
+
+            return RedirectToPage("/Error", new { statusCode = 500 });
+        }
     }
 
     public void OnPost()
     {
 
+    }
+
+    private async Task<SelectMaxSearchValuesResult> SelectMaxSearchValues()
+    {
+        await using (NpgsqlConnection conn = await dataSource.OpenConnectionAsync())
+        {
+            await using (NpgsqlCommand command = new NpgsqlCommand("SELECT * FROM \"MaxSearchValues\"", conn))
+            {
+                await using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                {
+                    await reader.ReadAsync();
+
+                    return new SelectMaxSearchValuesResult(
+                        reader.GetInt32(0),
+                        reader.GetInt32(1),
+                        reader.GetInt32(2),
+                        reader.GetInt32(3),
+                        reader.GetInt32(4),
+                        reader.GetInt32(5),
+                        reader.GetInt32(6),
+                        reader.GetInt32(7),
+                        reader.GetInt32(8),
+                        reader.GetInt32(9),
+                        reader.GetInt32(10),
+                        reader.GetInt32(11),
+                        reader.GetInt32(12),
+                        reader.GetInt32(13),
+                        reader.GetInt32(14),
+                        reader.GetInt32(15),
+                        reader.GetInt32(16),
+                        reader.GetInt32(17),
+                        reader.GetInt32(18),
+                        reader.GetInt32(19)
+                        );
+                }
+            }
+        }
     }
 
     private string ParseSearchOrder(string inputOrder)
