@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json.Linq;
 using Npgsql;
+using System.Text.RegularExpressions;
 
 
 namespace elite_dangerous_colonise.Pages;
@@ -14,6 +15,7 @@ public class IndexModel : PageModel
     private readonly ILogger<IndexModel> _logger;
 
     public SelectMaxSearchValuesResult MaxValues { get; private set; }
+    public List<string> HotspotTypes { get; private set; }
 
     [BindProperty]
     public string ColonisedSystem { get; set; }
@@ -38,6 +40,7 @@ public class IndexModel : PageModel
         try
         {
             MaxValues = await SelectMaxSearchValues();
+            HotspotTypes = await SelectHotspotTypes();
 
             return Page();
         }
@@ -96,6 +99,27 @@ public class IndexModel : PageModel
                 }
             }
         }
+    }
+
+    private async Task<List<string>> SelectHotspotTypes()
+    {
+        List<string> result = new List<string>();
+
+        await using (NpgsqlConnection conn = await dataSource.OpenConnectionAsync())
+        {
+            await using (NpgsqlCommand command = new NpgsqlCommand("SELECT DISTINCT \"hotspotType\" FROM \"Hotspots\";", conn))
+            {
+                await using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                {
+                    while(await reader.ReadAsync())
+                    {
+                        result.Add(Regex.Replace(reader.GetString(0), "(\\B[A-Z])", " $1"));
+                    }
+                }
+            }
+        }
+
+        return result;
     }
 
     private string ParseSearchOrder(string inputOrder)

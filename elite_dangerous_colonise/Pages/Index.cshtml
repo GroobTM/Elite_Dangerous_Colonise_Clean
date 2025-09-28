@@ -1,6 +1,4 @@
 ﻿@page
-@using System.Text.RegularExpressions
-@using elite_dangerous_colonise.Models.Database_Types
 @model IndexModel
 @{
     ViewData["Title"] = "Home Page";
@@ -26,7 +24,7 @@
                 <div class="relative">
                     <input asp-for="ColonisedSystem" type="text" role="combobox" id="colonised_system" class="peer block w-full appearance-none rounded-lg border-1 border-[#0F0F0F] bg-white px-2.5 pt-4 pb-2.5 pl-4 text-[#0F0F0F] shadow-sm focus:border-[#F07B05] focus:ring-0 focus:outline-none" placeholder=" " maxlength="75" data-hs-combo-box-input="" />
                     <label for="colonised_system" class="absolute start-2 top-2 z-10 origin-[0] -translate-y-4 scale-85 transform cursor-text rounded-3xl bg-white px-2 text-[#0F0F0F] duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-0 peer-focus:-translate-y-4 peer-focus:scale-85 peer-focus:p-1 peer-focus:px-2 peer-focus:shadow-sm rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4">Colonised System (Optional)</label>
-                    <label for="colonised_system" id="clear_button" class="absolute top-1 right-2 z-10 cursor-pointer text-3xl">&times;</label>
+                    <label for="colonised_system" id="clear_button" class="absolute top-1 right-2 z-10 cursor-pointer text-3xl hover:text-[#F07B05]">&times;</label>
                 </div>
                 <div class="absolute z-50 !mt-0 max-h-55 w-full overflow-y-auto rounded-lg border-1 border-[#BCBCBC] bg-white shadow-lg" style="display: none;" role="listbox" data-hs-combo-box-output=""></div>
             </div>
@@ -40,7 +38,7 @@
                     <option value="DistanceToTrailblazer">Distance to Trailblazer Megaship</option>
                 </select>
                 <label for="sortOrder" class="pointer-events-none absolute start-2 top-2 z-10 origin-[0] -translate-y-4 scale-85 rounded-3xl bg-white px-2 text-[#0F0F0F]">Sort Order</label>
-                <svg class="pointer-events-none absolute top-5 right-3 z-10 h-4 w-4 shrink-0 rotate-180 text-[#0F0F0F]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                <svg class="pointer-events-none absolute top-4 right-3 z-10 h-5 w-4 shrink-0 rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"></path>
                 </svg>
             </div>
@@ -74,7 +72,7 @@
                 <div class="relative">
                     <input asp-for="Faction" type="text" role="combobox" id="faction" class="peer block w-full appearance-none rounded-lg border-1 border-[#0F0F0F] bg-white px-2.5 pt-4 pb-2.5 pl-4 text-[#0F0F0F] shadow-sm focus:border-[#F07B05] focus:ring-0 focus:outline-none" placeholder=" " maxlength="75" data-hs-combo-box-input="" />
                     <label for="faction" class="absolute start-2 top-2 z-10 origin-[0] -translate-y-4 scale-85 transform cursor-text rounded-3xl bg-white px-2 text-[#0F0F0F] duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-0 peer-focus:-translate-y-4 peer-focus:scale-85 peer-focus:p-1 peer-focus:px-2 peer-focus:shadow-sm rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4">Faction (Optional)</label>
-                    <label for="faction" id="clear_button" class="absolute top-1 right-2 z-10 cursor-pointer text-3xl">&times;</label>
+                    <label for="faction" id="clear_button" class="absolute top-1 right-2 z-10 cursor-pointer text-3xl hover:text-[#F07B05]">&times;</label>
                 </div>
                 <div class="absolute z-50 !mt-0 max-h-55 w-full overflow-y-auto rounded-lg border-1 border-[#BCBCBC] bg-white shadow-lg" style="display: none;" role="listbox" data-hs-combo-box-output=""></div>
             </div>
@@ -761,15 +759,13 @@
                 </div>
             </div>
             <span class="m-0 h-1 rounded-full bg-[#DFDFDF] lg:col-start-1 lg:col-end-3"></span>
-            <div class="relative col-span-2">
+            <div class="relative lg:col-span-2">
                 <span class="relative p-3">Available Hotspots</span>
                 <select id="hotspot_select" multiple=""> 
                     @{
-                        Array values = Enum.GetValues(typeof(HotspotType));
-
-                        foreach (HotspotType value in values)
+                        foreach (string hotspot in Model.HotspotTypes)
                         {
-                            <option value="@value" data-hs-select-option='{"description": "@value"}'>@Regex.Replace(value.ToString(), "(\\B[A-Z])", " $1")</option>
+                            <option value="@hotspot" data-hs-select-option='{"description": "@hotspot"}'>@hotspot</option>
                         }
                     }
                 </select>
