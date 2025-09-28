@@ -698,7 +698,8 @@ CREATE OR REPLACE FUNCTION "SelectSearchResults" (
 	"inputMaxLandables" SMALLINT,
 	"inputMinWalkable" SMALLINT,
 	"inputMaxWalkable" SMALLINT,
-	"inputMaxDistanceToSol" INT
+	"inputMaxDistanceToSol" INT,
+	"inputHotspotTypes" "HotspotType"[]
 )
 RETURNS jsonb AS $$
 DECLARE
@@ -717,6 +718,28 @@ BEGIN
 					SELECT "colonisedSystemID"
 					FROM "SelectSearchedColonisedSystems"($41, $42)
 				)
+			),';
+	END IF;
+	
+	IF "inputHotspotTypes" IS NOT NULL AND NOT ("inputSystemName" IS NOT NULL OR "inputFactionName" IS NOT NULL) THEN
+		"queryString" := "queryString" || '
+			"HotspotSearchResults" AS (
+				SEELCT "uncolonisedSystemID"
+				FROM "DistinctUncolonisedStarSystems" duss
+				INNER JOIN "Rings" r ON duss."uncolonisedSystemID" = r."systemID"
+				INNER JOIN "Hotspots" h ON r."ringID" = h."ringID"
+				WHERE h."hotspotType" = ANY($41)
+			),';
+	END IF;
+	
+	IF "inputHotspotTypes" IS NOT NULL AND ("inputSystemName" IS NOT NULL OR "inputFactionName" IS NOT NULL) THEN
+		"queryString" := "queryString" || '
+			"HotspotSearchResults" AS (
+				SEELCT "uncolonisedSystemID"
+				FROM "DistinctUncolonisedStarSystems" duss
+				INNER JOIN "Rings" r ON duss."uncolonisedSystemID" = r."systemID"
+				INNER JOIN "Hotspots" h ON r."ringID" = h."ringID"
+				WHERE h."hotspotType" = ANY($43)
 			),';
 	END IF;
 	
@@ -775,6 +798,15 @@ BEGIN
 			"uncolonisedSystemID" IN (
 				SELECT "uncolonisedSystemID"
 				FROM "ColonisedSearchResults"
+			)
+			AND';
+	END IF;
+	
+	IF "inputHotspotTypes" IS NOT NULL THEN
+		"queryString" := "queryString" || '
+			"uncolonisedSystemID" IN (
+				SELECT "uncolonisedSystemID"
+				FROM "HotspotSearchResults"
 			)
 			AND';
 	END IF;
@@ -956,7 +988,99 @@ BEGIN
 		"resultsPerPage",
 		"inputSystemName",
 		"inputFactionName";
-	
+		
+	ELSIF "inputHotspotTypes" IS NOT NULL AND NOT ("inputSystemName" IS NOT NULL OR "inputFactionName" IS NOT NULL) THEN
+		EXECUTE "queryString" INTO "result"
+		USING 
+		"inputMinBlackHoles", 
+		"inputMaxBlackHoles", 
+		"inputMinNeutronStars",
+		"inputMaxNeutronStars",
+		"inputMinWhiteDwarves",
+		"inputMaxWhiteDwarves",
+		"inputMinOtherStars",
+		"inputMaxOtherStars",
+		"inputMinEarthLikes",
+		"inputMaxEarthLikes",
+		"inputMinWaterWorlds",
+		"inputMaxWaterWorlds",
+		"inputMinAmmoniaWorlds",
+		"inputMaxAmmoniaWorlds",
+		"inputMinGasGiants",
+		"inputMaxGasGiants",
+		"inputMinHighMetalContents",
+		"inputMaxHighMetalContents",
+		"inputMinMetalRichs",
+		"inputMaxMetalRichs",
+		"inputMinRockyIces",
+		"inputMaxRockyIces",
+		"inputMinRocks",
+		"inputMaxRocks",
+		"inputMinIcys",
+		"inputMaxIcys",
+		"inputMinOrganics",
+		"inputMaxOrganics",
+		"inputMinGeologicals",
+		"inputMaxGeologicals",
+		"inputMinRings",
+		"inputMaxRings",
+		"inputMinLandables",
+		"inputMaxLandables",
+		"inputMinWalkable",
+		"inputMaxWalkable",
+		"inputMaxDistanceToSol",
+		"sortOrder",
+		"pageNo",
+		"resultsPerPage",
+		"inputHotspotTypes";
+		
+	ELSIF "inputHotspotTypes" IS NOT NULL AND ("inputSystemName" IS NOT NULL OR "inputFactionName" IS NOT NULL) THEN
+		EXECUTE "queryString" INTO "result"
+		USING 
+		"inputMinBlackHoles", 
+		"inputMaxBlackHoles", 
+		"inputMinNeutronStars",
+		"inputMaxNeutronStars",
+		"inputMinWhiteDwarves",
+		"inputMaxWhiteDwarves",
+		"inputMinOtherStars",
+		"inputMaxOtherStars",
+		"inputMinEarthLikes",
+		"inputMaxEarthLikes",
+		"inputMinWaterWorlds",
+		"inputMaxWaterWorlds",
+		"inputMinAmmoniaWorlds",
+		"inputMaxAmmoniaWorlds",
+		"inputMinGasGiants",
+		"inputMaxGasGiants",
+		"inputMinHighMetalContents",
+		"inputMaxHighMetalContents",
+		"inputMinMetalRichs",
+		"inputMaxMetalRichs",
+		"inputMinRockyIces",
+		"inputMaxRockyIces",
+		"inputMinRocks",
+		"inputMaxRocks",
+		"inputMinIcys",
+		"inputMaxIcys",
+		"inputMinOrganics",
+		"inputMaxOrganics",
+		"inputMinGeologicals",
+		"inputMaxGeologicals",
+		"inputMinRings",
+		"inputMaxRings",
+		"inputMinLandables",
+		"inputMaxLandables",
+		"inputMinWalkable",
+		"inputMaxWalkable",
+		"inputMaxDistanceToSol",
+		"sortOrder",
+		"pageNo",
+		"resultsPerPage",
+		"inputSystemName",
+		"inputFactionName",
+		"inputHotspotTypes";
+		
 	ELSE
 		EXECUTE "queryString" INTO "result"
 		USING 
