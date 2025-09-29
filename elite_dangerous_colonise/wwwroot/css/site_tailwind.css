@@ -365,6 +365,12 @@
   .col-start-1 {
     grid-column-start: 1;
   }
+  .col-start-2 {
+    grid-column-start: 2;
+  }
+  .col-end-5 {
+    grid-column-end: 5;
+  }
   .row-start-1 {
     grid-row-start: 1;
   }
@@ -388,6 +394,12 @@
   }
   .row-start-8 {
     grid-row-start: 8;
+  }
+  .row-start-9 {
+    grid-row-start: 9;
+  }
+  .row-start-10 {
+    grid-row-start: 10;
   }
   .row-end-2 {
     grid-row-end: 2;
@@ -654,6 +666,9 @@
   .w-45 {
     width: calc(var(--spacing) * 45);
   }
+  .w-300 {
+    width: calc(var(--spacing) * 300);
+  }
   .w-\[calc\(100\%-32px\)\] {
     width: calc(100% - 32px);
   }
@@ -677,6 +692,9 @@
   }
   .shrink-0 {
     flex-shrink: 0;
+  }
+  .table-fixed {
+    table-layout: fixed;
   }
   .border-collapse {
     border-collapse: collapse;
@@ -761,8 +779,14 @@
   .grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+  .grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
   .grid-cols-5 {
     grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  .grid-cols-8 {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
   }
   .flex-col {
     flex-direction: column;
@@ -1780,6 +1804,51 @@
       grid-row-start: 4;
     }
   }
+  .lg\:row-start-5 {
+    @media (width >= 64rem) {
+      grid-row-start: 5;
+    }
+  }
+  .lg\:row-start-6 {
+    @media (width >= 64rem) {
+      grid-row-start: 6;
+    }
+  }
+  .lg\:block {
+    @media (width >= 64rem) {
+      display: block;
+    }
+  }
+  .lg\:hidden {
+    @media (width >= 64rem) {
+      display: none;
+    }
+  }
+  .lg\:inline {
+    @media (width >= 64rem) {
+      display: inline;
+    }
+  }
+  .lg\:table {
+    @media (width >= 64rem) {
+      display: table;
+    }
+  }
+  .lg\:table-cell {
+    @media (width >= 64rem) {
+      display: table-cell;
+    }
+  }
+  .lg\:table-header-group {
+    @media (width >= 64rem) {
+      display: table-header-group;
+    }
+  }
+  .lg\:table-row {
+    @media (width >= 64rem) {
+      display: table-row;
+    }
+  }
   .lg\:w-42 {
     @media (width >= 64rem) {
       width: calc(var(--spacing) * 42);
@@ -1883,6 +1952,11 @@
       grid-column-start: 4;
     }
   }
+  .xl\:col-end-5 {
+    @media (width >= 80rem) {
+      grid-column-end: 5;
+    }
+  }
   .xl\:row-start-1 {
     @media (width >= 80rem) {
       grid-row-start: 1;
@@ -1891,6 +1965,16 @@
   .xl\:row-start-2 {
     @media (width >= 80rem) {
       grid-row-start: 2;
+    }
+  }
+  .xl\:row-start-3 {
+    @media (width >= 80rem) {
+      grid-row-start: 3;
+    }
+  }
+  .xl\:row-start-4 {
+    @media (width >= 80rem) {
+      grid-row-start: 4;
     }
   }
   .xl\:grid-cols-4 {

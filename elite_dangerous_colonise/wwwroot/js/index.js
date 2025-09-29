@@ -356,8 +356,6 @@ async function LoadResults() {
         hotspotTypes: parseInt(formData.get("HotspotTypes"))
     });
 
-    console.log(searchParams);
-
     const response = await fetch(`/Index?handler=Search&${searchParams}`);
 
     if (!response.ok) {

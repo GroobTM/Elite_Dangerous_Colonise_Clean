@@ -283,7 +283,7 @@ public class IndexModel : PageModel
             }
             catch (NpgsqlException ex)
             {
-                Logger.LogError("User Result Controller", 0, ex);
+                Logger.LogError("Index Page", 0, ex);
 
                 return StatusCode(500, new
                 {
@@ -294,7 +294,7 @@ public class IndexModel : PageModel
 
             catch (Exception ex)
             {
-                Logger.LogError("User Result Controller", 1, ex);
+                Logger.LogError("Index Page", 1, ex);
 
                 return StatusCode(500, new
                 {

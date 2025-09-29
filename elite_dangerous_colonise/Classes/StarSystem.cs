@@ -120,8 +120,8 @@ namespace elite_dangerous_colonise.Classes
 
         private double CalculateSystemValue()
         {
-            double WALKABLE_WEIGHT = 0.6;
-            double HOTSPOT_WEIGHT = 0.8;
+            const double WALKABLE_WEIGHT = 0.6;
+            const double HOTSPOT_WEIGHT = 0.8;
 
             return
                 BodyCounts.CalculateCountValues() +

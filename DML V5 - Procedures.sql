@@ -259,6 +259,7 @@ BEGIN
 		"totalHotspots" = EXCLUDED."totalHotspots",
 		"systemValue" = EXCLUDED."systemValue"
 	WHERE (
+		"UncolonisedStarSystems"."lastUpdated",
 		"UncolonisedStarSystems"."reserveLevel",
 		"UncolonisedStarSystems"."landableCount",
 		"UncolonisedStarSystems"."walkableCount",
@@ -266,6 +267,7 @@ BEGIN
 		"UncolonisedStarSystems"."systemValue"
 	)
 	IS DISTINCT FROM (
+		EXCLUDED."lastUpdated",
 		EXCLUDED."reserveLevel",
 		EXCLUDED."landableCount",
 		EXCLUDED."walkableCount",
