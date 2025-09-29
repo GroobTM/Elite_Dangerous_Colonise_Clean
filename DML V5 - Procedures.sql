@@ -859,7 +859,9 @@ BEGIN
 						''coordinateY'', ST_Y(tr."systemCoords"),
 						''coordinateZ'', ST_Z(tr."systemCoords")
 					),
-				''systemValue'', tr."systemValue",
+				''reserveLevel'', tr."reserveLevel",
+				''landableCount'', tr."landableCount",
+				''walkableCount'', tr."walkableCount",
 				''systemCounts'', jsonb_build_object(
 					''blackHoleCount'', tr."blackHoleCount",
 					''neutronStarCount'', tr."neutronStarCount",
@@ -1151,5 +1153,3 @@ RETURNS jsonb AS $$
 		LIMIT 100
 	) as "systemNames";
 $$ LANGUAGE sql;
-
-
