@@ -659,7 +659,6 @@ CREATE OR REPLACE FUNCTION "SelectSearchResults" (
 	"sortOrder" "ResultOrderType",
 	"pageNo" INT,
 	"resultsPerPage" SMALLINT,
-	"includeClaimed" BOOLEAN,
 	"inputSystemName" VARCHAR(75),
 	"inputFactionName" VARCHAR(75),
 	"inputMinBlackHoles" SMALLINT,
@@ -680,8 +679,8 @@ CREATE OR REPLACE FUNCTION "SelectSearchResults" (
 	"inputMaxGasGiants" SMALLINT,
 	"inputMinHighMetalContents" SMALLINT,
 	"inputMaxHighMetalContents" SMALLINT,
-	"inputMinMetalRichs" SMALLINT,
-	"inputMaxMetalRichs" SMALLINT,
+	"inputMinMetalRiches" SMALLINT,
+	"inputMaxMetalRiches" SMALLINT,
 	"inputMinRockyIces" SMALLINT,
 	"inputMaxRockyIces" SMALLINT,
 	"inputMinRocks" SMALLINT,
@@ -724,7 +723,7 @@ BEGIN
 	IF "inputHotspotTypes" IS NOT NULL AND NOT ("inputSystemName" IS NOT NULL OR "inputFactionName" IS NOT NULL) THEN
 		"queryString" := "queryString" || '
 			"HotspotSearchResults" AS (
-				SEELCT "uncolonisedSystemID"
+				SELECT "uncolonisedSystemID"
 				FROM "DistinctUncolonisedStarSystems" duss
 				INNER JOIN "Rings" r ON duss."uncolonisedSystemID" = r."systemID"
 				INNER JOIN "Hotspots" h ON r."ringID" = h."ringID"
@@ -808,12 +807,6 @@ BEGIN
 				SELECT "uncolonisedSystemID"
 				FROM "HotspotSearchResults"
 			)
-			AND';
-	END IF;
-	
-	IF NOT "includeClaimed" THEN
-		"queryString" := "queryString" || '
-			ussa."isClaimed" = FALSE
 			AND';
 	END IF;
 	
@@ -964,8 +957,8 @@ BEGIN
 		"inputMaxGasGiants",
 		"inputMinHighMetalContents",
 		"inputMaxHighMetalContents",
-		"inputMinMetalRichs",
-		"inputMaxMetalRichs",
+		"inputMinMetalRiches",
+		"inputMaxMetalRiches",
 		"inputMinRockyIces",
 		"inputMaxRockyIces",
 		"inputMinRocks",
@@ -1010,8 +1003,8 @@ BEGIN
 		"inputMaxGasGiants",
 		"inputMinHighMetalContents",
 		"inputMaxHighMetalContents",
-		"inputMinMetalRichs",
-		"inputMaxMetalRichs",
+		"inputMinMetalRiches",
+		"inputMaxMetalRiches",
 		"inputMinRockyIces",
 		"inputMaxRockyIces",
 		"inputMinRocks",
@@ -1055,8 +1048,8 @@ BEGIN
 		"inputMaxGasGiants",
 		"inputMinHighMetalContents",
 		"inputMaxHighMetalContents",
-		"inputMinMetalRichs",
-		"inputMaxMetalRichs",
+		"inputMinMetalRiches",
+		"inputMaxMetalRiches",
 		"inputMinRockyIces",
 		"inputMaxRockyIces",
 		"inputMinRocks",
@@ -1102,8 +1095,8 @@ BEGIN
 		"inputMaxGasGiants",
 		"inputMinHighMetalContents",
 		"inputMaxHighMetalContents",
-		"inputMinMetalRichs",
-		"inputMaxMetalRichs",
+		"inputMinMetalRiches",
+		"inputMaxMetalRiches",
 		"inputMinRockyIces",
 		"inputMaxRockyIces",
 		"inputMinRocks",

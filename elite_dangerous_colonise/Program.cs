@@ -52,6 +52,7 @@ NpgsqlDataSourceBuilder dataSourceBuilder = new NpgsqlDataSourceBuilder(connecti
 dataSourceBuilder.MapEnum<RingType>("RingType");
 dataSourceBuilder.MapEnum<HotspotType>("HotspotType");
 dataSourceBuilder.MapEnum<ReserveType>("ReserveType");
+dataSourceBuilder.MapEnum<ResultOrderType>("ResultOrderType");
 dataSourceBuilder.MapComposite<StarSystemInsertType>("StarSystemInsertType");
 dataSourceBuilder.MapComposite<StationInsertType>("StationInsertType");
 dataSourceBuilder.MapComposite<RingInsertType>("RingInsertType");

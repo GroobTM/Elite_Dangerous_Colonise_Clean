@@ -268,8 +268,42 @@ function ToggleSearch(isSearching) {
         .toggleClass("cursor-pointer", !isSearching);
 }
 
+function AddSliderDataToForm(sliderID, sliderName) {
+    const sliderValues = document.querySelector("#" + sliderID).noUiSlider.get();
+    formData.append("Min" + sliderName, sliderValues[0]);
+    formData.append("Max" + sliderName, sliderValues[1]);
+}
+
 function SetFormData() {
     formData = new FormData(document.getElementById("systems_search"));
+
+    const distanceFromSol = document.querySelector("#distance_from_sol_slider").noUiSlider.get();
+    formData.append("MaxDistanceFromSol", distanceFromSol);
+
+    AddSliderDataToForm("landable_bodies_slider", "Landables");
+    AddSliderDataToForm("walkable_bodies_slider", "Walkables");
+    AddSliderDataToForm("black_holes_slider", "BlackHoles");
+    AddSliderDataToForm("neutron_stars_slider", "NeutronStars");
+    AddSliderDataToForm("white_dwarves_slider", "WhiteDwarves");
+    AddSliderDataToForm("other_stars_slider", "OtherStars");
+    AddSliderDataToForm("earth_likes_slider", "EarthLikes");
+    AddSliderDataToForm("water_worlds_slider", "WaterWorlds");
+    AddSliderDataToForm("ammonia_worlds_slider", "AmmoniaWorlds");
+    AddSliderDataToForm("gas_giants_slider", "GasGiants");
+    AddSliderDataToForm("high_metal_content_slider", "HighMetalContents");
+    AddSliderDataToForm("metal_rich_slider", "MetalRiches");
+    AddSliderDataToForm("rocky_ice_world_slider", "RockyIces");
+    AddSliderDataToForm("rocky_bodies_slider", "Rocks");
+    AddSliderDataToForm("icy_bodies_slider", "Icys");
+    AddSliderDataToForm("rings_slider", "Rings");
+    AddSliderDataToForm("geologicals_slider", "Geologicals");
+    AddSliderDataToForm("organics_slider", "Organics");
+
+    const hotspotTypes = document.querySelector("#hotspot_select");
+    formData.append(
+        "HotspotTypes",
+        Array.from(hotspotTypes.options).filter(option => option.selected).map(option => option.value)
+    );
 }
 
 async function LoadResults() {
@@ -277,13 +311,52 @@ async function LoadResults() {
     $("#loading").addClass("flex").removeClass("hidden");
 
     const searchParams = new URLSearchParams({
-        colonisedSystem: formData.get("ColonisedSystem"),
-        faction: formData.get("Faction"),
         sortOrder: formData.get("SortOrder"),
-        includeClaimed: formData.get("IncludeClaimed") === "include",
-        currentPage: currentPage,
-        resultsPerPage: resultsPerPage
+        pageNo: currentPage,
+        resultsPerPage: resultsPerPage,
+        systemName: formData.get("ColonisedSystem"),
+        factionName: formData.get("Faction"),
+        minBlackHoles: parseInt(formData.get("MinBlackHoles")),
+        maxBlackHoles: parseInt(formData.get("MaxBlackHoles")),
+        minNeutronStars: parseInt(formData.get("MinNeutronStars")),
+        maxNeutronStars: parseInt(formData.get("MaxNeutronStars")),
+        minWhiteDwarves: parseInt(formData.get("MinWhiteDwarves")),
+        maxWhiteDwarves: parseInt(formData.get("MaxWhiteDwarves")),
+        minOtherStars: parseInt(formData.get("MinOtherStars")),
+        maxOtherStars: parseInt(formData.get("MaxOtherStars")),
+        minEarthLikes: parseInt(formData.get("MinEarthLikes")),
+        maxEarthLikes: parseInt(formData.get("MaxEarthLikes")),
+        minWaterWorlds: parseInt(formData.get("MinWaterWorlds")),
+        maxWaterWorlds: parseInt(formData.get("MaxWaterWorlds")),
+        minAmmoniaWorlds: parseInt(formData.get("MinAmmoniaWorlds")),
+        maxAmmoniaWorlds: parseInt(formData.get("MaxAmmoniaWorlds")),
+        minGasGiants: parseInt(formData.get("MinGasGiants")),
+        maxGasGiants: parseInt(formData.get("MaxGasGiants")),
+        minHighMetalContents: parseInt(formData.get("MinHighMetalContents")),
+        maxHighMetalContents: parseInt(formData.get("MaxHighMetalContents")),
+        minMetalRiches: parseInt(formData.get("MinMetalRiches")),
+        maxMetalRiches: parseInt(formData.get("MaxMetalRiches")),
+        minRockyIces: parseInt(formData.get("MinRockyIces")),
+        maxRockyIces: parseInt(formData.get("MaxRockyIces")),
+        minRocks: parseInt(formData.get("MinRocks")),
+        maxRocks: parseInt(formData.get("MaxRocks")),
+        minIces: parseInt(formData.get("MinIcys")),
+        maxIces: parseInt(formData.get("MaxIcys")),
+        minOrganics: parseInt(formData.get("MinOrganics")),
+        maxOrganics: parseInt(formData.get("MaxOrganics")),
+        minGeologicals: parseInt(formData.get("MinGeologicals")),
+        maxGeologicals: parseInt(formData.get("MaxGeologicals")),
+        minRings: parseInt(formData.get("MinRings")),
+        maxRings: parseInt(formData.get("MaxRings")),
+        minLandables: parseInt(formData.get("MinLandables")),
+        maxLandables: parseInt(formData.get("MaxLandables")),
+        minWalkables: parseInt(formData.get("MinWalkables")),
+        maxWalkables: parseInt(formData.get("MaxWalkables")),
+        maxDistanceToSol: parseInt(formData.get("MaxDistanceFromSol")),
+        hotspotTypes: parseInt(formData.get("HotspotTypes"))
     });
+
+    console.log(searchParams);
 
     const response = await fetch(`/Index?handler=Search&${searchParams}`);
 
@@ -294,17 +367,19 @@ async function LoadResults() {
 
     const results = await response.json();
 
-    if (results?.results?.length > 0) {
-        FormatResults(results);
-        FormatPagination(true);
-    }
-    else {
-        FormatNoResults();
-        FormatPagination(false);
-    }
+    console.log(results);
 
-    $("#loading").addClass("hidden").removeClass("flex");
-    ToggleSearch(false);
+    //if (results?.results?.length > 0) {
+    //    FormatResults(results);
+    //    FormatPagination(true);
+    //}
+    //else {
+    //    FormatNoResults();
+    //    FormatPagination(false);
+    //}
+
+    //$("#loading").addClass("hidden").removeClass("flex");
+    //ToggleSearch(false);
 }
 
 function FormatResults(results) {

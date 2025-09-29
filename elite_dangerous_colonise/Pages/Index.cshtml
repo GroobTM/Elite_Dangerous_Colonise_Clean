@@ -43,28 +43,22 @@
                 </svg>
             </div>
         </div>
-        <div class="relative mt-3 flex flex-col-reverse gap-2 lg:flex-row">
+        <div class="relative mt-3 flex w-full flex-col-reverse justify-between gap-2 sm:flex-row">
             <div class="grid w-full lg:w-45">
                 <input type="button" id="more_options_button" class="col-3 col-start-1 row-start-1 row-end-2 block w-full cursor-pointer rounded-lg border-1 border-[#0F0F0F] bg-[#0F0F0F] px-2.5 pt-3 pb-3 text-left shadow-sm hover:border-[#F07B05] hover:bg-[#F07B05]" value="" />
-                <label for="search" class="pointer-events-none relative z-10 col-3 col-start-1 row-start-1 row-end-2 flex w-full items-center justify-center gap-5 text-[#F0F0F0]">
+                <label for="more_options_button" class="pointer-events-none relative z-10 col-3 col-start-1 row-start-1 row-end-2 flex w-full items-center justify-center gap-5 text-[#F0F0F0]">
                     <span>More Options</span>
-                    <svg id="more_options_icon" class="absolute top-5 right-10 h-3 w-3 shrink-0 rotate-180 transition-transform duration-200 lg:relative lg:top-0.5 lg:right-auto" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                    <svg id="more_options_icon" class="relative top-0.5 h-3 w-3 shrink-0 rotate-180 transition-transform duration-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5" />
                     </svg>
                 </label>
             </div>
-            <div class="flex flex-1 items-center justify-end gap-5">
-                <div class="flex items-center">
-                    <input asp-for="IncludeClaimed" type="checkbox" id="include_claimed" value="include" class="h-6 w-6 cursor-pointer accent-[#0F0F0F] shadow-sm" />
-                    <label for="include_claimed" class="ml-2 cursor-pointer text-sm text-[#0F0F0F] sm:text-base">Include Claimed Systems</label>
-                </div>
-                <div class="grid w-45">
-                    <input type="submit" id="search" class="col-3 col-start-1 row-start-1 row-end-2 block w-full cursor-pointer rounded-lg border-1 border-[#0F0F0F] bg-[#0F0F0F] px-2.5 pt-3 pb-3 text-left shadow-sm" value="" />
-                    <label for="search" class="pointer-events-none z-10 col-3 col-start-1 row-start-1 row-end-2 flex w-full items-center justify-center gap-5">
-                        <span class="text-[#F0F0F0]">Search</span>
-                        <img src="~/images/courier.svg" class="z-10 h-8 sm:h-10" />
-                    </label>
-                </div>
+            <div class="grid w-full lg:w-45">
+                <input type="submit" id="search" class="col-3 col-start-1 row-start-1 row-end-2 block w-full cursor-pointer rounded-lg border-1 border-[#0F0F0F] bg-[#0F0F0F] px-2.5 pt-3 pb-3 text-left shadow-sm" value="" />
+                <label for="search" class="pointer-events-none z-10 col-3 col-start-1 row-start-1 row-end-2 flex w-full items-center justify-center gap-5">
+                    <span class="text-[#F0F0F0]">Search</span>
+                    <img src="~/images/courier.svg" class="z-10 h-8 sm:h-10" />
+                </label>
             </div>
         </div>
         <div id="more_options" class="mt-3 hidden grid-cols-1 gap-y-5 lg:grid-cols-2 lg:gap-x-5">
