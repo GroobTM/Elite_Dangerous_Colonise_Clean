@@ -146,9 +146,7 @@ $(function () {
                 </div>`
         });
     });
-});
 
-$(function () {
     SetupSearchInput("colonised_system_search", "/api/ColonisedSystemNames");
     SetupSearchInput("faction_search", "/api/FactionNames");
     SetupMaxDistanceFromSolSlider();
@@ -189,7 +187,91 @@ $("#systems_search").on("submit", function (e) {
     LoadResults();
 });
 
-// Search Resutls Functions
+function UpdateFormFromParams(searchParams) {
+    $("#colonised_system").val(searchParams.systemName);
+    $("#sort_order").val(searchParams.sortOrder);
+    $("#faction").val(searchParams.factionName);
+
+    document.querySelector("#distance_from_sol_slider").noUiSlider.set(searchParams.maxDistanceToSol);
+    document.querySelector("#landable_bodies_slider").noUiSlider.set([searchParams.minLandables, searchParams.maxLandables]);
+    document.querySelector("#walkable_bodies_slider").noUiSlider.set([searchParams.minWalkables, searchParams.maxWalkables]);
+    document.querySelector("#black_holes_slider").noUiSlider.set([searchParams.minBlackHoles, searchParams.maxBlackHoles]);
+    document.querySelector("#neutron_stars_slider").noUiSlider.set([searchParams.minNeutronStars, searchParams.maxNeutronStars]);
+    document.querySelector("#white_dwarves_slider").noUiSlider.set([searchParams.minWhiteDwarves, searchParams.maxWhiteDwarves]);
+    document.querySelector("#other_stars_slider").noUiSlider.set([searchParams.minOtherStars, searchParams.maxOtherStars]);
+    document.querySelector("#earth_likes_slider").noUiSlider.set([searchParams.minEarthLikes, searchParams.maxEarthLikes]);
+    document.querySelector("#water_worlds_slider").noUiSlider.set([searchParams.minWaterWorlds, searchParams.maxWaterWorlds]);
+    document.querySelector("#ammonia_worlds_slider").noUiSlider.set([searchParams.minAmmoniaWorlds, searchParams.maxAmmoniaWorlds]);
+    document.querySelector("#gas_giants_slider").noUiSlider.set([searchParams.minGasGiants, searchParams.maxGasGiants]);
+    document.querySelector("#high_metal_content_slider").noUiSlider.set([searchParams.minHighMetalContents, searchParams.maxHighMetalContents]);
+    document.querySelector("#metal_rich_slider").noUiSlider.set([searchParams.minMetalRiches, searchParams.maxMetalRiches]);
+    document.querySelector("#rocky_ice_world_slider").noUiSlider.set([searchParams.minRockyIces, searchParams.maxRockyIces]);
+    document.querySelector("#rocky_bodies_slider").noUiSlider.set([searchParams.minRocks, searchParams.maxRocks]);
+    document.querySelector("#icy_bodies_slider").noUiSlider.set([searchParams.minIces, searchParams.maxIces]);
+    document.querySelector("#rings_slider").noUiSlider.set([searchParams.minRings, searchParams.maxRings]);
+    document.querySelector("#geologicals_slider").noUiSlider.set([searchParams.minGeologicals, searchParams.maxGeologicals]);
+    document.querySelector("#organics_slider").noUiSlider.set([searchParams.minOrganics, searchParams.maxOrganics]);
+
+    const hotspotSelect = document.querySelector("#hotspot_select");
+
+    const hotspotValues = searchParams.hotspotTypes ? searchParams.hotspotTypes.split(",") : [];
+
+    Array.from(hotspotSelect.options).forEach(option => {
+        option.selected = hotspotValues.includes(option.value);
+    });
+
+    window.HSStaticMethods.autoInit(['select']);
+}
+
+window.addEventListener("popstate", (event) => {
+    if (event.state && event.state.encodedParams) {
+        const searchParams = new URLSearchParams(atob(event.state.encodedParams));
+
+        UpdateFormFromParams(Object.fromEntries(searchParams));
+
+        currentPage = parseInt(searchParams.get("pageNo")) || 1;
+
+        SetFormData();
+
+        LoadResults(false);
+    }
+});
+
+$(function () {
+    const encodedParams = new URLSearchParams(window.location.search).get("q");
+
+    if (encodedParams) {
+        try {
+            const initialParams = new URLSearchParams(atob(encodedParams));
+
+            if (initialParams.has("sortOrder") && initialParams.has("pageNo") && initialParams.has("resultsPerPage") && initialParams.has("systemName")
+                && initialParams.has("factionName") && initialParams.has("minBlackHoles") && initialParams.has("maxBlackHoles") && initialParams.has("minNeutronStars")
+                && initialParams.has("maxNeutronStars") && initialParams.has("minWhiteDwarves") && initialParams.has("maxWhiteDwarves")
+                && initialParams.has("minOtherStars") && initialParams.has("maxOtherStars") && initialParams.has("minEarthLikes") && initialParams.has("maxEarthLikes")
+                && initialParams.has("minWaterWorlds") && initialParams.has("maxWaterWorlds") && initialParams.has("minAmmoniaWorlds")
+                && initialParams.has("maxAmmoniaWorlds") && initialParams.has("minGasGiants") && initialParams.has("maxGasGiants") && initialParams.has("minHighMetalContents")
+                && initialParams.has("maxHighMetalContents") && initialParams.has("minMetalRiches") && initialParams.has("maxMetalRiches")
+                && initialParams.has("minRockyIces") && initialParams.has("maxRockyIces") && initialParams.has("minRocks") && initialParams.has("maxRocks")
+                && initialParams.has("minIces") && initialParams.has("maxIces") && initialParams.has("minOrganics") && initialParams.has("maxOrganics")
+                && initialParams.has("minGeologicals") && initialParams.has("maxGeologicals") && initialParams.has("minRings") && initialParams.has("maxRings")
+                && initialParams.has("minLandables") && initialParams.has("maxLandables") && initialParams.has("minWalkables") && initialParams.has("maxWalkables")
+                && initialParams.has("maxDistanceToSol") && initialParams.has("hotspotTypes")) {
+
+                UpdateFormFromParams(Object.fromEntries(initialParams));
+
+                currentPage = parseInt(initialParams.get("pageNo")) || 1;
+
+                SetFormData();
+
+                LoadResults(false);
+            }
+        } catch (e) {
+            console.error("Failed to decode URL parameters:", e);
+        }
+    }
+});
+
+// Search Results Functions
 function CopyToClipboard(obj) {
     var text = obj.innerText;
 
@@ -302,11 +384,11 @@ function SetFormData() {
     const hotspotTypes = document.querySelector("#hotspot_select");
     formData.append(
         "HotspotTypes",
-        Array.from(hotspotTypes.options).filter(option => option.selected).map(option => option.value)
+        Array.from(hotspotTypes.selectedOptions).map(option => option.value)
     );
 }
 
-async function LoadResults() {
+async function LoadResults(updateUrl = true) {
     ToggleSearch(true);        
     $("#loading").addClass("flex").removeClass("hidden");
 
@@ -353,8 +435,15 @@ async function LoadResults() {
         minWalkables: parseInt(formData.get("MinWalkables")),
         maxWalkables: parseInt(formData.get("MaxWalkables")),
         maxDistanceToSol: parseInt(formData.get("MaxDistanceFromSol")),
-        hotspotTypes: parseInt(formData.get("HotspotTypes"))
+        hotspotTypes: formData.get("HotspotTypes")
     });
+
+    if (updateUrl) {
+        const encodedParams = btoa(searchParams.toString());
+        const newUrl = `${window.location.pathname}?q=${encodedParams}`;
+
+        history.pushState({ encodedParams: encodedParams }, "", newUrl);
+    }
 
     const response = await fetch(`/Index?handler=Search&${searchParams}`);
 
@@ -734,10 +823,12 @@ function FormatDate(inputDate) {
 function FormatRings(inputRings) {
     var ringList = ``;
 
-    inputRings.sort((a, b) => a.ringName.localeCompare(b.ringName, undefined, { numeric: true }));
+    if (inputRings != null) {
 
-    inputRings.forEach(ring => {
-        ringList += `
+        inputRings.sort((a, b) => a.ringName.localeCompare(b.ringName, undefined, { numeric: true }));
+
+        inputRings.forEach(ring => {
+            ringList += `
         <li>
             ${ring.ringName} (${ring.ringType})
             <ul class="items-center ps-7 font-normal">
@@ -745,7 +836,8 @@ function FormatRings(inputRings) {
             </ul>
         </li>
         `;
-    });
+        });
+    }
 
     return ringList;
 }
