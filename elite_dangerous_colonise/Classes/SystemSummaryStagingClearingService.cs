@@ -75,7 +75,7 @@ namespace elite_dangerous_colonise.Classes
         {
             Logger.LogInformation("System Summary Staging Clearing Service", 9, "Refreshing DistinctColonisedStarSystems view.");
 
-            await using (NpgsqlCommand command = new NpgsqlCommand("REFRESH MATERIALIZED VIEW \"DistinctColonisedStarSystems\"", conn))
+            await using (NpgsqlCommand command = new NpgsqlCommand("SELECT \"RefreshDistinctColonisedStarSystems\"()", conn))
             {
                 await command.ExecuteNonQueryAsync();
             }
@@ -85,7 +85,7 @@ namespace elite_dangerous_colonise.Classes
         {
             Logger.LogInformation("System Summary Staging Clearing Service", 9, "Refreshing DistinctUncolonisedStarSystems view.");
 
-            await using (NpgsqlCommand command = new NpgsqlCommand("REFRESH MATERIALIZED VIEW \"DistinctUncolonisedStarSystems\"", conn))
+            await using (NpgsqlCommand command = new NpgsqlCommand("SELECT \"RefreshDistinctUncolonisedStarSystems\"()", conn))
             {
                 await command.ExecuteNonQueryAsync();
             }
@@ -95,7 +95,7 @@ namespace elite_dangerous_colonise.Classes
         {
             Logger.LogInformation("System Summary Staging Clearing Service", 9, "Refreshing ClosestTrailblazerByStarSystem view.");
 
-            await using (NpgsqlCommand command = new NpgsqlCommand("REFRESH MATERIALIZED VIEW \"ClosestTrailblazerByStarSystem\"", conn))
+            await using (NpgsqlCommand command = new NpgsqlCommand("SELECT \"RefreshClosestTrailblazerByStarSystem\"()", conn))
             {
                 await command.ExecuteNonQueryAsync();
             }
@@ -105,7 +105,7 @@ namespace elite_dangerous_colonise.Classes
         {
             Logger.LogInformation("System Summary Staging Clearing Service", 9, "Refreshing MaxSearchValues view.");
 
-            await using (NpgsqlCommand command = new NpgsqlCommand("REFRESH MATERIALIZED VIEW \"MaxSearchValues\"", conn))
+            await using (NpgsqlCommand command = new NpgsqlCommand("SELECT \"RefreshMaxSearchValues\"()", conn))
             {
                 await command.ExecuteNonQueryAsync();
             }

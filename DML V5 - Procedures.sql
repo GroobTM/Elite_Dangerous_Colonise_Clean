@@ -1158,3 +1158,31 @@ RETURNS jsonb AS $$
 		LIMIT 100
 	) as "systemNames";
 $$ LANGUAGE sql;
+
+CREATE OR REPLACE FUNCTION "RefreshDistinctColonisedStarSystems"()
+RETURNS void AS $$
+BEGIN
+    REFRESH MATERIALIZED VIEW "DistinctColonisedStarSystems";
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE OR REPLACE FUNCTION "RefreshDistinctUncolonisedStarSystems"()
+RETURNS void AS $$
+BEGIN
+    REFRESH MATERIALIZED VIEW "DistinctUncolonisedStarSystems";
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE OR REPLACE FUNCTION "RefreshClosestTrailblazerByStarSystem"()
+RETURNS void AS $$
+BEGIN
+    REFRESH MATERIALIZED VIEW "ClosestTrailblazerByStarSystem";
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE OR REPLACE FUNCTION "RefreshMaxSearchValues"()
+RETURNS void AS $$
+BEGIN
+    REFRESH MATERIALIZED VIEW "MaxSearchValues";
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
