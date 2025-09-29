@@ -717,7 +717,11 @@ BEGIN
 				FROM "ColonisableStarSystems"
 				WHERE "colonisedSystemID" IN (
 					SELECT "colonisedSystemID"
-					FROM "SelectSearchedColonisedSystems"($41, $42)
+					FROM "DistinctColonisedStarSystems" dcss
+					INNER JOIN "Stations" s ON dcss."colonisedSystemID" = s."systemID"
+					INNER JOIN "Factions" f ON s."controllingFaction" = f."factionID"
+					WHERE ($41 IS NULL OR dcss."systemName" = $41)
+					AND ($42 IS NULL OR f."factionName" = $42)
 				)
 			),';
 	END IF;
@@ -736,7 +740,7 @@ BEGIN
 	IF "inputHotspotTypes" IS NOT NULL AND ("inputSystemName" IS NOT NULL OR "inputFactionName" IS NOT NULL) THEN
 		"queryString" := "queryString" || '
 			"HotspotSearchResults" AS (
-				SEELCT "uncolonisedSystemID"
+				SELECT "uncolonisedSystemID"
 				FROM "DistinctUncolonisedStarSystems" duss
 				INNER JOIN "Rings" r ON duss."uncolonisedSystemID" = r."systemID"
 				INNER JOIN "Hotspots" h ON r."ringID" = h."ringID"
@@ -814,6 +818,7 @@ BEGIN
 	
 	"queryString" := "queryString" || '
 			ussa."isLocked" = FALSE
+			AND ussa."isClaimed" = FALSE
 			AND coc."blackHoleCount" >= $1 AND coc."blackHoleCount" <= $2
 			AND coc."neutronStarCount" >= $3 AND coc."neutronStarCount" <= $4
 			AND coc."whiteDwarves" >= $5 AND coc."whiteDwarves" <= $6
@@ -940,7 +945,7 @@ BEGIN
 		)
 		FROM "TopResults" tr';
 		
-	IF "inputSystemName" IS NOT NULL OR "inputFactionName" IS NOT NULL THEN
+	IF ("inputSystemName" IS NOT NULL OR "inputFactionName" IS NOT NULL) AND "inputHotspotTypes" IS NULL THEN
 		EXECUTE "queryString" INTO "result"
 		USING 
 		"inputMinBlackHoles", 
