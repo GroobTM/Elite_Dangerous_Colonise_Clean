@@ -220,8 +220,8 @@ public class IndexModel : PageModel
                         ")", conn))
                     {
                         command.Parameters.AddWithValue("sortOrder", ParseSortOrder(sortOrder));
-                        command.Parameters.AddWithValue("pageNo", pageNo);
-                        command.Parameters.AddWithValue("resultsPerPage", resultsPerPage);
+                        command.Parameters.AddWithValue("pageNo", Math.Max(1, pageNo));
+                        command.Parameters.AddWithValue("resultsPerPage", Math.Min((short)50, resultsPerPage));
                         command.Parameters.AddWithValue("systemName", NpgsqlDbType.Varchar, (object)systemName ?? DBNull.Value);
                         command.Parameters.AddWithValue("factionName", NpgsqlDbType.Varchar, (object)factionName ?? DBNull.Value);
                         command.Parameters.AddWithValue("minBlackHoles", minBlackHoles);
@@ -269,13 +269,13 @@ public class IndexModel : PageModel
                             {
                                 string jsonResult = reader.GetFieldValue<string>(0);
 
-                                JArray parsedJson = JArray.Parse(jsonResult);
+                                JObject parsedJson = JObject.Parse(jsonResult);
 
                                 return Content(parsedJson.ToString(), "application/json");
                             }
                             else
                             {
-                                return Content("[]", "application/json");
+                                return Content("{}", "application/json");
                             }
                         }
                     }

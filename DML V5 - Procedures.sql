@@ -851,99 +851,108 @@ BEGIN
 	
 	"queryString" := "queryString" || '
 			OFFSET (($39 - 1) * $40) ROWS
-			LIMIT $40
+			LIMIT $40 * 11
 		)
-		SELECT jsonb_agg(
-			jsonb_build_object(
-				''systemID'', tr."uncolonisedSystemID",
-				''systemName'', tr."systemName",
-				''lastUpdate'', tr."lastUpdated",
-				''distanceToSol'', tr."distanceToSol",
-				''coordinates'', jsonb_build_object(
-						''coordinateX'', ST_X(tr."systemCoords"),
-						''coordinateY'', ST_Y(tr."systemCoords"),
-						''coordinateZ'', ST_Z(tr."systemCoords")
+		SELECT jsonb_build_object(
+			''minFollwingPages'', MIN(tr."minFollwingPages"),
+			''results'', jsonb_agg(
+				jsonb_build_object(
+					''systemID'', tr."uncolonisedSystemID",
+					''systemName'', tr."systemName",
+					''lastUpdate'', tr."lastUpdated",
+					''distanceToSol'', tr."distanceToSol",
+					''coordinates'', jsonb_build_object(
+							''coordinateX'', ST_X(tr."systemCoords"),
+							''coordinateY'', ST_Y(tr."systemCoords"),
+							''coordinateZ'', ST_Z(tr."systemCoords")
+						),
+					''reserveLevel'', tr."reserveLevel",
+					''landableCount'', tr."landableCount",
+					''walkableCount'', tr."walkableCount",
+					''systemCounts'', jsonb_build_object(
+						''blackHoleCount'', tr."blackHoleCount",
+						''neutronStarCount'', tr."neutronStarCount",
+						''whiteDwarves'', tr."whiteDwarves",
+						''otherStarCount'', tr."otherStarCount",
+						''earthLikeCount'', tr."earthLikeCount",
+						''waterWorldCount'', tr."waterWorldCount",
+						''ammoniaWorldCount'', tr."ammoniaWorldCount",
+						''gasGiantCount'', tr."gasGiantCount",
+						''highMetalContentCount'', tr."highMetalContentCount",
+						''metalRichCount'', tr."metalRichCount",
+						''rockyIceBodyCount'',tr."rockyIceBodyCount",
+						''rockBodyCount'', tr."rockBodyCount",
+						''icyBodyCount'', tr."icyBodyCount",
+						''organicCount'', tr."organicCount",
+						''geologicalsCount'', tr."geologicalsCount",
+						''ringCount'', tr."ringCount",
+						''totalHotspots'', tr."totalHotspots"
 					),
-				''reserveLevel'', tr."reserveLevel",
-				''landableCount'', tr."landableCount",
-				''walkableCount'', tr."walkableCount",
-				''systemCounts'', jsonb_build_object(
-					''blackHoleCount'', tr."blackHoleCount",
-					''neutronStarCount'', tr."neutronStarCount",
-					''whiteDwarves'', tr."whiteDwarves",
-					''otherStarCount'', tr."otherStarCount",
-					''earthLikeCount'', tr."earthLikeCount",
-					''waterWorldCount'', tr."waterWorldCount",
-					''ammoniaWorldCount'', tr."ammoniaWorldCount",
-					''gasGiantCount'', tr."gasGiantCount",
-					''highMetalContentCount'', tr."highMetalContentCount",
-					''metalRichCount'', tr."metalRichCount",
-					''rockyIceBodyCount'',tr."rockyIceBodyCount",
-					''rockBodyCount'', tr."rockBodyCount",
-					''icyBodyCount'', tr."icyBodyCount",
-					''organicCount'', tr."organicCount",
-					''geologicalsCount'', tr."geologicalsCount",
-					''ringCount'', tr."ringCount",
-					''totalHotspots'', tr."totalHotspots"
-				),
-				''rings'', (
-					SELECT jsonb_agg(
-						jsonb_build_object(
-							''ringName'', r."ringName",
-							''ringType'', r."ringType",
-							''hotspots'', (
-								SELECT jsonb_agg(
-									jsonb_build_object(
-										''hotspotType'', h."hotspotType",
-										''hotspotCount'', h."hotspotCount"
+					''rings'', (
+						SELECT jsonb_agg(
+							jsonb_build_object(
+								''ringName'', r."ringName",
+								''ringType'', r."ringType",
+								''hotspots'', (
+									SELECT jsonb_agg(
+										jsonb_build_object(
+											''hotspotType'', h."hotspotType",
+											''hotspotCount'', h."hotspotCount"
+										)
 									)
+									FROM "Hotspots" h
+									WHERE h."ringID" = r."ringID"
 								)
-								FROM "Hotspots" h
-								WHERE h."ringID" = r."ringID"
 							)
 						)
-					)
-					FROM "Rings" r
-					WHERE r."systemID" = tr."uncolonisedSystemID"
-				),
-				''trailblazers'', (
-					SELECT jsonb_agg(
-						jsonb_build_object(
-							''trailblazerID'', tm."trailblazerID",
-							''trailblazerName'', tm."trailblazerName",
-							''distanceBetween'', td."distanceBetween"
-						)
-					)
-					FROM "TrailblazerDistances" td
-					INNER JOIN "TrailblazerMegaships" tm ON td."trailblazerID" = tm."trailblazerID"
-					WHERE td."uncolonisedSystemID" = tr."uncolonisedSystemID"
-				),
-				''colonisedSystems'', (
-					SELECT jsonb_agg(
-						jsonb_build_object(
-							''colonisedSystemID'', css."colonisedSystemID",
-							''systemName'', ss."systemName",
-							''stations'', (
-								SELECT jsonb_agg(
-									jsonb_build_object(
-										''stationID'', s."stationID",
-										''stationName'', s."stationName",
-										''controllingFaction'', f."factionName"
-									)
-								)
-								FROM "Stations" s
-								INNER JOIN "Factions" f ON s."controllingFaction" = f."factionID"
-								WHERE s."systemID" = css."colonisedSystemID"
+						FROM "Rings" r
+						WHERE r."systemID" = tr."uncolonisedSystemID"
+					),
+					''trailblazers'', (
+						SELECT jsonb_agg(
+							jsonb_build_object(
+								''trailblazerID'', tm."trailblazerID",
+								''trailblazerName'', tm."trailblazerName",
+								''distanceBetween'', td."distanceBetween"
 							)
 						)
+						FROM "TrailblazerDistances" td
+						INNER JOIN "TrailblazerMegaships" tm ON td."trailblazerID" = tm."trailblazerID"
+						WHERE td."uncolonisedSystemID" = tr."uncolonisedSystemID"
+					),
+					''colonisedSystems'', (
+						SELECT jsonb_agg(
+							jsonb_build_object(
+								''colonisedSystemID'', css."colonisedSystemID",
+								''systemName'', ss."systemName",
+								''stations'', (
+									SELECT jsonb_agg(
+										jsonb_build_object(
+											''stationID'', s."stationID",
+											''stationName'', s."stationName",
+											''controllingFaction'', f."factionName"
+										)
+									)
+									FROM "Stations" s
+									INNER JOIN "Factions" f ON s."controllingFaction" = f."factionID"
+									WHERE s."systemID" = css."colonisedSystemID"
+								)
+							)
+						)
+						FROM "ColonisableStarSystems" css
+						INNER JOIN "StarSystems" ss ON css."colonisedSystemID" = ss."systemID"
+						WHERE css."uncolonisedSystemID" = tr."uncolonisedSystemID"
 					)
-					FROM "ColonisableStarSystems" css
-					INNER JOIN "StarSystems" ss ON css."colonisedSystemID" = ss."systemID"
-					WHERE css."uncolonisedSystemID" = tr."uncolonisedSystemID"
 				)
 			)
 		)
-		FROM "TopResults" tr';
+		FROM (
+			SELECT 
+				*,
+				GREATEST((COUNT(*) OVER()) / $40, 1) - 1 "minFollwingPages"
+				FROM "TopResults"
+				LIMIT $40
+		) tr';
 		
 	IF ("inputSystemName" IS NOT NULL OR "inputFactionName" IS NOT NULL) AND "inputHotspotTypes" IS NULL THEN
 		EXECUTE "queryString" INTO "result"
