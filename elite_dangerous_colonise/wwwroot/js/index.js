@@ -278,20 +278,16 @@ function CopyToClipboard(obj) {
     navigator.clipboard.writeText(text);
 }
 
-$("#next_page").on("click", function (e) {
+$("#pagination_next").on("click", function (e) {
     e.preventDefault();
-    if (currentPage < maxPages) {
-        currentPage++;
-        LoadResults();
-    }
+    currentPage++;
+    LoadResults(true);
 });
 
-$("#previous_page").on("click", function (e) {
+$("#pagination_previous").on("click", function (e) {
     e.preventDefault();
-    if (currentPage > 1) {
-        currentPage--;
-        LoadResults();
-    }
+    currentPage--;
+    LoadResults(true);
 });
 
 $("#results_per_page").change(function () {
@@ -303,7 +299,13 @@ $("#results_per_page").change(function () {
     }
 
     LoadResults();
-})
+});
+
+$(".pagination_numbers").on("click", function (e) {
+    e.preventDefault();
+    currentPage = parseInt($(this).text());
+    LoadResults(true);
+});
 
 $("#results_per_page").prop("disabled", true);
 $("#results_per_page_lbl").addClass("opacity-50", true);
@@ -426,12 +428,12 @@ async function LoadResults(updateUrl = true) {
 
     if (results?.results?.length > 0) {
         FormatResults(results.results);
-    //    FormatPagination(true);
     }
     else {
         FormatNoResults();
-    //    FormatPagination(false);
     }
+
+    FormatPagination(results.minFollwingPages);
 
     $("#loading").addClass("hidden").removeClass("flex");
     ToggleSearch(false);
@@ -945,147 +947,147 @@ function ReinitializeTooltips() {
 
 function TogglePaginationControls(enable) {
     $("#pagination").toggleClass("hidden", !enable);
+    $("#pagination").toggleClass("flex", enable);
     $("#results_per_page").prop("disabled", !enable);
     $("#results_per_page_lbl").toggleClass("opacity-50", !enable);
 }
 
-function TogglePaginationNumberButtons(pages) {
-    $("#pagination").toggleClass("hidden", pages == 0 && currentPage == 1);
-    $("#pagination_1").toggleClass("hidden", pages < 5 && currentPage == 1);
-    $("#pagination_2").toggleClass("hidden", pages < 4 && currentPage == 1);
-    $("#pagination_3").toggleClass("hidden", pages < 3 && currentPage == 1);
-    $("#pagination_4").toggleClass("hidden", pages < 2 && currentPage == 1);
+function TogglePaginationNumberButtons(remainingPages) {
+    const totalPages = remainingPages + currentPage;
+
+    $("#pagination").toggleClass("hidden", totalPages == 1);
+    $("#pagination_1").toggleClass("hidden", totalPages <= 4);
+    $("#pagination_2").toggleClass("hidden", totalPages <= 3);
+    $("#pagination_3").toggleClass("hidden", totalPages <= 2);
 }
 
 function SetPaginationNumberButtons(pages) {
-    switch (pages) {
-        case 0:
-            $("#pagination_1").text(currentPage - 4);
-            $("#pagination_2").text(currentPage - 3);
-            $("#pagination_3").text(currentPage - 2);
-            $("#pagination_4").text(currentPage - 1);
-            $("#pagination_5").text(currentPage);
-            break;
-        case 1:
-            $("#pagination_1").text(currentPage - 3);
-            $("#pagination_2").text(currentPage - 2);
-            $("#pagination_3").text(currentPage - 1);
-            $("#pagination_4").text(currentPage);
-            $("#pagination_5").text(currentPage + 1);
-            break;
-        case 3:
-            $("#pagination_1").text(currentPage - 1);
-            $("#pagination_2").text(currentPage);
-            $("#pagination_3").text(currentPage + 1);
-            $("#pagination_4").text(currentPage + 2);
-            $("#pagination_5").text(currentPage + 3);
-            break;
-        case 4:
-            $("#pagination_1").text(currentPage);
-            $("#pagination_2").text(currentPage + 1);
-            $("#pagination_3").text(currentPage + 2);
-            $("#pagination_4").text(currentPage + 3);
-            $("#pagination_5").text(currentPage + 4);
-            break;
-        default:
-            $("#pagination_1").text(currentPage - 2);
-            $("#pagination_2").text(currentPage - 1);
-            $("#pagination_3").text(currentPage);
-            $("#pagination_4").text(currentPage + 1);
-            $("#pagination_5").text(currentPage + 2);
-            break;
-    }   
+    if (currentPage == 1 && pages >= 4) {
+        $("#pagination_1").text(currentPage);
+        $("#pagination_2").text(currentPage + 1);
+        $("#pagination_3").text(currentPage + 2);
+        $("#pagination_4").text(currentPage + 3);
+        $("#pagination_5").text(currentPage + 4);
+    }
+    else if (currentPage <= 2 && pages >= 3) {
+        $("#pagination_1").text(currentPage - 1);
+        $("#pagination_2").text(currentPage);
+        $("#pagination_3").text(currentPage + 1);
+        $("#pagination_4").text(currentPage + 2);
+        $("#pagination_5").text(currentPage + 3);
+    }
+    else if (pages == 1) {
+        $("#pagination_1").text(currentPage - 3);
+        $("#pagination_2").text(currentPage - 2);
+        $("#pagination_3").text(currentPage - 1);
+        $("#pagination_4").text(currentPage);
+        $("#pagination_5").text(currentPage + 1);
+    }
+    else if (pages == 0) {
+        $("#pagination_1").text(currentPage - 4);
+        $("#pagination_2").text(currentPage - 3);
+        $("#pagination_3").text(currentPage - 2);
+        $("#pagination_4").text(currentPage - 1);
+        $("#pagination_5").text(currentPage);
+    }
+    else {
+        $("#pagination_1").text(currentPage - 2);
+        $("#pagination_2").text(currentPage - 1);
+        $("#pagination_3").text(currentPage);
+        $("#pagination_4").text(currentPage + 1);
+        $("#pagination_5").text(currentPage + 2);
+    }
 }
 
-SetPaginationNumberButtonAsSelected(buttonID, selected) {
+function SetPaginationNumberButtonAsSelected(buttonID, selected) {
     $("#" + buttonID).toggleClass("bg-[#F07B05] text-[#F0F0F0]", selected);
     $("#" + buttonID).toggleClass("cursor-pointer text-[#0F0F0F] hover:bg-[#0F0F0F] hover:text-[#F0F0F0] focus:bg-[#0F0F0F] focus:text-[#F0F0F0]", !selected);
 }
 
 function SetSelectedPaginationNumberButton(pages) {
-    switch (pages) {
-        case 0:
-            SetPaginationNumberButtonAsSelected("pagination_1", false);
-            SetPaginationNumberButtonAsSelected("pagination_2", false);
-            SetPaginationNumberButtonAsSelected("pagination_3", false);
-            SetPaginationNumberButtonAsSelected("pagination_4", false);
-            SetPaginationNumberButtonAsSelected("pagination_5", true);
-            break;
-        case 1:
-            SetPaginationNumberButtonAsSelected("pagination_1", false);
-            SetPaginationNumberButtonAsSelected("pagination_2", false);
-            SetPaginationNumberButtonAsSelected("pagination_3", false);
-            SetPaginationNumberButtonAsSelected("pagination_4", true);
-            SetPaginationNumberButtonAsSelected("pagination_5", false);
-            break;
-        case 3:
-            SetPaginationNumberButtonAsSelected("pagination_1", false);
-            SetPaginationNumberButtonAsSelected("pagination_2", true);
-            SetPaginationNumberButtonAsSelected("pagination_3", false);
-            SetPaginationNumberButtonAsSelected("pagination_4", false);
-            SetPaginationNumberButtonAsSelected("pagination_5", false);
-            break;
-        case 4:
-            SetPaginationNumberButtonAsSelected("pagination_1", true);
-            SetPaginationNumberButtonAsSelected("pagination_2", false);
-            SetPaginationNumberButtonAsSelected("pagination_3", false);
-            SetPaginationNumberButtonAsSelected("pagination_4", false);
-            SetPaginationNumberButtonAsSelected("pagination_5", false);
-            break;
-        default:
-            SetPaginationNumberButtonAsSelected("pagination_1", false);
-            SetPaginationNumberButtonAsSelected("pagination_2", false);
-            SetPaginationNumberButtonAsSelected("pagination_3", true);
-            SetPaginationNumberButtonAsSelected("pagination_4", false);
-            SetPaginationNumberButtonAsSelected("pagination_5", false);
-            break;
+    if (currentPage == 1 && pages >= 4) {
+        SetPaginationNumberButtonAsSelected("pagination_1", true);
+        SetPaginationNumberButtonAsSelected("pagination_2", false);
+        SetPaginationNumberButtonAsSelected("pagination_3", false);
+        SetPaginationNumberButtonAsSelected("pagination_4", false);
+        SetPaginationNumberButtonAsSelected("pagination_5", false);
     }
+    else if (currentPage <= 2 && pages >= 3) {
+        SetPaginationNumberButtonAsSelected("pagination_1", false);
+        SetPaginationNumberButtonAsSelected("pagination_2", true);
+        SetPaginationNumberButtonAsSelected("pagination_3", false);
+        SetPaginationNumberButtonAsSelected("pagination_4", false);
+        SetPaginationNumberButtonAsSelected("pagination_5", false);
+    }
+    else if (pages == 1) {
+        SetPaginationNumberButtonAsSelected("pagination_1", false);
+        SetPaginationNumberButtonAsSelected("pagination_2", false);
+        SetPaginationNumberButtonAsSelected("pagination_3", false);
+        SetPaginationNumberButtonAsSelected("pagination_4", true);
+        SetPaginationNumberButtonAsSelected("pagination_5", false);
+    }
+    else if (pages == 0) {
+        SetPaginationNumberButtonAsSelected("pagination_1", false);
+        SetPaginationNumberButtonAsSelected("pagination_2", false);
+        SetPaginationNumberButtonAsSelected("pagination_3", false);
+        SetPaginationNumberButtonAsSelected("pagination_4", false);
+        SetPaginationNumberButtonAsSelected("pagination_5", true);
+    }
+    else {
+        SetPaginationNumberButtonAsSelected("pagination_1", false);
+        SetPaginationNumberButtonAsSelected("pagination_2", false);
+        SetPaginationNumberButtonAsSelected("pagination_3", true);
+        SetPaginationNumberButtonAsSelected("pagination_4", false);
+        SetPaginationNumberButtonAsSelected("pagination_5", false);
+    }
+}
+
+function TogglePaginationButtons(remainingPages) {
+    $("#pagination_previous_jump").prop("disabled", currentPage == 1);
+    $("#pagination_previous").prop("disabled", currentPage == 1);
+    $("#pagination_next").prop("disabled", remainingPages == 0);
+    $("#pagination_next_jump").prop("disabled", remainingPages == 0);
+}
+
+function SetPaginationButttonFunctions(remainingPages) {
+    $("#pagination_previous_jump").off("click").on("click", function (e) {
+        e.preventDefault();
+        if (currentPage <= 10) {
+            currentPage = 1;
+        }
+        else {
+            currentPage -= 10;
+        }
+
+        LoadResults(true);
+    });
+
+    $("#pagination_next_jump").off("click").on("click", function (e) {
+        e.preventDefault();
+        if (remainingPages < 10) {
+            currentPage += remainingPages;
+        }
+        else {
+            currentPage += 10;
+        }
+
+        LoadResults(true);
+    });
 }
 
 function FormatPagination(minFollowingPages) {
     if (minFollowingPages != null) {
         TogglePaginationControls(true);
+
         TogglePaginationNumberButtons(minFollowingPages);
         SetPaginationNumberButtons(minFollowingPages);
-        SetSelectedPaginationNumberButton(minFollowingPages)
+        SetSelectedPaginationNumberButton(minFollowingPages);
+
+        TogglePaginationButtons(minFollowingPages);
+        SetPaginationButttonFunctions(minFollowingPages);
     }
     else {
         TogglePaginationControls(false);
-    }
-
-
-    if (results) {
-        $("#current_page").text("" + currentPage);
-        $("#max_pages").text("" + maxPages);
-        $("#results_per_page").prop("disabled", false);
-        $("#results_per_page_lbl").removeClass("opacity-50");
-        $("#select_page_btn").prop("disabled", false);
-        $("#select_page_form").find("input")
-            .val(currentPage)
-            .attr("max", maxPages);
-
-        if (currentPage <= 1) {
-            $("#previous_page").prop("disabled", true);
-        }
-        else {
-            $("#previous_page").prop("disabled", false);
-        }
-
-        if (currentPage >= maxPages) {
-            $("#next_page").prop("disabled", true);
-        }
-        else {
-            $("#next_page").prop("disabled", false);
-        }
-    }
-    else {
-        $("#current_page").text("0");
-        $("#max_pages").text("0");
-        $("#next_page").prop("disabled", true);
-        $("#previous_page").prop("disabled", true);
-        $("#select_page_btn").prop("disabled", true);
-        $("#results_per_page").prop("disabled", true);
-        $("#results_per_page_lbl").addClass("opacity-50");
     }
 }
 
