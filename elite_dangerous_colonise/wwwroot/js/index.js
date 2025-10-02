@@ -753,8 +753,13 @@ function FormatResults(results) {
                         </div>
                         <p class="mt-3">${system.systemCounts.organicCount}</p>
                     </div>
-                    <div class="mt-5 lg:col-span-2 xl:col-span-4">
-                        <a href="https://spansh.co.uk/system/${system.systemID}" target="_blank" class="text-blue-800 underline">View on Spansh</a>
+                    <h2 class="col-start-1 row-start-11 border-b border-gray-300 pt-5 text-center text-lg drop-shadow-xs lg:col-end-3 lg:row-start-7 lg:text-left xl:col-end-5 xl:row-start-5"></h2>
+                    <div class="mt-5 flex flex-col justify-between gap-y-5 sm:flex-row lg:col-span-2 xl:col-span-4">
+                        <a href="https://spansh.co.uk/system/${system.systemID}" target="_blank" class="text-center text-blue-800 underline sm:text-left">View on Spansh</a>
+                        <div class="flex justify-center gap-x-3 text-center sm:text-left">
+                            <a href="" class="text-blue-800 underline">Report as Locked</a>
+                            <a href="" class="text-blue-800 underline">Report as Claimed</a>
+                        </div>
                     </div>
                 </div>
                 <div id="${system.systemID}_tooltip" role="tooltip" class="tooltip invisible absolute z-10 inline-block rounded-lg bg-[#0F0F0F] px-3 py-2 text-sm text-[#F0F0F0] opacity-0 shadow-xs transition-opacity duration-200">
