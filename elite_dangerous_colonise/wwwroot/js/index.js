@@ -67,6 +67,31 @@ function StartCountdown() {
     }, 1000);
 }
 
+$(function () {
+    StarSession();
+});
+
+async function StarSession() {
+    var storedIDs = localStorage.getItem("ReportedIDs");
+    var storedIDsJson = [];
+
+    if (storedIDs) {
+        storedIDsJson = JSON.parse(storedIDs);
+    }
+
+    const response = await fetch("/api/StartSession", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(storedIDsJson)
+    });
+
+    if (!response.ok) {
+        console.error("Error starting session.")
+    }
+}
+
 
 // Search Bar Functions
 
@@ -757,8 +782,8 @@ function FormatResults(results) {
                     <div class="mt-5 flex flex-col justify-between gap-y-5 sm:flex-row lg:col-span-2 xl:col-span-4">
                         <a href="https://spansh.co.uk/system/${system.systemID}" target="_blank" class="text-center text-blue-800 underline sm:text-left">View on Spansh</a>
                         <div class="flex justify-center gap-x-3 text-center sm:text-left">
-                            <a href="" class="text-blue-800 underline">Report as Locked</a>
-                            <a href="" class="text-blue-800 underline">Report as Claimed</a>
+                            <a id="${system.systemID}_reportLocked" class="text-blue-800 underline cursor-pointer">Report as Locked</a>
+                            <a id="${system.systemID}_reportClaimed" class="text-blue-800 underline cursor-pointer">Report as Claimed</a>
                         </div>
                     </div>
                 </div>
@@ -769,6 +794,10 @@ function FormatResults(results) {
             </div>
         `;
         count++;
+    });
+
+    results.forEach(system => {
+        ReinitializeReportLinks(system.systemID);
     });
 
     ReinitializeAccordion();
@@ -913,6 +942,58 @@ function FormatColonisedSystemTooltips(systemID, inputColonisedSystems) {
     });
 
     return tooltipList;
+}
+
+function AddToLocalStorage(systemID) {
+    var storedIDs = localStorage.getItem("ReportedIDs");
+    var storedIDsJson = [];
+
+    if (storedIDs) {
+        storedIDsJson = JSON.parse(storedIDs);
+    }
+
+    if (!storedIDsJson.includes(systemID)) {
+        storedIDsJson.push(systemID);
+    }
+
+    localStorage.setItem("ReportedIDs", JSON.stringify(storedIDsJson));
+}
+
+async function ReportSystem(systemID, isLocked) {
+    const reportParams = {
+        ReportedSystemID: systemID,
+        IsLocked: isLocked
+    };
+
+    const response = await fetch("/api/StarSystemReport", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(reportParams)
+    });
+
+    if (response.status == 401) {
+
+    }
+    else if (!response.ok) {
+        console.error("Error sending report.")
+    }
+    else {
+        AddToLocalStorage(systemID);
+    }
+}
+
+function ReinitializeReportLinks(systemID) {
+    $(`#${systemID}_reportLocked`).on("click", function () {
+        ReportSystem(systemID, true);
+        LoadResults(false);
+    });
+
+    $(`#${systemID}_reportClaimed`).on("click", function () {
+        ReportSystem(systemID, false);
+        LoadResults(false);
+    });
 }
 
 function ReinitializeAccordion() {

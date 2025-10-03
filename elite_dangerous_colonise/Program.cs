@@ -26,6 +26,17 @@ builder.Services.AddControllers();
 // Adds the SignalR service.
 builder.Services.AddSignalR();
 
+// Adds the MemoryCache service.
+builder.Services.AddDistributedMemoryCache();
+
+// Adds the Session service.
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromHours(1);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 // Configures the data protection service.
 builder.Services.AddDataProtection()
     .PersistKeysToFileSystem(new DirectoryInfo(rootDir + @"\private\keys"))
@@ -102,6 +113,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseSession();
 
 app.UseAuthorization();
 

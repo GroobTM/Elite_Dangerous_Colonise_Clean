@@ -1195,3 +1195,21 @@ BEGIN
     REFRESH MATERIALIZED VIEW "MaxSearchValues";
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE OR REPLACE FUNCTION "ReportStarSystem"("inputSystemID" BIGINT, "isLockReport" BOOLEAN)
+RETURNS VOID AS $$
+BEGIN
+	IF "isLockReport" THEN
+		UPDATE "UncolonisedStarSystemsAvailability"
+		SET "lockReportCount" = "lockReportCount" + 1
+		WHERE "systemID" = "inputSystemID"
+		AND NOT "isLocked";
+	
+	ELSE
+		UPDATE "UncolonisedStarSystemsAvailability"
+		SET "claimReportCount" = "claimReportCount" + 1
+		WHERE "systemID" = "inputSystemID"
+		AND NOT "isClaimed";
+	END IF;
+END;
+$$ LANGUAGE plpgsql;
