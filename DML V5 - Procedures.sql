@@ -700,7 +700,8 @@ CREATE OR REPLACE FUNCTION "SelectSearchResults" (
 	"inputMinWalkable" SMALLINT,
 	"inputMaxWalkable" SMALLINT,
 	"inputMaxDistanceToSol" INT,
-	"inputHotspotTypes" "HotspotType"[]
+	"inputHotspotTypes" "HotspotType"[],
+	"inputRemovedSystemIDs" BIGINT[]
 )
 RETURNS jsonb AS $$
 DECLARE
@@ -720,8 +721,8 @@ BEGIN
 					FROM "DistinctColonisedStarSystems" dcss
 					INNER JOIN "Stations" s ON dcss."colonisedSystemID" = s."systemID"
 					INNER JOIN "Factions" f ON s."controllingFaction" = f."factionID"
-					WHERE ($41 IS NULL OR dcss."systemName" = $41)
-					AND ($42 IS NULL OR f."factionName" = $42)
+					WHERE ($42 IS NULL OR dcss."systemName" = $42)
+					AND ($43 IS NULL OR f."factionName" = $43)
 				)
 			),';
 	END IF;
@@ -733,7 +734,7 @@ BEGIN
 				FROM "DistinctUncolonisedStarSystems" duss
 				INNER JOIN "Rings" r ON duss."uncolonisedSystemID" = r."systemID"
 				INNER JOIN "Hotspots" h ON r."ringID" = h."ringID"
-				WHERE h."hotspotType" = ANY($41)
+				WHERE h."hotspotType" = ANY($43)
 			),';
 	END IF;
 	
@@ -744,7 +745,7 @@ BEGIN
 				FROM "DistinctUncolonisedStarSystems" duss
 				INNER JOIN "Rings" r ON duss."uncolonisedSystemID" = r."systemID"
 				INNER JOIN "Hotspots" h ON r."ringID" = h."ringID"
-				WHERE h."hotspotType" = ANY($43)
+				WHERE h."hotspotType" = ANY($44)
 			),';
 	END IF;
 	
@@ -792,7 +793,7 @@ BEGIN
 			
 	IF "sortOrder" = 'DistanceToTrailblazer' THEN
 		"queryString" := "queryString" || '
-			INNER JOIN "ClosestTrailblazerByStarSystem" ctbss ON dcss."uncolonisedSystemID" = ctbss."uncolonisedSystemID"';
+			INNER JOIN "ClosestTrailblazerByStarSystem" ctbss ON duss."uncolonisedSystemID" = ctbss."uncolonisedSystemID"';
 	END IF;
 			
 	"queryString" := "queryString" || '
@@ -838,6 +839,7 @@ BEGIN
 			AND uss."landableCount" >= $33 AND uss."landableCount" <= $34
 			AND uss."walkableCount" >= $35 AND uss."walkableCount" <= $36
 			AND uss."distanceToSol" <= $37
+			AND duss."uncolonisedSystemID" <> ANY(COALESCE($41, ''{}''))
 			ORDER BY
 				CASE WHEN $38 = ''SystemValue'' THEN uss."systemValue" END DESC,
 				CASE WHEN $38 = ''MostWalkables'' THEN uss."walkableCount" END DESC,
@@ -997,6 +999,7 @@ BEGIN
 		"sortOrder",
 		"pageNo",
 		"resultsPerPage",
+		"inputRemovedSystemIDs",
 		"inputSystemName",
 		"inputFactionName";
 		
@@ -1043,6 +1046,7 @@ BEGIN
 		"sortOrder",
 		"pageNo",
 		"resultsPerPage",
+		"inputRemovedSystemIDs",
 		"inputHotspotTypes";
 		
 	ELSIF "inputHotspotTypes" IS NOT NULL AND ("inputSystemName" IS NOT NULL OR "inputFactionName" IS NOT NULL) THEN
@@ -1088,6 +1092,7 @@ BEGIN
 		"sortOrder",
 		"pageNo",
 		"resultsPerPage",
+		"inputRemovedSystemIDs",
 		"inputSystemName",
 		"inputFactionName",
 		"inputHotspotTypes";
@@ -1134,7 +1139,8 @@ BEGIN
 		"inputMaxDistanceToSol",
 		"sortOrder",
 		"pageNo",
-		"resultsPerPage";
+		"resultsPerPage",
+		"inputRemovedSystemIDs";
 	
 	END IF;
 	

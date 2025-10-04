@@ -3,6 +3,7 @@ using elite_dangerous_colonise.Models.Database_Results;
 using elite_dangerous_colonise.Models.Database_Types;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Npgsql;
 using NpgsqlTypes;
@@ -216,7 +217,8 @@ public class IndexModel : PageModel
                         "@minWalkables, " +
                         "@maxWalkables, " +
                         "@maxDistanceToSol, " +
-                        "@hotspotTypes" +
+                        "@hotspotTypes," +
+                        "@removedSystemIDs" +
                         ")", conn))
                     {
                         command.Parameters.AddWithValue("sortOrder", ParseSortOrder(sortOrder));
@@ -262,6 +264,7 @@ public class IndexModel : PageModel
                         command.Parameters.AddWithValue("maxWalkables", maxWalkables);
                         command.Parameters.AddWithValue("maxDistanceToSol", maxDistanceToSol);
                         command.Parameters.AddWithValue("hotspotTypes", (object)ParseHotspotTypes(hotspotTypes) ?? DBNull.Value);
+                        command.Parameters.AddWithValue("removedSystemIDs", ParseSessionReportedStarSystems());
                         
                         await using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
                         {
@@ -311,5 +314,17 @@ public class IndexModel : PageModel
                 error = "Search is currently blocked."
             });
         }
+    }
+    private List<long> ParseSessionReportedStarSystems()
+    {
+        List<long> reportedStarSystems = new List<long>();
+        string? reportedStarSystemsJson = HttpContext.Session.GetString("reportedStarSystemsJson");
+
+        if (!string.IsNullOrEmpty(reportedStarSystemsJson))
+        {
+            reportedStarSystems = JsonConvert.DeserializeObject<List<long>>(reportedStarSystemsJson);
+        }
+
+        return reportedStarSystems;
     }
 }

@@ -985,14 +985,14 @@ async function ReportSystem(systemID, isLocked) {
 }
 
 function ReinitializeReportLinks(systemID) {
-    $(`#${systemID}_reportLocked`).on("click", function () {
-        ReportSystem(systemID, true);
-        LoadResults(false);
+    $(`#${systemID}_reportLocked`).on("click", async function () {
+        await ReportSystem(systemID, true);
+        await LoadResults(false);
     });
 
-    $(`#${systemID}_reportClaimed`).on("click", function () {
-        ReportSystem(systemID, false);
-        LoadResults(false);
+    $(`#${systemID}_reportClaimed`).on("click", async function () {
+        await ReportSystem(systemID, false);
+        await LoadResults(false);
     });
 }
 
