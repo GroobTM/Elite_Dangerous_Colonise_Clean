@@ -974,7 +974,7 @@ async function ReportSystem(systemID, isLocked) {
     });
 
     if (response.status == 401) {
-
+        HSOverlay.open("#error_modal");
     }
     else if (!response.ok) {
         console.error("Error sending report.")
@@ -1184,3 +1184,8 @@ function FormatNoResults() {
     </div>
     `;
 }
+
+$("#error_modal_close").on("click", function (e) {
+    e.preventDefault();
+    HSOverlay.close("#error_modal");
+});
