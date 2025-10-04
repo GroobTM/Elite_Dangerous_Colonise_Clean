@@ -1,12 +1,8 @@
 using elite_dangerous_colonise.Classes;
 using elite_dangerous_colonise.Models.Database_Results;
-using elite_dangerous_colonise.Models.Database_Types;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Npgsql;
-using NpgsqlTypes;
 using System.Text.RegularExpressions;
 
 
