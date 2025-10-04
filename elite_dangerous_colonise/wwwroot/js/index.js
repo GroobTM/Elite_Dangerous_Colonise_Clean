@@ -442,7 +442,7 @@ async function LoadResults(updateUrl = true) {
         history.pushState({ encodedParams: encodedParams }, "", newUrl);
     }
 
-    const response = await fetch(`/Index?handler=Search&${searchParams}`);
+    const response = await fetch(`/api/StarSystemSearch?${searchParams}`);
 
     if (!response.ok) {
         console.error("Error loading search results.")
