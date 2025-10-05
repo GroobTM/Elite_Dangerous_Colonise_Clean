@@ -79,7 +79,7 @@ async function StarSession() {
         storedIDsJson = JSON.parse(storedIDs);
     }
 
-    const response = await fetch("/api/StartSession", {
+    const response = await fetch("/api/ConfigSession", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -88,7 +88,7 @@ async function StarSession() {
     });
 
     if (!response.ok) {
-        console.error("Error starting session.")
+        console.error("Error configuring session.")
     }
 }
 

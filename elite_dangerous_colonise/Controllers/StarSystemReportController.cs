@@ -25,7 +25,7 @@ namespace elite_dangerous_colonise.Controllers
         {
             ParseSessionValues();
 
-            if (reportedStarSystems == null)
+            if (HttpContext.Session.GetString("PassedCaptcha") != "true" || reportedStarSystems == null)
             {
                 return StatusCode(401, new
                 {

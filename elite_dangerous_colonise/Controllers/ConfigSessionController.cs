@@ -5,7 +5,7 @@ namespace elite_dangerous_colonise.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class StartSessionController : ControllerBase
+    public class ConfigSessionController : ControllerBase
     {
         [HttpPost]
         public IActionResult Post([FromBody] List<long> reportedStarSystems)
@@ -13,11 +13,11 @@ namespace elite_dangerous_colonise.Controllers
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("reportedStarSystemsJson")))
             {
                 HttpContext.Session.SetString("reportedStarSystemsJson", JsonConvert.SerializeObject(reportedStarSystems ?? []));
-                return Ok("Session created.");
+                return Ok("Session configured.");
             }
             else
             {
-                return Ok("Session already created.");
+                return Ok("Session already configured.");
             }
         }
     }
