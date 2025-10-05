@@ -16,9 +16,23 @@ namespace elite_dangerous_colonise.Pages
             this.altchaService = altchaService;
         }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
             ReturnUrl ??= Url.Content("~/");
+
+            if (HttpContext.Session.GetString("PassedCaptcha") == "true")
+            {
+                if (!string.IsNullOrEmpty(ReturnUrl) && Url.IsLocalUrl(ReturnUrl))
+                {
+                    return Redirect(ReturnUrl);
+                }
+                else
+                {
+                    return RedirectToPage("/Index");
+                }
+            }
+
+            return Page();  
         }
 
         public async Task<IActionResult> OnPostAsync()
