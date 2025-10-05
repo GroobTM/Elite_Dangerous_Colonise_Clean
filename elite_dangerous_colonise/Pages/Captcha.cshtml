@@ -1,0 +1,29 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.ModelBinding;
+@model elite_dangerous_colonise.Pages.CaptchaModel
+@{
+    ViewData["Title"] = "Home Page";
+    ViewData["Description"] = "ED Colonise is a colonisation helper for the game Elite Dangerous.";
+    ViewData["url"] = "https://edcolonise.net/";
+}
+@section Scripts {
+    <script type="module" src="https://cdn.jsdelivr.net/gh/altcha-org/altcha@main/dist/altcha.min.js" async defer></script>
+}
+
+<section>
+    <h1>Before you proceed, I need to ask: Are you a robot?</h1>
+
+    <form method="post">
+        <input type="hidden" name="ReturnUrl" value="@Model.ReturnUrl" />
+        <altcha-widget challengeurl="/Captcha?handler=Challenge"></altcha-widget>
+        <button type="submit">Continue</button>
+
+        @if (!ModelState.IsValid)
+        {
+            @foreach (ModelError error in ModelState.Values.SelectMany(ValueTask => ValueTask.Errors))
+            {
+                <span>@error.ErrorMessage.</span>
+            }
+        }
+    </form>
+</section>

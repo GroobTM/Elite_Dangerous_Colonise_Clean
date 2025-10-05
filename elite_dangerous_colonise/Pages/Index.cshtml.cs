@@ -11,7 +11,6 @@ namespace elite_dangerous_colonise.Pages;
 public class IndexModel : PageModel
 {
     private readonly NpgsqlDataSource dataSource;
-    private readonly ILogger<IndexModel> _logger;
 
     public SelectMaxSearchValuesResult MaxValues { get; private set; }
     public List<string> HotspotTypes { get; private set; }
@@ -26,14 +25,21 @@ public class IndexModel : PageModel
     public string SortOrder { get; set; }
 
 
-    public IndexModel(ILogger<IndexModel> logger, NpgsqlDataSource dataSource)
+    public IndexModel(NpgsqlDataSource dataSource)
     {
-        _logger = logger;
         this.dataSource = dataSource;
     }
 
     public async Task<IActionResult> OnGet()
     {
+        if (HttpContext.Session.GetString("PassedCaptcha") != "true")
+        {
+            string returnUrl = $"{Request.Path}{Request.QueryString}";
+
+            return RedirectToPage("/Captcha", new { ReturnUrl = returnUrl });
+        }
+
+
         try
         {
             MaxValues = await SelectMaxSearchValues();

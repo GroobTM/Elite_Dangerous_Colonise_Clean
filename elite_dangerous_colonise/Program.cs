@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.DataProtection;
 using Npgsql;
 using elite_dangerous_colonise.Classes;
 using elite_dangerous_colonise.Models.Database_Types;
+using System.Text;
+using Ixnas.AltchaNet;
 
 const bool DEBUG = true;
 
@@ -15,7 +17,7 @@ builder.Configuration
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
-    .AddJsonFile(rootDir + "\\private\\ConnectionStrings.json", optional: false, reloadOnChange: true);
+    .AddJsonFile(rootDir + "\\private\\Secrets.json", optional: false, reloadOnChange: true);
 
 // Adds the RazorPages service.
 builder.Services.AddRazorPages();
@@ -78,6 +80,20 @@ builder.Services.AddScoped<DatabaseBulkWriter>(provider =>
 {
     return new DatabaseBulkWriter(dataSource, DEBUG);
 });
+
+// Configures Altcha service
+string altchaKey = builder.Configuration["AltchaKey"];
+if (string.IsNullOrEmpty(altchaKey) || Encoding.UTF8.GetByteCount(altchaKey) != 64)
+{
+    throw new InvalidOperationException("Altcha Key not found or incorrect length.");
+}
+
+builder.Services.AddSingleton<AltchaService>(service =>
+    Altcha.CreateServiceBuilder()
+        .UseSha256(Encoding.UTF8.GetBytes(altchaKey))
+        .UseStore(new AltchaMemoryStore())
+        .Build()
+);
 
 if (!DEBUG)
 {
