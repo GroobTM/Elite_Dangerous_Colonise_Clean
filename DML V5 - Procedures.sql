@@ -839,7 +839,7 @@ BEGIN
 			AND uss."landableCount" >= $33 AND uss."landableCount" <= $34
 			AND uss."walkableCount" >= $35 AND uss."walkableCount" <= $36
 			AND uss."distanceToSol" <= $37
-			AND duss."uncolonisedSystemID" <> ANY(COALESCE($41, ''{}''))
+			AND duss."uncolonisedSystemID" NOT IN (SELECT unnest($41))
 			ORDER BY
 				CASE WHEN $38 = ''SystemValue'' THEN uss."systemValue" END DESC,
 				CASE WHEN $38 = ''MostWalkables'' THEN uss."walkableCount" END DESC,
@@ -848,7 +848,7 @@ BEGIN
 			
 	IF "sortOrder" = 'DistanceToTrailblazer' THEN
 		"queryString" := "queryString" || '
-				CASE WHEN $38 = ''DistanceToTrailblazer'' THEN ctbss."distanceToTrailblazer" END ASC';
+				, CASE WHEN $38 = ''DistanceToTrailblazer'' THEN ctbss."distanceToTrailblazer" END ASC';
 	END IF;
 	
 	"queryString" := "queryString" || '
