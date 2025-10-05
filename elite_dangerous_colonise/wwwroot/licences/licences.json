@@ -1,48 +1,12 @@
 [
   {
-    "PackageId": "Accord",
-    "PackageVersion": "3.8.0",
-    "PackageProjectUrl": "http://accord-framework.net/",
-    "Authors": "Accord.NET",
-    "License": "http://accord-framework.net/license.txt",
-    "LicenseUrl": "http://accord-framework.net/license.txt",
-    "LicenseInformationOrigin": 1
-  },
-  {
-    "PackageId": "Accord.MachineLearning",
-    "PackageVersion": "3.8.0",
-    "PackageProjectUrl": "http://accord-framework.net/",
-    "Authors": "Accord.NET",
-    "License": "http://accord-framework.net/license.txt",
-    "LicenseUrl": "http://accord-framework.net/license.txt",
-    "LicenseInformationOrigin": 1
-  },
-  {
-    "PackageId": "Accord.Math",
-    "PackageVersion": "3.8.0",
-    "PackageProjectUrl": "http://accord-framework.net/",
-    "Authors": "Accord.NET",
-    "License": "http://accord-framework.net/license.txt",
-    "LicenseUrl": "http://accord-framework.net/license.txt",
-    "LicenseInformationOrigin": 1
-  },
-  {
-    "PackageId": "Accord.Statistics",
-    "PackageVersion": "3.8.0",
-    "PackageProjectUrl": "http://accord-framework.net/",
-    "Authors": "Accord.NET",
-    "License": "http://accord-framework.net/license.txt",
-    "LicenseUrl": "http://accord-framework.net/license.txt",
-    "LicenseInformationOrigin": 1
-  },
-  {
     "PackageId": "AsyncIO",
     "PackageVersion": "0.1.69",
     "PackageProjectUrl": "https://github.com/somdoron/AsyncIO",
     "Authors": "AsyncIO",
-    "License": "https://github.com/somdoron/AsyncIO/blob/master/LICENSE.md",
-    "LicenseUrl": "https://github.com/somdoron/AsyncIO/blob/master/LICENSE.md",
-    "LicenseInformationOrigin": 1
+    "License": " MPL-2.0",
+    "LicenseUrl": "https://licenses.nuget.org/MPL-2.0",
+    "LicenseInformationOrigin": 0
   },
   {
     "PackageId": "Humanizer",
@@ -545,8 +509,18 @@
     "LicenseInformationOrigin": 0
   },
   {
+    "PackageId": "Ixnas.AltchaNet",
+    "PackageVersion": "1.1.0",
+    "PackageProjectUrl": "https://github.com/ixnas/altcha-dotnet",
+    "Copyright": "Copyright (c) 2024 Sjoerd Scheffer",
+    "Authors": "Sjoerd Scheffer",
+    "License": "BSD-2-Clause",
+    "LicenseUrl": "https://github.com/ixnas/altcha-dotnet/blob/main/LICENSE.txt",
+    "LicenseInformationOrigin": 0
+  },
+  {
     "PackageId": "Microsoft.AspNetCore.Connections.Abstractions",
-    "PackageVersion": "7.0.20",
+    "PackageVersion": "9.0.9",
     "PackageProjectUrl": "https://asp.net/",
     "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
     "Authors": "Microsoft",
@@ -556,7 +530,7 @@
   },
   {
     "PackageId": "Microsoft.AspNetCore.Http.Connections.Client",
-    "PackageVersion": "7.0.20",
+    "PackageVersion": "9.0.9",
     "PackageProjectUrl": "https://asp.net/",
     "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
     "Authors": "Microsoft",
@@ -566,7 +540,7 @@
   },
   {
     "PackageId": "Microsoft.AspNetCore.Http.Connections.Common",
-    "PackageVersion": "7.0.20",
+    "PackageVersion": "9.0.9",
     "PackageProjectUrl": "https://asp.net/",
     "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
     "Authors": "Microsoft",
@@ -586,7 +560,7 @@
   },
   {
     "PackageId": "Microsoft.AspNetCore.SignalR.Client",
-    "PackageVersion": "7.0.20",
+    "PackageVersion": "9.0.9",
     "PackageProjectUrl": "https://asp.net/",
     "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
     "Authors": "Microsoft",
@@ -596,7 +570,7 @@
   },
   {
     "PackageId": "Microsoft.AspNetCore.SignalR.Client.Core",
-    "PackageVersion": "7.0.20",
+    "PackageVersion": "9.0.9",
     "PackageProjectUrl": "https://asp.net/",
     "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
     "Authors": "Microsoft",
@@ -606,7 +580,7 @@
   },
   {
     "PackageId": "Microsoft.AspNetCore.SignalR.Common",
-    "PackageVersion": "7.0.20",
+    "PackageVersion": "9.0.9",
     "PackageProjectUrl": "https://asp.net/",
     "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
     "Authors": "Microsoft",
@@ -616,7 +590,7 @@
   },
   {
     "PackageId": "Microsoft.AspNetCore.SignalR.Protocols.Json",
-    "PackageVersion": "7.0.20",
+    "PackageVersion": "9.0.9",
     "PackageProjectUrl": "https://asp.net/",
     "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
     "Authors": "Microsoft",
@@ -626,7 +600,7 @@
   },
   {
     "PackageId": "Microsoft.Bcl.AsyncInterfaces",
-    "PackageVersion": "7.0.0",
+    "PackageVersion": "9.0.9",
     "PackageProjectUrl": "https://dot.net/",
     "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
     "Authors": "Microsoft",
@@ -636,7 +610,17 @@
   },
   {
     "PackageId": "Microsoft.Bcl.Cryptography",
-    "PackageVersion": "9.0.3",
+    "PackageVersion": "9.0.9",
+    "PackageProjectUrl": "https://dot.net/",
+    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
+    "Authors": "Microsoft",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
+    "LicenseInformationOrigin": 0
+  },
+  {
+    "PackageId": "Microsoft.Bcl.TimeProvider",
+    "PackageVersion": "9.0.9",
     "PackageProjectUrl": "https://dot.net/",
     "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
     "Authors": "Microsoft",
@@ -816,7 +800,7 @@
   },
   {
     "PackageId": "Microsoft.Extensions.DependencyInjection",
-    "PackageVersion": "9.0.0",
+    "PackageVersion": "9.0.9",
     "PackageProjectUrl": "https://dot.net/",
     "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
     "Authors": "Microsoft",
@@ -826,7 +810,7 @@
   },
   {
     "PackageId": "Microsoft.Extensions.DependencyInjection.Abstractions",
-    "PackageVersion": "9.0.0",
+    "PackageVersion": "9.0.9",
     "PackageProjectUrl": "https://dot.net/",
     "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
     "Authors": "Microsoft",
@@ -856,7 +840,7 @@
   },
   {
     "PackageId": "Microsoft.Extensions.Features",
-    "PackageVersion": "7.0.20",
+    "PackageVersion": "9.0.9",
     "PackageProjectUrl": "https://asp.net/",
     "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
     "Authors": "Microsoft",
@@ -886,7 +870,7 @@
   },
   {
     "PackageId": "Microsoft.Extensions.Logging",
-    "PackageVersion": "9.0.0",
+    "PackageVersion": "9.0.9",
     "PackageProjectUrl": "https://dot.net/",
     "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
     "Authors": "Microsoft",
@@ -896,7 +880,7 @@
   },
   {
     "PackageId": "Microsoft.Extensions.Logging.Abstractions",
-    "PackageVersion": "9.0.0",
+    "PackageVersion": "9.0.9",
     "PackageProjectUrl": "https://dot.net/",
     "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
     "Authors": "Microsoft",
@@ -906,17 +890,17 @@
   },
   {
     "PackageId": "Microsoft.Extensions.ObjectPool",
-    "PackageVersion": "5.0.10",
+    "PackageVersion": "8.0.10",
     "PackageProjectUrl": "https://asp.net/",
     "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
     "Authors": "Microsoft",
-    "License": "Apache-2.0",
-    "LicenseUrl": "https://licenses.nuget.org/Apache-2.0",
+    "License": "MIT",
+    "LicenseUrl": "https://licenses.nuget.org/MIT",
     "LicenseInformationOrigin": 0
   },
   {
     "PackageId": "Microsoft.Extensions.Options",
-    "PackageVersion": "9.0.0",
+    "PackageVersion": "9.0.9",
     "PackageProjectUrl": "https://dot.net/",
     "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
     "Authors": "Microsoft",
@@ -926,7 +910,7 @@
   },
   {
     "PackageId": "Microsoft.Extensions.Primitives",
-    "PackageVersion": "9.0.0",
+    "PackageVersion": "9.0.9",
     "PackageProjectUrl": "https://dot.net/",
     "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
     "Authors": "Microsoft",
@@ -1024,16 +1008,6 @@
     "LicenseInformationOrigin": 0
   },
   {
-    "PackageId": "murmurhash",
-    "PackageVersion": "1.0.3",
-    "PackageProjectUrl": "https://github.com/darrenkopp/murmurhash-net",
-    "Copyright": "Copyright 2013",
-    "Authors": "Darren Kopp",
-    "License": "https://github.com/darrenkopp/murmurhash-net/blob/master/LICENSE.md",
-    "LicenseUrl": "https://github.com/darrenkopp/murmurhash-net/blob/master/LICENSE.md",
-    "LicenseInformationOrigin": 1
-  },
-  {
     "PackageId": "NaCl.Net",
     "PackageVersion": "0.1.13",
     "PackageProjectUrl": "https://github.com/somdoron/nacl.net",
@@ -1044,16 +1018,16 @@
   },
   {
     "PackageId": "NetMQ",
-    "PackageVersion": "4.0.1.13",
+    "PackageVersion": "4.0.2.1",
     "PackageProjectUrl": "https://github.com/zeromq/netmq",
     "Authors": "NetMQ",
-    "License": "https://github.com/zeromq/netmq/blob/master/COPYING.LESSER",
+    "License": "LGPL",
     "LicenseUrl": "https://github.com/zeromq/netmq/blob/master/COPYING.LESSER",
     "LicenseInformationOrigin": 1
   },
   {
     "PackageId": "Newtonsoft.Json",
-    "PackageVersion": "13.0.3",
+    "PackageVersion": "13.0.4",
     "PackageProjectUrl": "https://www.newtonsoft.com/json",
     "Copyright": "Copyright \u00A9 James Newton-King 2008",
     "Authors": "James Newton-King",
@@ -1063,9 +1037,9 @@
   },
   {
     "PackageId": "Npgsql",
-    "PackageVersion": "9.0.3",
+    "PackageVersion": "9.0.4",
     "PackageProjectUrl": "https://github.com/npgsql/npgsql",
-    "Copyright": "Copyright 2024 \u00A9 The Npgsql Development Team",
+    "Copyright": "Copyright 2025 \u00A9 The Npgsql Development Team",
     "Authors": "Shay Rojansky,Nikita Kazmin,Brar Piening,Nino Floris,Yoh Deadfall,Austin Drenski,Emil Lenngren,Francisco Figueiredo Jr.,Kenji Uno",
     "License": "PostgreSQL",
     "LicenseUrl": "https://licenses.nuget.org/PostgreSQL",
@@ -1163,7 +1137,7 @@
   },
   {
     "PackageId": "Serilog",
-    "PackageVersion": "4.2.0",
+    "PackageVersion": "4.3.0",
     "PackageProjectUrl": "https://serilog.net/",
     "Copyright": "Copyright \u00A9 Serilog Contributors",
     "Authors": "Serilog Contributors",
@@ -1236,7 +1210,7 @@
   },
   {
     "PackageId": "Serilog.Sinks.File",
-    "PackageVersion": "6.0.0",
+    "PackageVersion": "7.0.0",
     "PackageProjectUrl": "https://github.com/serilog/serilog-sinks-file",
     "Authors": "Serilog Contributors",
     "License": "Apache-2.0",
@@ -1345,7 +1319,7 @@
   },
   {
     "PackageId": "System.Diagnostics.DiagnosticSource",
-    "PackageVersion": "9.0.0",
+    "PackageVersion": "9.0.9",
     "PackageProjectUrl": "https://dot.net/",
     "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
     "Authors": "Microsoft",
@@ -1365,7 +1339,7 @@
   },
   {
     "PackageId": "System.Formats.Asn1",
-    "PackageVersion": "9.0.3",
+    "PackageVersion": "9.0.9",
     "PackageProjectUrl": "https://dot.net/",
     "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
     "Authors": "Microsoft",
@@ -1375,7 +1349,7 @@
   },
   {
     "PackageId": "System.IO.Pipelines",
-    "PackageVersion": "9.0.0",
+    "PackageVersion": "9.0.9",
     "PackageProjectUrl": "https://dot.net/",
     "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
     "Authors": "Microsoft",
@@ -1384,29 +1358,9 @@
     "LicenseInformationOrigin": 0
   },
   {
-    "PackageId": "System.Numerics.Vectors",
-    "PackageVersion": "4.5.0",
+    "PackageId": "System.Net.ServerSentEvents",
+    "PackageVersion": "9.0.9",
     "PackageProjectUrl": "https://dot.net/",
-    "Copyright": "\u00A9 Microsoft Corporation.  All rights reserved.",
-    "Authors": "Microsoft",
-    "License": "MIT",
-    "LicenseUrl": "https://github.com/dotnet/corefx/blob/master/LICENSE.TXT",
-    "LicenseInformationOrigin": 1
-  },
-  {
-    "PackageId": "System.Private.ServiceModel",
-    "PackageVersion": "4.9.0",
-    "PackageProjectUrl": "https://github.com/dotnet/wcf",
-    "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
-    "Authors": "Microsoft",
-    "License": "MIT",
-    "LicenseUrl": "https://licenses.nuget.org/MIT",
-    "LicenseInformationOrigin": 0
-  },
-  {
-    "PackageId": "System.Reflection.DispatchProxy",
-    "PackageVersion": "4.7.1",
-    "PackageProjectUrl": "https://github.com/dotnet/corefx",
     "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
     "Authors": "Microsoft",
     "License": "MIT",
@@ -1445,7 +1399,7 @@
   },
   {
     "PackageId": "System.Security.Cryptography.Pkcs",
-    "PackageVersion": "9.0.3",
+    "PackageVersion": "9.0.9",
     "PackageProjectUrl": "https://dot.net/",
     "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
     "Authors": "Microsoft",
@@ -1465,7 +1419,7 @@
   },
   {
     "PackageId": "System.Security.Cryptography.Xml",
-    "PackageVersion": "9.0.3",
+    "PackageVersion": "9.0.9",
     "PackageProjectUrl": "https://dot.net/",
     "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
     "Authors": "Microsoft",
@@ -1485,7 +1439,7 @@
   },
   {
     "PackageId": "System.ServiceModel.Primitives",
-    "PackageVersion": "4.9.0",
+    "PackageVersion": "8.1.2",
     "PackageProjectUrl": "https://github.com/dotnet/wcf",
     "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
     "Authors": "Microsoft",
@@ -1495,7 +1449,7 @@
   },
   {
     "PackageId": "System.Text.Encodings.Web",
-    "PackageVersion": "9.0.0",
+    "PackageVersion": "9.0.9",
     "PackageProjectUrl": "https://dot.net/",
     "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
     "Authors": "Microsoft",
@@ -1505,7 +1459,7 @@
   },
   {
     "PackageId": "System.Text.Json",
-    "PackageVersion": "9.0.0",
+    "PackageVersion": "9.0.9",
     "PackageProjectUrl": "https://dot.net/",
     "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
     "Authors": "Microsoft",
@@ -1515,7 +1469,7 @@
   },
   {
     "PackageId": "System.Threading.Channels",
-    "PackageVersion": "7.0.0",
+    "PackageVersion": "9.0.9",
     "PackageProjectUrl": "https://dot.net/",
     "Copyright": "\u00A9 Microsoft Corporation. All rights reserved.",
     "Authors": "Microsoft",
@@ -1532,15 +1486,5 @@
     "License": "MIT",
     "LicenseUrl": "https://licenses.nuget.org/MIT",
     "LicenseInformationOrigin": 0
-  },
-  {
-    "PackageId": "System.ValueTuple",
-    "PackageVersion": "4.5.0",
-    "PackageProjectUrl": "https://dot.net/",
-    "Copyright": "\u00A9 Microsoft Corporation.  All rights reserved.",
-    "Authors": "Microsoft",
-    "License": "MIT",
-    "LicenseUrl": "https://github.com/dotnet/corefx/blob/master/LICENSE.TXT",
-    "LicenseInformationOrigin": 1
   }
 ]
