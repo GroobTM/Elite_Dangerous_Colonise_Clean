@@ -5,9 +5,9 @@ namespace elite_dangerous_colonise.Classes
     /// <summary> Defines the BodyCount object. </summary>
     public class BodyCount
     {
-        private double INTERESTING_WEIGHT = 1.0;
-        private double MEH_WEIGHT = 0.5;
-        private double BORING_WEIGHT = 0.2;
+        private const double INTERESTING_WEIGHT = 1.0;
+        private const double MEH_WEIGHT = 0.5;
+        private const double BORING_WEIGHT = 0.2;
 
         public short BlackHoleCount { get; set; } = 0;
         public short NeutronStarCount { get; set; } = 0;
