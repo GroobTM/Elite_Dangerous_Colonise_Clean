@@ -54,7 +54,7 @@
     <h1 class="p-1 text-center text-xl text-[#0F0F0F] sm:text-left">About</h1>
     <div data-accordion="collapse" class="mt-3">
         <div id="about-heading-1" class="grid">
-            <button type="button" class="border-t-1 flex w-full cursor-pointer items-center justify-between gap-3 rounded-t-lg border border-b-1 border-[#0F0F0F] bg-white p-5 text-[#0F0F0F] shadow-sm hover:bg-[#ff9305] rtl:text-right" data-accordion-target="#about-body-1" aria-expanded="false" aria-controls="about-body-1">
+            <button type="button" class="flex w-full cursor-pointer items-center justify-between gap-3 rounded-t-lg border border-t-1 border-b-1 border-[#0F0F0F] bg-white p-5 text-[#0F0F0F] shadow-sm hover:bg-[#ff9305] rtl:text-right" data-accordion-target="#about-body-1" aria-expanded="false" aria-controls="about-body-1">
                 <span class="flex items-center font-bold text-[#0F0F0F]">What is this?</span>
                 <svg data-accordion-icon class="h-3 w-3 shrink-0 rotate-180 transition-transform duration-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5" />
@@ -63,18 +63,16 @@
         </div>
 
         <div id="about-body-1" class="hidden" aria-labelledby="about-heading-1">
-            <div class="border-t-0 border border-[#0F0F0F] bg-white p-5 shadow-sm">
+            <div class="border border-t-0 border-[#0F0F0F] bg-white p-5 shadow-sm">
                 <p>
-                    I created this tool to help find interesting colonisation candidates. I intended to use it
-                    for personal use only, but I thought others might also be interested in it, so I turned it
-                    into a web app.
+                    ED Colonise is a tool designed to make finding interesting or specific colonisation candidates easier.
                 </p>
             </div>
         </div>
 
         <div id="about-heading-2" class="grid">
-            <button type="button" class="border-t-1 flex w-full cursor-pointer items-center justify-between gap-3 border border-b-1 border-[#0F0F0F] bg-white p-5 text-[#0F0F0F] shadow-sm hover:bg-[#ff9305] rtl:text-right" data-accordion-target="#about-body-2" aria-expanded="false" aria-controls="about-body-2">
-                <span class="flex items-center font-bold text-[#0F0F0F]">How does it work?</span>
+            <button type="button" class="flex w-full cursor-pointer items-center justify-between gap-3 border border-t-1 border-b-1 border-[#0F0F0F] bg-white p-5 text-[#0F0F0F] shadow-sm hover:bg-[#ff9305] rtl:text-right" data-accordion-target="#about-body-2" aria-expanded="false" aria-controls="about-body-2">
+                <span class="flex items-center font-bold text-[#0F0F0F]">How do I use this tool...</span>
                 <svg data-accordion-icon class="h-3 w-3 shrink-0 rotate-180 transition-transform duration-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5" />
                 </svg>
@@ -82,37 +80,41 @@
         </div>
 
         <div id="about-body-2" class="hidden" aria-labelledby="about-heading-2">
-            <div class="border-t-0 border border-[#0F0F0F] bg-white p-5 shadow-sm">
-                <p>To start using the tool:</p>
-                <ol class="list-inside list-decimal ps-2">
-                    <li>Enter the name of a colonised system (optional).</li>
-                    <li>Enter the name of a faction you want to expand (optional).</li>
-                    <li>Select the order in which you want the results to appear.</li>
-                    <li>Select if you want the search results to include systems that have been claimed (but not colonised).</li>
-                    <li>Click search.</li>
-                </ol>
-                <p class="mt-2">
-                    After a short wait, the tool will populate the "Colonisation Candidates" section with results
-                    matching your search within about 1000 ly of Sol.
+            <div class="border border-t-0 border-[#0F0F0F] bg-white p-5 shadow-sm">
+                <h2 class="text-lg font-bold">...to find any system to colonise:</h2>
+                <p class="ml-5">
+                    Simply clicking "Search" will display all colonisable systems within 2000-3000 ly sorted by value. However, these results may be too far away, already claimed (but not reported as such), or they may not be what you wanted.
+                    <br /><br />
+                    To refine your search, click the "More Options" button. This will open a selection of sliders that you can use to tailor your search to your preferences.
+                    <br /><br />
+                    Once you've executed a search, a list of system names will be displayed under the search bar. Clicking on one of these names will display a summary of the system's details as well as the names and locations of nearby stations that you can use for colonisation.
                 </p>
-                <br />
-                <p>
-                    Clicking on the name of any of the systems in the result will open an accordion box that displays
-                    details about the selected system.
+                <h2 class="mt-5 text-lg font-bold">...to expand from your existing colonies:</h2>
+                <p class="ml-5">
+                    To find colonisable systems within 15 ly of an existing system, enter the existing system's name into the "Colonised System" search box. If that system exists in our database, it will appear under the search bar. Select the system and click "Search".
                 </p>
-                <p>These include:</p>
-                <ul class="list-inside list-disc ps-2">
-                    <li>An overview of the system.</li>
-                    <li>Details about the rings and hotspots in the system.</li>
-                    <li>Details about the notable bodies in the system.</li>
-                    <li>Stations in systems within the colonisation range can be used to colonise the selected system.</li>
-                </ul>
+                <h2 class="mt-5 text-lg font-bold">...to expand my faction:</h2>
+                <p class="ml-5">
+                    To find systems that a specific faction can colonise, click the "More Options" button and enter the faction's name into the "Faction" search box. If that faction exists in our database, it will appear under the search bar. Select the system and click "Search".
+                    <br /><br />
+                    When viewing the details of a colonisation candidate, the locations, names, and controlling factions of stations that you can use for colonisation are shown under the "Nearby Stations" heading. Remember to pick a station controlled by the faction you want to expand.
+                </p>
+                <h2 class="mt-5 text-lg font-bold">Sorting:</h2>
+                <p class="ml-5">
+                    There are a few different sorting options you can select when executing a search: "System Value", "Most Walkable Bodies", "Most Hotspots", "Distance to Sol", and "Distance to Trailblazer Megaship".
+                </p>
+                <h2 class="mt-5 text-lg font-bold">General Notes:</h2>
+                <p class="ml-5">
+                    This tool is not perfect, and not all colonisable systems in the database are up to date with their current claim status. As such, <b>you should always check colonisation candidates using the in-game colonisation map mode.</b>
+                    <br /><br />
+                    Additionally, if you want to contribute to the database's current understanding of the galaxy, you can report uncolonisable systems as "Claimed" (if another player has claimed/colonised the system) or "Locked" (if Frontier has prevented the system's colonisation for whatever reason).
+                </p>
             </div>
         </div>
 
         <div id="about-heading-4" class="grid">
-            <button type="button" class="border-t-1 flex w-full cursor-pointer items-center justify-between gap-3 border border-b-1 border-[#0F0F0F] bg-white p-5 text-[#0F0F0F] shadow-sm hover:bg-[#ff9305] rtl:text-right" data-accordion-target="#about-body-4" aria-expanded="false" aria-controls="about-body-4">
-                <span class="flex items-center font-bold text-[#0F0F0F]">How do the search orders work?</span>
+            <button type="button" class="flex w-full cursor-pointer items-center justify-between gap-3 border border-t-1 border-b-1 border-[#0F0F0F] bg-white p-5 text-[#0F0F0F] shadow-sm hover:bg-[#ff9305] rtl:text-right" data-accordion-target="#about-body-4" aria-expanded="false" aria-controls="about-body-4">
+                <span class="flex items-center font-bold text-[#0F0F0F]">How is system value calculated?</span>
                 <svg data-accordion-icon class="h-3 w-3 shrink-0 rotate-180 transition-transform duration-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5" />
                 </svg>
@@ -120,70 +122,68 @@
         </div>
 
         <div id="about-body-4" class="hidden" aria-labelledby="about-heading-4">
-            <div class="border-t-0 border border-[#0F0F0F] bg-white p-5 shadow-sm">
-                <p>There are currently five search order options:</p>
-                <ul class="list-inside list-disc ps-2">
-                    <li>Combined Value</li>
-                    <li>Most Landable Bodies</li>
-                    <li>Most Hotspots</li>
-                    <li>Notable Body Value</li>
-                    <li>Distance to Sol</li>
-                    <li>Distance to Trailblazer Megaship</li>
-                </ul>
-                <p class="mt-2">
-                    While "Most Landable Bodies", "Most Hotspots", "Distance to Sol", and "Distance to Trailblazer Megaship"
-                    are self-explanatory, the other two options are less so.
-                </p>
-                <br />
+            <div class="border border-t-0 border-[#0F0F0F] bg-white p-5 shadow-sm">
                 <p>
-                    "Notable Body Value" is not the in-game value of the bodies in the system; instead, it is
-                    the point-based system based on the body type.
-                    <br />
-                    The breakdown of points is as follows:
+                    The value of a system gets calculated based on the types and quantities of bodies in the system, the number of walkable bodies, and the number of hotspots.
+                    <br /><br />
+                    Bodies/body features are categorised into three groups and then weighted according to their group.
                 </p>
-                <ul class="list-inside list-disc ps-2">
-                    <li>Black Holes, Neutron Stars, Ammonia worlds - 1 point</li>
-                    <li>Water worlds - 2 points</li>
-                    <li>Earth-like worlds - 3 points</li>
-                </ul>
-                <p class="mt-2">Why these types or values? &nbsp; ¯\_(ツ)_/¯</p>
-                <br />
-                <p>
-                    "Combined Value" is a weighted combination of "Most Landable Bodies", "Most Hotspots",
-                    and "Notable Body Value".
-                </p>
-            </div>
-        </div>
-
-        <div id="about-heading-5" class="grid">
-            <button type="button" class="border-t-1 flex w-full cursor-pointer items-center justify-between gap-3 border border-b-1 border-[#0F0F0F] bg-white p-5 text-[#0F0F0F] shadow-sm hover:bg-[#ff9305] rtl:text-right" data-accordion-target="#about-body-5" aria-expanded="false" aria-controls="about-body-5">
-                <span class="flex items-center font-bold text-[#0F0F0F]">Why would I want to include claimed systems?</span>
-                <svg data-accordion-icon class="h-3 w-3 shrink-0 rotate-180 transition-transform duration-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5" />
-                </svg>
-            </button>
-        </div>
-
-        <div id="about-body-5" class="hidden" aria-labelledby="about-heading-5">
-            <div class="border-t-0 border border-[#0F0F0F] bg-white p-5 shadow-sm">
-                <p>
-                    It's not hard to find which systems have been colonised (it's systems with a government
-                    and/or a station) and not too tricky to work out which have been claimed (it's systems
-                    that have a colonisation ship that is not yet colonised), but it's hard to find systems
-                    that have been claimed and then abandoned.
-                </p>
-                <br />
-                <p>
-                    Because of this, I decided to include the option to show claimed systems. When you do
-                    this, any systems that have been claimed will display the last time someone docked at
-                    that system's colonisation ship. If that was long ago, the system might be abandoned
-                    and ready to claim again.
+                <div class="mt-5 rounded-lg border">
+                    <table class="w-full table-fixed text-center">
+                        <tr class="border-b">
+                            <th class="border-r">Interesting (1.0)</th>
+                            <th class="border-r">Meh (0.5)</th>
+                            <th>Boring (0.2)</th>
+                        </tr>
+                        <tr>
+                            <td class="border-r">Black Holes</td>
+                            <td class="border-r">Rocky Ice Worlds</td>
+                            <td>Other Star Types</td>
+                        </tr>
+                        <tr class="bg-gray-200">
+                            <td class ="border-r">Neutron Stars</td>
+                            <td class="border-r">Rocky Bodies</td>
+                            <td>Gas Giants</td>
+                        </tr>
+                        <tr>
+                            <td class="border-r">White Dwarves</td>
+                            <td class="border-r">Rings</td>
+                            <td>High Metal Content Worlds</td>
+                        </tr>
+                        <tr class="bg-gray-200">
+                            <td class="border-r">Earth-like Worlds</td>
+                            <td class="border-r"></td>
+                            <td>Metal Rich Bodies</td>
+                        </tr>
+                        <tr>
+                            <td class="border-r">Water Worlds</td>
+                            <td class="border-r"></td>
+                            <td>Icy Bodies</td>
+                        </tr>
+                        <tr class="bg-gray-200">
+                            <td class="border-r">Bodies with Geologicals</td>
+                            <td class="border-r"></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="border-r">Bodies with Organics</td>
+                            <td class="border-r"></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+                <p class="mt-5">
+                    The number of walkable bodies gets multiplied by a weight of 0.6, and the number of hotspots gets multiplied by a weight of 0.8.
+                    <br /><br />
+                    The sum of quantities * weights produces the system's value.
+                    <br /><br />
+                    Why these weights? ¯\_(ツ)_/¯
                 </p>
             </div>
         </div>
 
         <div id="about-heading-6" class="grid">
-            <button type="button" class="border-t-1 flex w-full cursor-pointer items-center justify-between gap-3 border border-b-1 border-[#0F0F0F] bg-white p-5 text-[#0F0F0F] shadow-sm hover:bg-[#ff9305] rtl:text-right" data-accordion-target="#about-body-6" aria-expanded="false" aria-controls="about-body-6">
+            <button type="button" class="flex w-full cursor-pointer items-center justify-between gap-3 border border-t-1 border-b-1 border-[#0F0F0F] bg-white p-5 text-[#0F0F0F] shadow-sm hover:bg-[#ff9305] rtl:text-right" data-accordion-target="#about-body-6" aria-expanded="false" aria-controls="about-body-6">
                 <span class="flex items-center font-bold text-[#0F0F0F]">Someone already claimed the system I wanted; what gives?</span>
                 <svg data-accordion-icon class="h-3 w-3 shrink-0 rotate-180 transition-transform duration-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5" />
@@ -192,27 +192,23 @@
         </div>
 
         <div id="about-body-6" class="hidden" aria-labelledby="about-heading-6">
-            <div class="border-t-0 border border-[#0F0F0F] bg-white p-5 shadow-sm">
-                <p>This tool leans if a system is claimed in two ways:</p>
-                <ol class="list-inside list-decimal ps-2">
-                    <li>While performing the daily update, a system colonisation ship is found in an uncolonised system.</li>
-                    <li>An EDDN data contributor docks at a system colonisation ship.</li>
+            <div class="border border-t-0 border-[#0F0F0F] bg-white p-5 shadow-sm">
+                <p>
+                    There is no 100% accurate way to track which systems have been claimed or colonised because players need to opt into sharing this data using 3rd party apps. Therefore, we need to make the most of the information we have, which can sometimes be outdated.
+                    <br /><br />
+                    If you want to help improve the dataset, you can do one of two things:
+                </p>
+                <ol class="ml-5 list-decimal">
+                    <li>Start using a third-party app that allows you to opt into sharing your (anonymised) data with <a href="https://github.com/EDCD/EDDN" class="text-blue-800 underline">EDDN</a>. This will help improve all third-party apps that utilise this data. (<a href="https://edcd.github.io/cmdrs-guide.html" class="text-blue-800 underline">More Details</a>)</li>
+                    <li>Report systems using the "Report as Locked" and "Report as Claimed" links under every search result produced by this tool. This removes the reported system from your future search results and contributes to a global blocklist for all users.</li>
                 </ol>
-                <br />
-                <p>
-                    The tool doesn't know if a system has been claimed if neither of these criteria
-                    is met.
-                </p>
-                <p>
-                    I always recommend double-checking a system's colonisation status using the in-game
-                    map mode before travelling to colonise it.
-                </p>
+                <p class="mt-5 font-bold">You should always check colonisation candidates using the in-game colonisation map mode.</p>
             </div>
         </div>
 
         <div id="about-heading-7" class="grid">
-            <button type="button" class="border-t-1 flex w-full cursor-pointer items-center justify-between gap-3 border border-b-1 border-[#0F0F0F] bg-white p-5 text-[#0F0F0F] shadow-sm hover:bg-[#ff9305] rtl:text-right" data-accordion-target="#about-body-7" aria-expanded="false" aria-controls="about-body-7">
-                <span class="flex items-center font-bold text-[#0F0F0F]">Why are some systems missing from the search results?</span>
+            <button type="button" class="flex w-full cursor-pointer items-center justify-between gap-3 border border-t-1 border-b-1 border-[#0F0F0F] bg-white p-5 text-[#0F0F0F] shadow-sm hover:bg-[#ff9305] rtl:text-right" data-accordion-target="#about-body-7" aria-expanded="false" aria-controls="about-body-7">
+                <span class="flex items-center font-bold text-[#0F0F0F]">Why is a colonised system or faction missing from its search box?</span>
                 <svg data-accordion-icon class="h-3 w-3 shrink-0 rotate-180 transition-transform duration-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5" />
                 </svg>
@@ -220,25 +216,27 @@
         </div>
 
         <div id="about-body-7" class="hidden" aria-labelledby="about-heading-7">
-            <div class="border-t-0 border border-[#0F0F0F] bg-white p-5 shadow-sm">
-                <p>If a system is missing from the list, there are a few possibilities:</p>
-                <ol class="list-inside list-decimal ps-2">
-                    <li>The system was discovered today and has not yet been added to the database.</li>
-                    <li>The system was never sent to EDDN and thus never entered the database.</li>
-                    <li>The server considered the system boring (no notable bodies, no rings, and no landable bodies.)</li>
-                    <li>The system is outside this tool's range (more than 1000 ly ish away from Sol).</li>
-                </ol>
+            <div class="border border-t-0 border-[#0F0F0F] bg-white p-5 shadow-sm">
+                <p>If a colonised system is missing from the search box, there are a few possibilities:</p>
+                <ul class="ml-5 list-disc">
+                    <li>The system was colonised today, and thus the database has not been updated with the new information yet.</li>
+                    <li>The system was never sent to EDDN and thus is unknown to the database.</li>
+                    <li>The system is outside of this tool's range (more than 2000-3000 ly from Sol).</li>
+                </ul>
                 <br />
                 <p>
-                    The tool's database is updated with all the new discoveries, claims, and colonised
-                    systems from the previous day once per day at 5 a.m. UTC.
+                    It is rarer for a faction to be missing from the database and would likely only occur if the faction is not present within the tool's range (more than 2000-3000 ly from Sol). If this is not the case, let me know via the <a href="https://forums.frontier.co.uk/threads/introducing-edcolonise-net-a-colonisation-candidate-finder.635882/">Frontier Forum</a> post.
+                </p>
+                <br />
+                <p>
+                    The tool's database is updated with new data daily at 5:00 UTC.
                 </p>
             </div>
         </div>
 
         <div id="about-heading-8" class="grid">
-            <button type="button" class="border-t-1 flex w-full cursor-pointer items-center justify-between gap-3 border border-b-1 border-[#0F0F0F] bg-white p-5 text-[#0F0F0F] shadow-sm hover:bg-[#ff9305] rtl:text-right" data-accordion-target="#about-body-8" aria-expanded="false" aria-controls="about-body-8">
-                <span class="flex items-center font-bold text-[#0F0F0F]">The tool says that a system can be colonised, but the game disagrees; why?</span>
+            <button type="button" class="flex w-full cursor-pointer items-center justify-between gap-3 border border-t-1 border-b-1 border-[#0F0F0F] bg-white p-5 text-[#0F0F0F] shadow-sm hover:bg-[#ff9305] rtl:text-right" data-accordion-target="#about-body-8" aria-expanded="false" aria-controls="about-body-8">
+                <span class="flex items-center font-bold text-[#0F0F0F]">Why are some stations listed as "Unknown"?</span>
                 <svg data-accordion-icon class="h-3 w-3 shrink-0 rotate-180 transition-transform duration-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5" />
                 </svg>
@@ -246,24 +244,16 @@
         </div>
 
         <div id="about-body-8" class="hidden" aria-labelledby="about-heading-8">
-            <div class="border-t-0 border border-[#0F0F0F] bg-white p-5 shadow-sm">
+            <div class="border border-t-0 border-[#0F0F0F] bg-white p-5 shadow-sm">
                 <p>
-                    This tool decides if a system can be colonised if it is in range of another colonised
-                    system (with a valid station type). Extra-bubble stations that can't be used for
-                    colonisation cause issues with this, resulting in colonisable systems being marked as
-                    colonisable.
-                </p>
-                <br />
-                <p>
-                    I believe this issue will be solved over time as these systems eventually become linked
-                    to the bubble.
+                    Stations are marked as "Unknown" when the database has incomplete data about a colonised system. The tool has correctly identified that the system has been colonised, but detailed information about stations in the system has not been uploaded yet.
                 </p>
             </div>
         </div>
 
         <div id="about-heading-9" class="grid">
-            <button type="button" class="border-t-1 flex w-full cursor-pointer items-center justify-between gap-3 border border-b-1 border-[#0F0F0F] bg-white p-5 text-[#0F0F0F] shadow-sm hover:bg-[#ff9305] rtl:text-right" data-accordion-target="#about-body-9" aria-expanded="false" aria-controls="about-body-9">
-                <span class="flex items-center font-bold text-[#0F0F0F]">I've run into an issue/bug or I have a recommendation. How do I let you know about it?</span>
+            <button type="button" class="flex w-full cursor-pointer items-center justify-between gap-3 border border-t-1 border-b-1 border-[#0F0F0F] bg-white p-5 text-[#0F0F0F] shadow-sm hover:bg-[#ff9305] rtl:text-right" data-accordion-target="#about-body-9" aria-expanded="false" aria-controls="about-body-9">
+                <span class="flex items-center font-bold text-[#0F0F0F]">What is the best way to provide feedback or report issues/bugs?</span>
                 <svg data-accordion-icon class="h-3 w-3 shrink-0 rotate-180 transition-transform duration-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5" />
                 </svg>
@@ -271,9 +261,9 @@
         </div>
 
         <div id="about-body-9" class="hidden" aria-labelledby="about-heading-9">
-            <div class="border-t-0 border border-[#0F0F0F] bg-white p-5 shadow-sm">
+            <div class="border border-t-0 border-[#0F0F0F] bg-white p-5 shadow-sm">
                 <p>
-                    There is a post on the Frontier Forum that you can use to post bug reports and recommendations.
+                    Currently, the best way to contact me about ED Colonise is by commenting on the Frontier Forum post for this tool.
                 </p>
                 <br />
                 <a href="https://forums.frontier.co.uk/threads/introducing-edcolonise-net-a-colonisation-candidate-finder.635882/" target="_blank" class="text-blue-800 underline">Link to the Frontier Forum post.</a>
