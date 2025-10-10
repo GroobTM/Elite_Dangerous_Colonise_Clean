@@ -38,9 +38,16 @@ namespace elite_dangerous_colonise.Pages
         public async Task<IActionResult> OnPostAsync()
         {
             string altchaFormContent = HttpContext.Request.Form["altcha"];
+
+            if (string.IsNullOrEmpty(altchaFormContent))
+            {
+                ModelState.AddModelError("Altcha Failed", "Captcha check failed. Please try again.");
+                return Page();
+            }
+
             AltchaValidationResult validationResult = await altchaService.Validate(altchaFormContent);
 
-            if (string.IsNullOrEmpty(altchaFormContent) || !validationResult.IsValid)
+            if (!validationResult.IsValid)
             {
                 ModelState.AddModelError("Altcha Failed", "Captcha check failed. Please try again.");
                 return Page();
