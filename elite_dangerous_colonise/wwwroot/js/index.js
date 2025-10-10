@@ -141,7 +141,7 @@ function SetupGenericSlider(sliderID, valueID) {
     });
 }
 
-$(document).ready(function () {
+$(function () {
     window.HSStaticMethods.autoInit();
 
     setTimeout(function () {
@@ -196,7 +196,7 @@ $(document).ready(function () {
         SetupGenericSlider("rings_slider", "rings_value");
         SetupGenericSlider("geologicals_slider", "geologicals_value");
         SetupGenericSlider("organics_slider", "organics_value");
-    }, 1);
+    }, 10);
 });
 
 $("#more_options_button").on("click", function () {
@@ -266,7 +266,7 @@ window.addEventListener("popstate", (event) => {
     }
 });
 
-$(document).ready(function () {
+$(function () {
     const encodedParams = new URLSearchParams(window.location.search).get("q");
 
     if (encodedParams) {
