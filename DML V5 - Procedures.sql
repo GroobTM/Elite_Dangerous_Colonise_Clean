@@ -577,7 +577,7 @@ BEGIN
 		END AS "colonisedSystemID"
 	FROM "StagedStarSystems" sss
 	INNER JOIN "StarSystems" source ON sss."systemID" = source."systemID"
-	INNER JOIN "StarSystems" target ON ST_DWithin(source."systemCoords", target."systemCoords", 15)
+	INNER JOIN "StarSystems" target ON ST_3DDWithin(source."systemCoords", target."systemCoords", 15)
 	WHERE source."isColonised" = "insertColonised"
 	AND target."isColonised" = NOT "insertColonised"
 	AND source."systemID" != target."systemID"
@@ -734,7 +734,7 @@ BEGIN
 				FROM "DistinctUncolonisedStarSystems" duss
 				INNER JOIN "Rings" r ON duss."uncolonisedSystemID" = r."systemID"
 				INNER JOIN "Hotspots" h ON r."ringID" = h."ringID"
-				WHERE h."hotspotType" = ANY($43)
+				WHERE h."hotspotType" = ANY($42)
 			),';
 	END IF;
 	
