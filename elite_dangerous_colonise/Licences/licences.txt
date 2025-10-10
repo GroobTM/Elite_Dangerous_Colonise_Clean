@@ -1,2 +1,6 @@
 https://www.material-tailwind.com/docs/react/license
 https://flowbite.com/license/
+https://github.com/tailwindlabs/tailwindcss?tab=MIT-1-ov-file#readme
+https://github.com/htmlstreamofficial/preline?tab=License-1-ov-file#readme
+https://github.com/tailwindlabs/tailwindcss-forms?tab=MIT-1-ov-file#readme
+https://github.com/leongersen/noUiSlider?tab=MIT-1-ov-file#readme

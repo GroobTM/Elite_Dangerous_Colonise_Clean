@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.DataProtection;
 using Npgsql;
 using elite_dangerous_colonise.Classes;
 using elite_dangerous_colonise.Models.Database_Types;
+using System.Text;
+using Ixnas.AltchaNet;
 
 const bool DEBUG = false;
 
@@ -15,18 +17,31 @@ builder.Configuration
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
-    .AddJsonFile(rootDir + "\\private\\ConnectionStrings.json", optional: false, reloadOnChange: true);
+    .AddJsonFile(rootDir + "\\private\\Secrets.json", optional: false, reloadOnChange: true);
 
 // Adds the RazorPages service.
 builder.Services.AddRazorPages();
 
+// Adds the Controllers service.
+builder.Services.AddControllers();
+
 // Adds the SignalR service.
 builder.Services.AddSignalR();
+
+// Adds the MemoryCache service.
+builder.Services.AddDistributedMemoryCache();
+
+// Adds the Session service.
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromHours(1);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 // Configures the data protection service.
 builder.Services.AddDataProtection()
     .PersistKeysToFileSystem(new DirectoryInfo(rootDir + @"\private\keys"))
-    .ProtectKeysWithDpapi()
     .SetApplicationName("EDColonise");
 
 // Configures Serilog.
@@ -46,20 +61,38 @@ string connectionString = builder.Configuration.GetConnectionString("SystemsData
     ?? throw new InvalidOperationException("Connection string 'SystemsDatabase' not found.");
 
 NpgsqlDataSourceBuilder dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
-dataSourceBuilder.MapComposite<StarSystemsType>("starsystemstype");
-dataSourceBuilder.MapComposite<StationsType>("stationstype");
-dataSourceBuilder.MapComposite<BodiesType>("bodiestype");
-dataSourceBuilder.MapComposite<RingsType>("ringstype");
-dataSourceBuilder.MapComposite<HotspotsType>("hotspotstype");
+dataSourceBuilder.MapEnum<RingType>("RingType");
+dataSourceBuilder.MapEnum<HotspotType>("HotspotType");
+dataSourceBuilder.MapEnum<ReserveType>("ReserveType");
+dataSourceBuilder.MapEnum<ResultOrderType>("ResultOrderType");
+dataSourceBuilder.MapComposite<StarSystemInsertType>("StarSystemInsertType");
+dataSourceBuilder.MapComposite<StationInsertType>("StationInsertType");
+dataSourceBuilder.MapComposite<RingInsertType>("RingInsertType");
+dataSourceBuilder.MapComposite<HotspotInsertType>("HotspotInsertType");
+dataSourceBuilder.MapComposite<UncolonisedDetailsInsertType>("UncolonisedDetailsInsertType");
+dataSourceBuilder.MapComposite<ColonisableInsertType>("ColonisableInsertType");
 
 NpgsqlDataSource dataSource = dataSourceBuilder.Build();
 builder.Services.AddSingleton(dataSource);
 
-// Registers Classes
 builder.Services.AddScoped<DatabaseBulkWriter>(provider =>
 {
     return new DatabaseBulkWriter(dataSource, DEBUG);
 });
+
+// Configures Altcha service
+string altchaKey = builder.Configuration["AltchaKey"];
+if (string.IsNullOrEmpty(altchaKey) || Encoding.UTF8.GetByteCount(altchaKey) != 64)
+{
+    throw new InvalidOperationException("Altcha Key not found or incorrect length.");
+}
+
+builder.Services.AddSingleton<AltchaService>(service =>
+    Altcha.CreateServiceBuilder()
+        .UseSha256(Encoding.UTF8.GetBytes(altchaKey))
+        .UseStore(new AltchaMemoryStore())
+        .Build()
+);
 
 if (!DEBUG)
 {
@@ -76,9 +109,6 @@ if (!DEBUG)
     // Configures the self ping background service.
     builder.Services.AddHttpClient();
     builder.Services.AddHostedService<SelfPingService>();
-
-    // Configures the AA system save background service.
-    builder.Services.AddHostedService<AASystemsSaveService>();
 }
 
 var app = builder.Build();
@@ -99,9 +129,13 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseSession();
+
 app.UseAuthorization();
 
 app.MapRazorPages();
+
+app.MapControllers();
 
 app.MapHub<UpdateHub>("/updateHub");
 

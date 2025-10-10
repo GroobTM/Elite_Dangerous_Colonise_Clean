@@ -4,19 +4,19 @@ namespace elite_dangerous_colonise.Classes
 {
     public class DatabaseDataLists
     {
-        public List<StarSystemsType> StarSystems { get; set; } = new List<StarSystemsType>();
-        public List<StationsType> Stations { get; set; } = new List<StationsType>();
-        public List<BodiesType> Bodies { get; set; } = new List<BodiesType>();
-        public List<RingsType> Rings { get; set; } = new List<RingsType>();
-        public List<HotspotsType> Hotspots { get; set; } = new List<HotspotsType>();
+        public List<StarSystemInsertType> StarSystems { get; set; } = new List<StarSystemInsertType>();
+        public List<StationInsertType> Stations { get; set; } = new List<StationInsertType>();
+        public List<RingInsertType> Rings { get; set; } = new List<RingInsertType>();
+        public List<HotspotInsertType> Hotspots { get; set; } = new List<HotspotInsertType>();
+        public List<UncolonisedDetailsInsertType> UncolonisedDetails { get; set; } = new List<UncolonisedDetailsInsertType>();
 
         public void ClearLists()
         {
             StarSystems.Clear();
             Stations.Clear();
-            Bodies.Clear();
             Rings.Clear();
             Hotspots.Clear();
+            UncolonisedDetails.Clear();
         }
 
         public int Count()

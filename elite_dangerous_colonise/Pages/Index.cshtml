@@ -8,8 +8,10 @@
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/preline@3.2.3/dist/preline.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@@preline/range-slider@3.2.3/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/nouislider@15.8.1/dist/nouislider.min.js"></script>
     <script src="~/js/index.js" asp-append-version="true"></script>
-    
 }
 
 <aside class="mt-3 w-full rounded-md bg-[#F0F0F0]">
@@ -17,81 +19,804 @@
 </aside>
 <section class="mt-3 w-full rounded-md bg-[#F0F0F0] p-3">
     <form id="systems_search" method="GET">
-        <div class="flex flex-col justify-between gap-3 lg:gap-15 lg:flex-row">
-            <div class="relative flex-1">
-                <input asp-for="ColonisedSystem" type="text" id="colonised_system" class="border-1 peer block w-full appearance-none rounded-lg border-[#0F0F0F] bg-white px-2.5 pt-4 pb-2.5 pl-4 text-[#0F0F0F] shadow-sm focus:outline-none focus:ring-0 focus:border-[#F07B05]" placeholder=" " maxlength="75"/>
-                <label for="colonised_system" class="absolute start-2 top-2 z-10 origin-[0] -translate-y-4 scale-85 transform cursor-text rounded-3xl bg-white px-2 text-[#0F0F0F] duration-200 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:px-2 peer-focus:p-1 peer-focus:shadow-sm peer-focus:top-0 peer-focus:scale-85 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Colonised System (Optional)</label>
-                <label for="colonised_system" id="clear_button" class="absolute top-1 right-2 z-10 cursor-pointer text-3xl">&times;</label>
+        <div class="flex flex-col justify-between gap-3 lg:flex-row lg:gap-5">
+            <div id="colonised_system_search" class="relative flex-1">
+                <div class="relative">
+                    <input asp-for="ColonisedSystem" type="text" role="combobox" id="colonised_system" class="peer block w-full appearance-none rounded-lg border-1 border-[#0F0F0F] bg-white px-2.5 pt-4 pb-2.5 pl-4 text-[#0F0F0F] shadow-sm focus:border-[#F07B05] focus:ring-0 focus:outline-none" placeholder=" " maxlength="75" data-hs-combo-box-input="" />
+                    <label for="colonised_system" class="absolute start-2 top-2 z-10 origin-[0] -translate-y-4 scale-85 transform cursor-text rounded-3xl bg-white px-2 text-[#0F0F0F] duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-0 peer-focus:-translate-y-4 peer-focus:scale-85 peer-focus:p-1 peer-focus:px-2 peer-focus:shadow-sm rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4">Colonised System (Optional)</label>
+                    <label for="colonised_system" id="clear_button" class="absolute top-1 right-2 z-10 cursor-pointer text-3xl hover:text-[#F07B05]">&times;</label>
+                </div>
+                <div class="absolute z-50 !mt-0 max-h-55 w-full overflow-y-auto rounded-lg border-1 border-[#BCBCBC] bg-white shadow-lg" style="display: none;" role="listbox" data-hs-combo-box-output=""></div>
             </div>
             <div class="relative flex-1">
-                <input asp-for="Faction" type="text" id="faction" class="border-1 peer block w-full appearance-none rounded-lg border-[#0F0F0F] bg-white px-2.5 pt-4 pb-2.5 pl-4 text-[#0F0F0F] shadow-sm focus:outline-none focus:ring-0 focus:border-[#F07B05]" placeholder=" " maxlength="75" />
-                <label for="faction" class="absolute start-2 top-2 z-10 origin-[0] -translate-y-4 scale-85 transform cursor-text rounded-3xl bg-white px-2 text-[#0F0F0F] duration-200 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:p-1 peer-focus:shadow-sm peer-focus:px-2 peer-focus:top-0 peer-focus:scale-85 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Faction (Optional)</label>
-                <label for="faction" id="clear_button" class="absolute top-1 right-2 z-10 cursor-pointer text-3xl">&times;</label>
-            </div>
-            <div class="relative flex-1">
-                <select asp-for="SortOrder" id="sortOrder" class="border-1 block w-full cursor-pointer appearance-none rounded-lg border-[#0F0F0F] bg-white px-2.5 pt-4 pb-2.5 pl-4 text-[#0F0F0F] shadow-sm focus:outline-none focus:ring-0 focus:border-[#F07B05]">
-                    <option value="totalValue">Combined Value</option>
-                    <option value="landableBodies">Most Landable Bodies</option>
-                    <option value="hotspots">Most Hotspots</option>
-                    <option value="bodyValue">Notable Body Value</option>
-                    <option value="solDistance">Distance to Sol</option>
-                    <option value="trailblazerDistance">Distance to Trailblazer Megaship</option>
+                <select asp-for="SortOrder" id="sort_order" class="block w-full cursor-pointer appearance-none rounded-lg border-1 border-[#0F0F0F] bg-white px-2.5 pt-4 pb-2.5 pl-4 text-[#0F0F0F] shadow-sm focus:border-[#F07B05] focus:ring-0 focus:outline-none">
+                    <option value="SystemValue">System Value</option>
+                    <option value="MostWalkables">Most Walkable Bodies</option>
+                    <option value="MostHotspots">Most Hotspots</option>
+                    <option value="DistanceToSol">Distance to Sol</option>
+                    <option value="DistanceToTrailblazer">Distance to Trailblazer Megaship</option>
                 </select>
-                <label for="sortOrder" class="pointer-events-none absolute start-2 top-2 z-10 origin-[0] -translate-y-4 scale-85 rounded-3xl bg-white px-2 text-[#0F0F0F]">Sort Order</label>
-                <svg class="pointer-events-none absolute top-5 right-3 z-10 h-4 w-4 shrink-0 rotate-180 text-[#0F0F0F]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                <label for="sort_order" class="pointer-events-none absolute start-2 top-2 z-10 origin-[0] -translate-y-4 scale-85 rounded-3xl bg-white px-2 text-[#0F0F0F]">Sort Order</label>
+                <svg class="pointer-events-none absolute top-4 right-3 z-10 h-5 w-4 shrink-0 rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"></path>
                 </svg>
             </div>
         </div>
-        <div class="relative mt-3 flex flex-1 items-center justify-end gap-5">
-            <div class="flex items-center">
-                <input asp-for="IncludeClaimed" type="checkbox" id="include_claimed" value="include" class="h-6 w-6 cursor-pointer accent-[#0F0F0F] shadow-sm" />
-                <label for="include_claimed" class="ml-2 cursor-pointer text-sm text-[#0F0F0F] sm:text-base">Include Claimed Systems</label>
+        <div class="relative mt-3 flex w-full flex-col-reverse justify-between gap-2 sm:flex-row">
+            <div class="grid w-full lg:w-45">
+                <input type="button" id="more_options_button" class="col-3 col-start-1 row-start-1 row-end-2 block w-full cursor-pointer rounded-lg border-1 border-[#0F0F0F] bg-[#0F0F0F] px-2.5 pt-3 pb-3 text-left shadow-sm hover:border-[#F07B05] hover:bg-[#F07B05]" value="" />
+                <label for="more_options_button" class="pointer-events-none relative z-10 col-3 col-start-1 row-start-1 row-end-2 flex w-full items-center justify-center gap-5 text-[#F0F0F0]">
+                    <span>More Options</span>
+                    <svg id="more_options_icon" class="relative top-0.5 h-3 w-3 shrink-0 rotate-180 transition-transform duration-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5" />
+                    </svg>
+                </label>
             </div>
-            <div class="grid w-45">
-                <input type="submit" id="search" class="border-1 col-3 col-start-1 row-start-1 row-end-2 block w-full cursor-pointer rounded-lg border-[#0F0F0F] bg-[#0F0F0F] px-2.5 pt-3 pb-3 text-left shadow-sm" value="" />
+            <div class="grid w-full lg:w-45">
+                <input type="submit" id="search" class="col-3 col-start-1 row-start-1 row-end-2 block w-full cursor-pointer rounded-lg border-1 border-[#0F0F0F] bg-[#0F0F0F] px-2.5 pt-3 pb-3 text-left shadow-sm" value="" />
                 <label for="search" class="pointer-events-none z-10 col-3 col-start-1 row-start-1 row-end-2 flex w-full items-center justify-center gap-5">
                     <span class="text-[#F0F0F0]">Search</span>
                     <img src="~/images/courier.svg" class="z-10 h-8 sm:h-10" />
                 </label>
             </div>
         </div>
+        <div id="more_options" class="mt-3 hidden grid-cols-1 gap-y-5 lg:grid-cols-2 lg:gap-x-5">
+            <div id="faction_search" class="relative flex-1">
+                <div class="relative">
+                    <input asp-for="Faction" type="text" role="combobox" id="faction" class="peer block w-full appearance-none rounded-lg border-1 border-[#0F0F0F] bg-white px-2.5 pt-4 pb-2.5 pl-4 text-[#0F0F0F] shadow-sm focus:border-[#F07B05] focus:ring-0 focus:outline-none" placeholder=" " maxlength="75" data-hs-combo-box-input="" />
+                    <label for="faction" class="absolute start-2 top-2 z-10 origin-[0] -translate-y-4 scale-85 transform cursor-text rounded-3xl bg-white px-2 text-[#0F0F0F] duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-0 peer-focus:-translate-y-4 peer-focus:scale-85 peer-focus:p-1 peer-focus:px-2 peer-focus:shadow-sm rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4">Faction (Optional)</label>
+                    <label for="faction" id="clear_button" class="absolute top-1 right-2 z-10 cursor-pointer text-3xl hover:text-[#F07B05]">&times;</label>
+                </div>
+                <div class="absolute z-50 !mt-0 max-h-55 w-full overflow-y-auto rounded-lg border-1 border-[#BCBCBC] bg-white shadow-lg" style="display: none;" role="listbox" data-hs-combo-box-output=""></div>
+            </div>
+
+            <div class="z-10 mr-2 ml-2 flex min-h-13 flex-col justify-around">
+                <div class="relative -top-2 w-full">
+                    <span class="absolute left-1">Max Distance From Sol</span>
+                    <span id="distance_from_sol_value" class="absolute right-1">@Model.MaxValues.DistanceToSol ly</span>
+                </div>
+                <div id="distance_from_sol_slider" class="--prevent-on-load-init" data-hs-range-slider='{
+                    "start": @Model.MaxValues.DistanceToSol,
+                    "range": {
+                        "min": 0,
+                        "max": @Model.MaxValues.DistanceToSol
+                    },
+                    "step": 1,
+                    "connect": "lower",
+                    "cssClasses": {
+                        "target": "relative h-2.5 rounded-full bg-white border-1 border-[#0F0F0F]",
+                        "base": "size-full relative z-1",
+                        "origin": "absolute top-0 end-0 size-full origin-[0_0] rounded-full",
+                        "handle": "absolute top-1/2 end-0 size-5 bg-white border-3 border-[#0F0F0F] rounded-full cursor-pointer translate-x-2/4 -translate-y-2/4",
+                        "connects": "relative z-0 size-full rounded-full overflow-hidden",
+                        "connect": "absolute top-0 end-0 z-1 size-full bg-[#F07B05] origin-[0_0]",
+                        "touchArea": "absolute -inset-1"
+                    }
+                }'></div>
+            </div>
+            <div class="z-11 mr-2 ml-2 flex min-h-13 flex-col justify-around">
+                <div class="relative -top-2 w-full">
+                    <span class="absolute left-1">Landable Bodies</span>
+                    <span id="landable_bodies_value" class="absolute right-1">0 - @Model.MaxValues.LandableCount</span>
+                </div>
+                <div id="landable_bodies_slider" class="--prevent-on-load-init" data-hs-range-slider='{
+                    "start": [0, @Model.MaxValues.LandableCount],
+                    "range": {
+                        "min": 0,
+                        "max": @Model.MaxValues.LandableCount
+                    },
+                    "step": 1,
+                    "connect": true,
+                    "cssClasses": {
+                        "target": "relative h-2.5 rounded-full bg-white border-1 border-[#0F0F0F]",
+                        "base": "size-full relative z-1",
+                        "origin": "absolute top-0 end-0 size-full origin-[0_0] rounded-full",
+                        "handle": "absolute top-1/2 end-0 size-5 bg-white border-3 border-[#0F0F0F] rounded-full cursor-pointer translate-x-2/4 -translate-y-2/4",
+                        "connects": "relative z-0 size-full rounded-full overflow-hidden",
+                        "connect": "absolute top-0 end-0 z-1 size-full bg-[#F07B05] origin-[0_0]",
+                        "touchArea": "absolute -inset-1"
+                    }
+                }'></div>
+            </div>
+            <div class="z-10 mr-2 ml-2 flex min-h-13 flex-col justify-around">
+                <div class="relative -top-2 w-full">
+                    <span class="absolute left-1">Walkable Bodies</span>
+                    <span id="walkable_bodies_value" class="absolute right-1">0 - @Model.MaxValues.WalkableCount</span>
+                </div>
+                <div id="walkable_bodies_slider" class="--prevent-on-load-init" data-hs-range-slider='{
+                    "start": [0, @Model.MaxValues.WalkableCount],
+                    "range": {
+                        "min": 0,
+                        "max": @Model.MaxValues.WalkableCount
+                    },
+                    "step": 1,
+                    "connect": true,
+                    "cssClasses": {
+                        "target": "relative h-2.5 rounded-full bg-white border-1 border-[#0F0F0F]",
+                        "base": "size-full relative z-1",
+                        "origin": "absolute top-0 end-0 size-full origin-[0_0] rounded-full",
+                        "handle": "absolute top-1/2 end-0 size-5 bg-white border-3 border-[#0F0F0F] rounded-full cursor-pointer translate-x-2/4 -translate-y-2/4",
+                        "connects": "relative z-0 size-full rounded-full overflow-hidden",
+                        "connect": "absolute top-0 end-0 z-1 size-full bg-[#F07B05] origin-[0_0]",
+                        "touchArea": "absolute -inset-1"
+                    }
+                }'></div>
+            </div>
+            <span class="m-0 h-1 rounded-full bg-gray-300 lg:col-start-1 lg:col-end-3"></span>
+            <div class="z-11 mr-2 ml-2 flex min-h-13 flex-col justify-around">
+                <div class="relative -top-2 w-full">
+                    <span class="absolute left-1">Black Holes</span>
+                    <div class="absolute right-1">
+                        <svg data-tooltip-target="black_holes_slider_tooltip" class="absolute right-20 h-6 w-6" version="1.1" id="Layer_1" x="0px" y="0px" width="924" height="924" viewBox="0 0 924 924" enable-background="new 0 0 924 924" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><defs id="defs3" />
+	                        <g id="g1">
+		                        <path class="fill-[#00FFFF]" d="M 458.18182,917.9913 8.1454545,468.46402 46.836364,883.88221 Z" id="path7" />
+		                        <path class="fill-[#6600E5]" d="M 458.84246,917.9913 908.87883,468.46402 870.18792,883.88221 Z" id="path8" />
+		                        <path class="fill-[#00FFFF]" d="M 458.18182,12.727273 8.1454545,462.25455 46.836364,46.836364 Z" id="path9" />
+		                        <path class="fill-[#6600E5]" d="M 458.84246,12.727273 908.87883,462.25455 870.18792,46.836364 Z" id="path10" />
+	                        </g>
+	                        <g id="g3"><path d="M 462,29.698 894.302,462 462,894.302 29.698,462 462,29.698 M 462,0 0,462 462,924 924,462 Z" id="path2" style="display:inline" /><path d="M 462,21.083 866.97,57.031 902.918,462 866.97,866.97 462,902.918 57.031,866.97 21.083,462 57.031,57.031 462,21.083 M 462,0 37.667,37.667 0,462 37.667,886.333 462,924 886.333,886.333 924,462 886.333,37.667 Z" id="path1" /><rect x="327" y="433" width="270" height="58" id="rect1" /></g>
+                        </svg>
+                        <span id="black_holes_value" >0 - @Model.MaxValues.BlackHoleCount</span>
+                    </div>
+                </div>
+                <div id="black_holes_slider" class="--prevent-on-load-init" data-hs-range-slider='{
+                    "start": [0, @Model.MaxValues.BlackHoleCount],
+                    "range": {
+                        "min": 0,
+                        "max": @Model.MaxValues.BlackHoleCount
+                    },
+                    "step": 1,
+                    "connect": true,
+                    "cssClasses": {
+                        "target": "relative h-2.5 rounded-full bg-white border-1 border-[#0F0F0F]",
+                        "base": "size-full relative z-1",
+                        "origin": "absolute top-0 end-0 size-full origin-[0_0] rounded-full",
+                        "handle": "absolute top-1/2 end-0 size-5 bg-white border-3 border-[#0F0F0F] rounded-full cursor-pointer translate-x-2/4 -translate-y-2/4",
+                        "connects": "relative z-0 size-full rounded-full overflow-hidden",
+                        "connect": "absolute top-0 end-0 z-1 size-full bg-[#F07B05] origin-[0_0]",
+                        "touchArea": "absolute -inset-1"
+                    }
+                }'></div>
+                <div id="black_holes_slider_tooltip" role="tooltip" class="tooltip invisible absolute z-10 inline-block rounded-lg bg-[#0F0F0F] px-3 py-2 text-sm text-[#F0F0F0] opacity-0 shadow-xs transition-opacity duration-200">
+                    Colony Influence: High Tech and Tourism
+                </div>
+            </div>
+            <div class="z-10 mr-2 ml-2 flex min-h-13 flex-col justify-around">
+                <div class="relative -top-2 w-full">
+                    <span class="absolute left-1">Neutron Stars</span>
+                    <div class="absolute right-1">
+                        <svg data-tooltip-target="neutron_stars_slider_tooltip" class="absolute right-20 h-6 w-6" version="1.1" id="Layer_1" x="0px" y="0px" width="924" height="924" viewBox="0 0 924 924" enable-background="new 0 0 924 924" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><defs id="defs3" />
+	                        <g id="g1">
+		                        <path class="fill-[#00FFFF]" d="M 458.18182,917.9913 8.1454545,468.46402 46.836364,883.88221 Z" id="path7" />
+		                        <path class="fill-[#6600E5]" d="M 458.84246,917.9913 908.87883,468.46402 870.18792,883.88221 Z" id="path8" />
+		                        <path class="fill-[#00FFFF]" d="M 458.18182,12.727273 8.1454545,462.25455 46.836364,46.836364 Z" id="path9" />
+		                        <path class="fill-[#6600E5]" d="M 458.84246,12.727273 908.87883,462.25455 870.18792,46.836364 Z" id="path10" />
+	                        </g>
+	                        <g id="g3"><path d="M 462,29.698 894.302,462 462,894.302 29.698,462 462,29.698 M 462,0 0,462 462,924 924,462 Z" id="path2" style="display:inline" /><path d="M 462,21.083 866.97,57.031 902.918,462 866.97,866.97 462,902.918 57.031,866.97 21.083,462 57.031,57.031 462,21.083 M 462,0 37.667,37.667 0,462 37.667,886.333 462,924 886.333,886.333 924,462 886.333,37.667 Z" id="path1" /><rect x="327" y="433" width="270" height="58" id="rect1" /></g>
+                        </svg>
+                        <span id="neutron_stars_value" >0 - @Model.MaxValues.NeutronStarCount</span>
+                    </div>
+                </div>
+                <div id="neutron_stars_slider" class="--prevent-on-load-init" data-hs-range-slider='{
+                    "start": [0, @Model.MaxValues.NeutronStarCount],
+                    "range": {
+                        "min": 0,
+                        "max": @Model.MaxValues.NeutronStarCount
+                    },
+                    "step": 1,
+                    "connect": true,
+                    "cssClasses": {
+                        "target": "relative h-2.5 rounded-full bg-white border-1 border-[#0F0F0F]",
+                        "base": "size-full relative z-1",
+                        "origin": "absolute top-0 end-0 size-full origin-[0_0] rounded-full",
+                        "handle": "absolute top-1/2 end-0 size-5 bg-white border-3 border-[#0F0F0F] rounded-full cursor-pointer translate-x-2/4 -translate-y-2/4",
+                        "connects": "relative z-0 size-full rounded-full overflow-hidden",
+                        "connect": "absolute top-0 end-0 z-1 size-full bg-[#F07B05] origin-[0_0]",
+                        "touchArea": "absolute -inset-1"
+                    }
+                }'></div>
+                <div id="neutron_stars_slider_tooltip" role="tooltip" class="tooltip invisible absolute z-10 inline-block rounded-lg bg-[#0F0F0F] px-3 py-2 text-sm text-[#F0F0F0] opacity-0 shadow-xs transition-opacity duration-200">
+                    Colony Influence: High Tech and Tourism
+                </div>
+            </div>
+            <div class="z-11 mr-2 ml-2 flex min-h-13 flex-col justify-around">
+                <div class="relative -top-2 w-full">
+                    <span class="absolute left-1">White Dwarves</span>
+                    <div class="absolute right-1">
+                        <svg data-tooltip-target="white_dwarves_slider_tooltip" class="absolute right-20 h-6 w-6" version="1.1" id="Layer_1" x="0px" y="0px" width="924" height="924" viewBox="0 0 924 924" enable-background="new 0 0 924 924" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><defs id="defs3" />
+	                        <g id="g1">
+		                        <path class="fill-[#00FFFF]" d="M 458.18182,917.9913 8.1454545,468.46402 46.836364,883.88221 Z" id="path7" />
+		                        <path class="fill-[#6600E5]" d="M 458.84246,917.9913 908.87883,468.46402 870.18792,883.88221 Z" id="path8" />
+		                        <path class="fill-[#00FFFF]" d="M 458.18182,12.727273 8.1454545,462.25455 46.836364,46.836364 Z" id="path9" />
+		                        <path class="fill-[#6600E5]" d="M 458.84246,12.727273 908.87883,462.25455 870.18792,46.836364 Z" id="path10" />
+	                        </g>
+	                        <g id="g3"><path d="M 462,29.698 894.302,462 462,894.302 29.698,462 462,29.698 M 462,0 0,462 462,924 924,462 Z" id="path2" style="display:inline" /><path d="M 462,21.083 866.97,57.031 902.918,462 866.97,866.97 462,902.918 57.031,866.97 21.083,462 57.031,57.031 462,21.083 M 462,0 37.667,37.667 0,462 37.667,886.333 462,924 886.333,886.333 924,462 886.333,37.667 Z" id="path1" /><rect x="327" y="433" width="270" height="58" id="rect1" /></g>
+                        </svg>
+                        <span id="white_dwarves_value" >0 - @Model.MaxValues.WhiteDwarves</span>
+                    </div>
+                </div>
+                <div id="white_dwarves_slider" class="--prevent-on-load-init" data-hs-range-slider='{
+                    "start": [0, @Model.MaxValues.WhiteDwarves],
+                    "range": {
+                        "min": 0,
+                        "max": @Model.MaxValues.WhiteDwarves
+                    },
+                    "step": 1,
+                    "connect": true,
+                    "cssClasses": {
+                        "target": "relative h-2.5 rounded-full bg-white border-1 border-[#0F0F0F]",
+                        "base": "size-full relative z-1",
+                        "origin": "absolute top-0 end-0 size-full origin-[0_0] rounded-full",
+                        "handle": "absolute top-1/2 end-0 size-5 bg-white border-3 border-[#0F0F0F] rounded-full cursor-pointer translate-x-2/4 -translate-y-2/4",
+                        "connects": "relative z-0 size-full rounded-full overflow-hidden",
+                        "connect": "absolute top-0 end-0 z-1 size-full bg-[#F07B05] origin-[0_0]",
+                        "touchArea": "absolute -inset-1"
+                    }
+                }'></div>
+                <div id="white_dwarves_slider_tooltip" role="tooltip" class="tooltip invisible absolute z-10 inline-block rounded-lg bg-[#0F0F0F] px-3 py-2 text-sm text-[#F0F0F0] opacity-0 shadow-xs transition-opacity duration-200">
+                    Colony Influence: High Tech and Tourism
+                </div>
+            </div>
+            <div class="z-10 mr-2 ml-2 flex min-h-13 flex-col justify-around">
+                <div class="relative -top-2 w-full">
+                    <span class="absolute left-1">Other Stars</span>
+                    <div class="absolute right-1">
+                        <svg data-tooltip-target="other_stars_slider_tooltip" class="absolute right-20 h-6 w-6" version="1.1" id="Layer_1" x="0px" y="0px" width="924" height="924" viewBox="0 0 924 924" enable-background="new 0 0 924 924" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><defs id="defs3" />
+	                        <g id="g1">
+		                        <path class="fill-[#E500E5]" d="M 458.18182,917.9913 8.1454545,468.46402 46.836364,883.88221 Z" id="path7" />
+		                        <path class="fill-[#E500E5]" d="M 458.84246,917.9913 908.87883,468.46402 870.18792,883.88221 Z" id="path8" />
+		                        <path class="fill-[#E500E5]" d="M 458.18182,12.727273 8.1454545,462.25455 46.836364,46.836364 Z" id="path9" />
+		                        <path class="fill-[#E500E5]" d="M 458.84246,12.727273 908.87883,462.25455 870.18792,46.836364 Z" id="path10" />
+	                        </g>
+	                        <g id="g3"><path d="M 462,29.698 894.302,462 462,894.302 29.698,462 462,29.698 M 462,0 0,462 462,924 924,462 Z" id="path2" style="display:inline" /><path d="M 462,21.083 866.97,57.031 902.918,462 866.97,866.97 462,902.918 57.031,866.97 21.083,462 57.031,57.031 462,21.083 M 462,0 37.667,37.667 0,462 37.667,886.333 462,924 886.333,886.333 924,462 886.333,37.667 Z" id="path1" /><rect x="327" y="433" width="270" height="58" id="rect1" /></g>
+                        </svg>
+                        <span id="other_stars_value" >0 - @Model.MaxValues.OtherStarCount</span>
+                    </div>
+                </div>
+                <div id="other_stars_slider" class="--prevent-on-load-init" data-hs-range-slider='{
+                    "start": [0, @Model.MaxValues.OtherStarCount],
+                    "range": {
+                        "min": 0,
+                        "max": @Model.MaxValues.OtherStarCount
+                    },
+                    "step": 1,
+                    "connect": true,
+                    "cssClasses": {
+                        "target": "relative h-2.5 rounded-full bg-white border-1 border-[#0F0F0F]",
+                        "base": "size-full relative z-1",
+                        "origin": "absolute top-0 end-0 size-full origin-[0_0] rounded-full",
+                        "handle": "absolute top-1/2 end-0 size-5 bg-white border-3 border-[#0F0F0F] rounded-full cursor-pointer translate-x-2/4 -translate-y-2/4",
+                        "connects": "relative z-0 size-full rounded-full overflow-hidden",
+                        "connect": "absolute top-0 end-0 z-1 size-full bg-[#F07B05] origin-[0_0]",
+                        "touchArea": "absolute -inset-1"
+                    }
+                }'></div>
+                <div id="other_stars_slider_tooltip" role="tooltip" class="tooltip invisible absolute z-10 inline-block rounded-lg bg-[#0F0F0F] px-3 py-2 text-sm text-[#F0F0F0] opacity-0 shadow-xs transition-opacity duration-200">
+                    Colony Influence: Military
+                </div>
+            </div>
+            <div class="z-11 mr-2 ml-2 flex min-h-13 flex-col justify-around">
+                <div class="relative -top-2 w-full">
+                    <span class="absolute left-1">Earth-like Worlds</span>
+                    <div class="absolute right-1">
+                        <svg data-tooltip-target="earth_likes_slider_tooltip" class="absolute right-20 h-6 w-6" version="1.1" id="Layer_1" x="0px" y="0px" width="924" height="924" viewBox="0 0 924 924" enable-background="new 0 0 924 924" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><defs id="defs3" />
+	                        <g id="g1">
+		                        <path class="fill-[#E500E5]" d="M 458.18182,917.9913 8.1454545,468.46402 46.836364,883.88221 Z" id="path7" />
+		                        <path class="fill-[#6600E5]" d="M 458.84246,917.9913 908.87883,468.46402 870.18792,883.88221 Z" id="path8" />
+		                        <path class="fill-[#80FF00]" d="M 458.18182,12.727273 8.1454545,462.25455 46.836364,46.836364 Z" id="path9" />
+		                        <path class="fill-[#00FFFF]" d="M 458.84246,12.727273 908.87883,462.25455 870.18792,46.836364 Z" id="path10" />
+	                        </g>
+	                        <g id="g3"><path d="M 462,29.698 894.302,462 462,894.302 29.698,462 462,29.698 M 462,0 0,462 462,924 924,462 Z" id="path2" style="display:inline" /><path d="M 462,21.083 866.97,57.031 902.918,462 866.97,866.97 462,902.918 57.031,866.97 21.083,462 57.031,57.031 462,21.083 M 462,0 37.667,37.667 0,462 37.667,886.333 462,924 886.333,886.333 924,462 886.333,37.667 Z" id="path1" /><rect x="327" y="433" width="270" height="58" id="rect1" /></g>
+                        </svg>
+                        <span id="earth_likes_value" >0 - @Model.MaxValues.EarthLikeCount</span>
+                    </div>
+                </div>
+                <div id="earth_likes_slider" class="--prevent-on-load-init" data-hs-range-slider='{
+                    "start": [0, @Model.MaxValues.EarthLikeCount],
+                    "range": {
+                        "min": 0,
+                        "max": @Model.MaxValues.EarthLikeCount
+                    },
+                    "step": 1,
+                    "connect": true,
+                    "cssClasses": {
+                        "target": "relative h-2.5 rounded-full bg-white border-1 border-[#0F0F0F]",
+                        "base": "size-full relative z-1",
+                        "origin": "absolute top-0 end-0 size-full origin-[0_0] rounded-full",
+                        "handle": "absolute top-1/2 end-0 size-5 bg-white border-3 border-[#0F0F0F] rounded-full cursor-pointer translate-x-2/4 -translate-y-2/4",
+                        "connects": "relative z-0 size-full rounded-full overflow-hidden",
+                        "connect": "absolute top-0 end-0 z-1 size-full bg-[#F07B05] origin-[0_0]",
+                        "touchArea": "absolute -inset-1"
+                    }
+                }'></div>
+                <div id="earth_likes_slider_tooltip" role="tooltip" class="tooltip invisible absolute z-10 inline-block rounded-lg bg-[#0F0F0F] px-3 py-2 text-sm text-[#F0F0F0] opacity-0 shadow-xs transition-opacity duration-200">
+                    Colony Influence: Argriculture, High Tech, Tourism, and Military
+                </div>
+            </div>
+            <div class="z-10 mr-2 ml-2 flex min-h-13 flex-col justify-around">
+                <div class="relative -top-2 w-full">
+                    <span class="absolute left-1">Water Worlds</span>
+                    <div class="absolute right-1">
+                        <svg data-tooltip-target="water_worlds_slider_tooltip" class="absolute right-20 h-6 w-6" version="1.1" id="Layer_1" x="0px" y="0px" width="924" height="924" viewBox="0 0 924 924" enable-background="new 0 0 924 924" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><defs id="defs3" />
+	                        <g id="g1">
+                                <path class="fill-[#80FF00]" d="M 458.18182,917.9913 8.1454545,468.46402 46.836364,883.88221 Z" id="path7" />
+		                        <path class="fill-[#6600E5]" d="M 458.84246,917.9913 908.87883,468.46402 870.18792,883.88221 Z" id="path8" />
+		                        <path class="fill-[#80FF00]" d="M 458.18182,12.727273 8.1454545,462.25455 46.836364,46.836364 Z" id="path9" />
+		                        <path class="fill-[#6600E5]" d="M 458.84246,12.727273 908.87883,462.25455 870.18792,46.836364 Z" id="path10" />
+	                        </g>
+	                        <g id="g3"><path d="M 462,29.698 894.302,462 462,894.302 29.698,462 462,29.698 M 462,0 0,462 462,924 924,462 Z" id="path2" style="display:inline" /><path d="M 462,21.083 866.97,57.031 902.918,462 866.97,866.97 462,902.918 57.031,866.97 21.083,462 57.031,57.031 462,21.083 M 462,0 37.667,37.667 0,462 37.667,886.333 462,924 886.333,886.333 924,462 886.333,37.667 Z" id="path1" /><rect x="327" y="433" width="270" height="58" id="rect1" /></g>
+                        </svg>
+                        <span id="water_worlds_value" >0 - @Model.MaxValues.WaterWorldCount</span>
+                    </div>
+                </div>
+                <div id="water_worlds_slider" class="--prevent-on-load-init" data-hs-range-slider='{
+                    "start": [0, @Model.MaxValues.WaterWorldCount],
+                    "range": {
+                        "min": 0,
+                        "max": @Model.MaxValues.WaterWorldCount
+                    },
+                    "step": 1,
+                    "connect": true,
+                    "cssClasses": {
+                        "target": "relative h-2.5 rounded-full bg-white border-1 border-[#0F0F0F]",
+                        "base": "size-full relative z-1",
+                        "origin": "absolute top-0 end-0 size-full origin-[0_0] rounded-full",
+                        "handle": "absolute top-1/2 end-0 size-5 bg-white border-3 border-[#0F0F0F] rounded-full cursor-pointer translate-x-2/4 -translate-y-2/4",
+                        "connects": "relative z-0 size-full rounded-full overflow-hidden",
+                        "connect": "absolute top-0 end-0 z-1 size-full bg-[#F07B05] origin-[0_0]",
+                        "touchArea": "absolute -inset-1"
+                    }
+                }'></div>
+                <div id="water_worlds_slider_tooltip" role="tooltip" class="tooltip invisible absolute z-10 inline-block rounded-lg bg-[#0F0F0F] px-3 py-2 text-sm text-[#F0F0F0] opacity-0 shadow-xs transition-opacity duration-200">
+                    Colony Influence: Argriculture and Tourism
+                </div>
+            </div>
+            <div class="z-11 mr-2 ml-2 flex min-h-13 flex-col justify-around">
+                <div class="relative -top-2 w-full">
+                    <span class="absolute left-1">Ammonia Worlds</span>
+                    <div class="absolute right-1">
+                        <svg data-tooltip-target="ammonia_worlds_slider_tooltip" class="absolute right-20 h-6 w-6" version="1.1" id="Layer_1" x="0px" y="0px" width="924" height="924" viewBox="0 0 924 924" enable-background="new 0 0 924 924" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><defs id="defs3" />
+	                        <g id="g1">
+                                <path class="fill-[#00FFFF]" d="M 458.18182,917.9913 8.1454545,468.46402 46.836364,883.88221 Z" id="path7" />
+		                        <path class="fill-[#6600E5]" d="M 458.84246,917.9913 908.87883,468.46402 870.18792,883.88221 Z" id="path8" />
+		                        <path class="fill-[#00FFFF]" d="M 458.18182,12.727273 8.1454545,462.25455 46.836364,46.836364 Z" id="path9" />
+		                        <path class="fill-[#6600E5]" d="M 458.84246,12.727273 908.87883,462.25455 870.18792,46.836364 Z" id="path10" />
+	                        </g>
+	                        <g id="g3"><path d="M 462,29.698 894.302,462 462,894.302 29.698,462 462,29.698 M 462,0 0,462 462,924 924,462 Z" id="path2" style="display:inline" /><path d="M 462,21.083 866.97,57.031 902.918,462 866.97,866.97 462,902.918 57.031,866.97 21.083,462 57.031,57.031 462,21.083 M 462,0 37.667,37.667 0,462 37.667,886.333 462,924 886.333,886.333 924,462 886.333,37.667 Z" id="path1" /><rect x="327" y="433" width="270" height="58" id="rect1" /></g>
+                        </svg>
+                        <span id="ammonia_worlds_value" >0 - @Model.MaxValues.AmmoniaWorldCount</span>
+                    </div>
+                </div>
+                <div id="ammonia_worlds_slider" class="--prevent-on-load-init" data-hs-range-slider='{
+                    "start": [0, @Model.MaxValues.AmmoniaWorldCount],
+                    "range": {
+                        "min": 0,
+                        "max": @Model.MaxValues.AmmoniaWorldCount
+                    },
+                    "step": 1,
+                    "connect": true,
+                    "cssClasses": {
+                        "target": "relative h-2.5 rounded-full bg-white border-1 border-[#0F0F0F]",
+                        "base": "size-full relative z-1",
+                        "origin": "absolute top-0 end-0 size-full origin-[0_0] rounded-full",
+                        "handle": "absolute top-1/2 end-0 size-5 bg-white border-3 border-[#0F0F0F] rounded-full cursor-pointer translate-x-2/4 -translate-y-2/4",
+                        "connects": "relative z-0 size-full rounded-full overflow-hidden",
+                        "connect": "absolute top-0 end-0 z-1 size-full bg-[#F07B05] origin-[0_0]",
+                        "touchArea": "absolute -inset-1"
+                    }
+                }'></div>
+                <div id="ammonia_worlds_slider_tooltip" role="tooltip" class="tooltip invisible absolute z-10 inline-block rounded-lg bg-[#0F0F0F] px-3 py-2 text-sm text-[#F0F0F0] opacity-0 shadow-xs transition-opacity duration-200">
+                    Colony Influence: High Tech and Tourism
+                </div>
+            </div>
+            <div class="z-10 mr-2 ml-2 flex min-h-13 flex-col justify-around">
+                <div class="relative -top-2 w-full">
+                    <span class="absolute left-1">Gas Giants</span>
+                    <div class="absolute right-1">
+                        <svg data-tooltip-target="gas_giants_slider_tooltip" class="absolute right-20 h-6 w-6" version="1.1" id="Layer_1" x="0px" y="0px" width="924" height="924" viewBox="0 0 924 924" enable-background="new 0 0 924 924" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><defs id="defs3" />
+	                        <g id="g1">
+                                <path class="fill-[#00FFFF]" d="M 458.18182,917.9913 8.1454545,468.46402 46.836364,883.88221 Z" id="path7" />
+		                        <path class="fill-[#FFFF00]" d="M 458.84246,917.9913 908.87883,468.46402 870.18792,883.88221 Z" id="path8" />
+		                        <path class="fill-[#00FFFF]" d="M 458.18182,12.727273 8.1454545,462.25455 46.836364,46.836364 Z" id="path9" />
+		                        <path class="fill-[#FFFF00]" d="M 458.84246,12.727273 908.87883,462.25455 870.18792,46.836364 Z" id="path10" />
+	                        </g>
+	                        <g id="g3"><path d="M 462,29.698 894.302,462 462,894.302 29.698,462 462,29.698 M 462,0 0,462 462,924 924,462 Z" id="path2" style="display:inline" /><path d="M 462,21.083 866.97,57.031 902.918,462 866.97,866.97 462,902.918 57.031,866.97 21.083,462 57.031,57.031 462,21.083 M 462,0 37.667,37.667 0,462 37.667,886.333 462,924 886.333,886.333 924,462 886.333,37.667 Z" id="path1" /><rect x="327" y="433" width="270" height="58" id="rect1" /></g>
+                        </svg>
+                        <span id="gas_giants_value" >0 - @Model.MaxValues.GasGiantCount</span>
+                    </div>
+                </div>
+                <div id="gas_giants_slider" class="--prevent-on-load-init" data-hs-range-slider='{
+                    "start": [0, @Model.MaxValues.GasGiantCount],
+                    "range": {
+                        "min": 0,
+                        "max": @Model.MaxValues.GasGiantCount
+                    },
+                    "step": 1,
+                    "connect": true,
+                    "cssClasses": {
+                        "target": "relative h-2.5 rounded-full bg-white border-1 border-[#0F0F0F]",
+                        "base": "size-full relative z-1",
+                        "origin": "absolute top-0 end-0 size-full origin-[0_0] rounded-full",
+                        "handle": "absolute top-1/2 end-0 size-5 bg-white border-3 border-[#0F0F0F] rounded-full cursor-pointer translate-x-2/4 -translate-y-2/4",
+                        "connects": "relative z-0 size-full rounded-full overflow-hidden",
+                        "connect": "absolute top-0 end-0 z-1 size-full bg-[#F07B05] origin-[0_0]",
+                        "touchArea": "absolute -inset-1"
+                    }
+                }'></div>
+                <div id="gas_giants_slider_tooltip" role="tooltip" class="tooltip invisible absolute z-10 inline-block rounded-lg bg-[#0F0F0F] px-3 py-2 text-sm text-[#F0F0F0] opacity-0 shadow-xs transition-opacity duration-200">
+                    Colony Influence: High Tech and Industrial
+                </div>
+            </div>
+            <div class="z-11 mr-2 ml-2 flex min-h-13 flex-col justify-around">
+                <div class="relative -top-2 w-full">
+                    <span class="absolute left-1">High Metal Content Worlds</span>
+                    <div class="absolute right-1">
+                        <svg data-tooltip-target="high_metal_content_slider_tooltip" class="absolute right-20 h-6 w-6" version="1.1" id="Layer_1" x="0px" y="0px" width="924" height="924" viewBox="0 0 924 924" enable-background="new 0 0 924 924" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><defs id="defs3" />
+	                        <g id="g1">
+                                <path class="fill-[#FF0000]" d="M 458.18182,917.9913 8.1454545,468.46402 46.836364,883.88221 Z" id="path7" />
+		                        <path class="fill-[#FF0000]" d="M 458.84246,917.9913 908.87883,468.46402 870.18792,883.88221 Z" id="path8" />
+		                        <path class="fill-[#FF0000]" d="M 458.18182,12.727273 8.1454545,462.25455 46.836364,46.836364 Z" id="path9" />
+		                        <path class="fill-[#FF0000]" d="M 458.84246,12.727273 908.87883,462.25455 870.18792,46.836364 Z" id="path10" />
+	                        </g>
+	                        <g id="g3"><path d="M 462,29.698 894.302,462 462,894.302 29.698,462 462,29.698 M 462,0 0,462 462,924 924,462 Z" id="path2" style="display:inline" /><path d="M 462,21.083 866.97,57.031 902.918,462 866.97,866.97 462,902.918 57.031,866.97 21.083,462 57.031,57.031 462,21.083 M 462,0 37.667,37.667 0,462 37.667,886.333 462,924 886.333,886.333 924,462 886.333,37.667 Z" id="path1" /><rect x="327" y="433" width="270" height="58" id="rect1" /></g>
+                        </svg>
+                        <span id="high_metal_content_value" >0 - @Model.MaxValues.HighMetalContentCount</span>
+                    </div>
+                </div>
+                <div id="high_metal_content_slider" class="--prevent-on-load-init" data-hs-range-slider='{
+                    "start": [0, @Model.MaxValues.HighMetalContentCount],
+                    "range": {
+                        "min": 0,
+                        "max": @Model.MaxValues.HighMetalContentCount
+                    },
+                    "step": 1,
+                    "connect": true,
+                    "cssClasses": {
+                        "target": "relative h-2.5 rounded-full bg-white border-1 border-[#0F0F0F]",
+                        "base": "size-full relative z-1",
+                        "origin": "absolute top-0 end-0 size-full origin-[0_0] rounded-full",
+                        "handle": "absolute top-1/2 end-0 size-5 bg-white border-3 border-[#0F0F0F] rounded-full cursor-pointer translate-x-2/4 -translate-y-2/4",
+                        "connects": "relative z-0 size-full rounded-full overflow-hidden",
+                        "connect": "absolute top-0 end-0 z-1 size-full bg-[#F07B05] origin-[0_0]",
+                        "touchArea": "absolute -inset-1"
+                    }
+                }'></div>
+                <div id="high_metal_content_slider_tooltip" role="tooltip" class="tooltip invisible absolute z-10 inline-block rounded-lg bg-[#0F0F0F] px-3 py-2 text-sm text-[#F0F0F0] opacity-0 shadow-xs transition-opacity duration-200">
+                    Colony Influence: Extraction
+                </div>
+            </div>
+            <div class="z-10 mr-2 ml-2 flex min-h-13 flex-col justify-around">
+                <div class="relative -top-2 w-full">
+                    <span class="absolute left-1">Metal Rich Bodies</span>
+                    <div class="absolute right-1">
+                        <svg data-tooltip-target="metal_rich_slider_tooltip" class="absolute right-20 h-6 w-6" version="1.1" id="Layer_1" x="0px" y="0px" width="924" height="924" viewBox="0 0 924 924" enable-background="new 0 0 924 924" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><defs id="defs3" />
+	                        <g id="g1">
+                                <path class="fill-[#FF0000]" d="M 458.18182,917.9913 8.1454545,468.46402 46.836364,883.88221 Z" id="path7" />
+		                        <path class="fill-[#FF0000]" d="M 458.84246,917.9913 908.87883,468.46402 870.18792,883.88221 Z" id="path8" />
+		                        <path class="fill-[#FF0000]" d="M 458.18182,12.727273 8.1454545,462.25455 46.836364,46.836364 Z" id="path9" />
+		                        <path class="fill-[#FF0000]" d="M 458.84246,12.727273 908.87883,462.25455 870.18792,46.836364 Z" id="path10" />
+	                        </g>
+	                        <g id="g3"><path d="M 462,29.698 894.302,462 462,894.302 29.698,462 462,29.698 M 462,0 0,462 462,924 924,462 Z" id="path2" style="display:inline" /><path d="M 462,21.083 866.97,57.031 902.918,462 866.97,866.97 462,902.918 57.031,866.97 21.083,462 57.031,57.031 462,21.083 M 462,0 37.667,37.667 0,462 37.667,886.333 462,924 886.333,886.333 924,462 886.333,37.667 Z" id="path1" /><rect x="327" y="433" width="270" height="58" id="rect1" /></g>
+                        </svg>
+                        <span id="metal_rich_value" >0 - @Model.MaxValues.MetalRichCount</span>
+                    </div>
+                </div>
+                <div id="metal_rich_slider" class="--prevent-on-load-init" data-hs-range-slider='{
+                    "start": [0, @Model.MaxValues.MetalRichCount],
+                    "range": {
+                        "min": 0,
+                        "max": @Model.MaxValues.MetalRichCount
+                    },
+                    "step": 1,
+                    "connect": true,
+                    "cssClasses": {
+                        "target": "relative h-2.5 rounded-full bg-white border-1 border-[#0F0F0F]",
+                        "base": "size-full relative z-1",
+                        "origin": "absolute top-0 end-0 size-full origin-[0_0] rounded-full",
+                        "handle": "absolute top-1/2 end-0 size-5 bg-white border-3 border-[#0F0F0F] rounded-full cursor-pointer translate-x-2/4 -translate-y-2/4",
+                        "connects": "relative z-0 size-full rounded-full overflow-hidden",
+                        "connect": "absolute top-0 end-0 z-1 size-full bg-[#F07B05] origin-[0_0]",
+                        "touchArea": "absolute -inset-1"
+                    }
+                }'></div>
+                <div id="metal_rich_slider_tooltip" role="tooltip" class="tooltip invisible absolute z-10 inline-block rounded-lg bg-[#0F0F0F] px-3 py-2 text-sm text-[#F0F0F0] opacity-0 shadow-xs transition-opacity duration-200">
+                    Colony Influence: Extraction
+                </div>
+            </div>
+            <div class="z-11 mr-2 ml-2 flex min-h-13 flex-col justify-around">
+                <div class="relative -top-2 w-full">
+                    <span class="absolute left-1">Rocky Ice Worlds</span>
+                    <div class="absolute right-1">
+                        <svg data-tooltip-target="rocky_ice_world_slider_tooltip" class="absolute right-20 h-6 w-6" version="1.1" id="Layer_1" x="0px" y="0px" width="924" height="924" viewBox="0 0 924 924" enable-background="new 0 0 924 924" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><defs id="defs3" />
+	                        <g id="g1">
+                                <path class="fill-[#FF8000]" d="M 458.18182,917.9913 8.1454545,468.46402 46.836364,883.88221 Z" id="path7" />
+                                <path class="fill-[#FFFF00]" d="M 458.84246,917.9913 908.87883,468.46402 870.18792,883.88221 Z" id="path8" />
+                                <path class="fill-[#FF8000]" d="M 458.18182,12.727273 8.1454545,462.25455 46.836364,46.836364 Z" id="path9" />
+                                <path class="fill-[#FFFF00]" d="M 458.84246,12.727273 908.87883,462.25455 870.18792,46.836364 Z" id="path10" />
+	                        </g>
+	                        <g id="g3"><path d="M 462,29.698 894.302,462 462,894.302 29.698,462 462,29.698 M 462,0 0,462 462,924 924,462 Z" id="path2" style="display:inline" /><path d="M 462,21.083 866.97,57.031 902.918,462 866.97,866.97 462,902.918 57.031,866.97 21.083,462 57.031,57.031 462,21.083 M 462,0 37.667,37.667 0,462 37.667,886.333 462,924 886.333,886.333 924,462 886.333,37.667 Z" id="path1" /><rect x="327" y="433" width="270" height="58" id="rect1" /></g>
+                        </svg>
+                        <span id="rocky_ice_world_value" >0 - @Model.MaxValues.RockyIceBodyCount</span>
+                    </div>
+                </div>
+                <div id="rocky_ice_world_slider" class="--prevent-on-load-init" data-hs-range-slider='{
+                    "start": [0, @Model.MaxValues.RockyIceBodyCount],
+                    "range": {
+                        "min": 0,
+                        "max": @Model.MaxValues.RockyIceBodyCount
+                    },
+                    "step": 1,
+                    "connect": true,
+                    "cssClasses": {
+                        "target": "relative h-2.5 rounded-full bg-white border-1 border-[#0F0F0F]",
+                        "base": "size-full relative z-1",
+                        "origin": "absolute top-0 end-0 size-full origin-[0_0] rounded-full",
+                        "handle": "absolute top-1/2 end-0 size-5 bg-white border-3 border-[#0F0F0F] rounded-full cursor-pointer translate-x-2/4 -translate-y-2/4",
+                        "connects": "relative z-0 size-full rounded-full overflow-hidden",
+                        "connect": "absolute top-0 end-0 z-1 size-full bg-[#F07B05] origin-[0_0]",
+                        "touchArea": "absolute -inset-1"
+                    }
+                }'></div>
+                <div id="rocky_ice_world_slider_tooltip" role="tooltip" class="tooltip invisible absolute z-10 inline-block rounded-lg bg-[#0F0F0F] px-3 py-2 text-sm text-[#F0F0F0] opacity-0 shadow-xs transition-opacity duration-200">
+                    Colony Influence: Refinery and Industrial
+                </div>
+            </div>
+            <div class="z-10 mr-2 ml-2 flex min-h-13 flex-col justify-around">
+                <div class="relative -top-2 w-full">
+                    <span class="absolute left-1">Rocky Bodies</span>
+                    <div class="absolute right-1">
+                        <svg data-tooltip-target="rocky_bodies_slider_tooltip" class="absolute right-20 h-6 w-6" version="1.1" id="Layer_1" x="0px" y="0px" width="924" height="924" viewBox="0 0 924 924" enable-background="new 0 0 924 924" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><defs id="defs3" />
+                        <g id="g1">
+                            <path class="fill-[#FF8000]" d="M 458.18182,917.9913 8.1454545,468.46402 46.836364,883.88221 Z" id="path7" />
+                            <path class="fill-[#FF8000]" d="M 458.84246,917.9913 908.87883,468.46402 870.18792,883.88221 Z" id="path8" />
+                            <path class="fill-[#FF8000]" d="M 458.18182,12.727273 8.1454545,462.25455 46.836364,46.836364 Z" id="path9" />
+                            <path class="fill-[#FF8000]" d="M 458.84246,12.727273 908.87883,462.25455 870.18792,46.836364 Z" id="path10" />
+                         </g>
+                        <g id="g3"><path d="M 462,29.698 894.302,462 462,894.302 29.698,462 462,29.698 M 462,0 0,462 462,924 924,462 Z" id="path2" style="display:inline" /><path d="M 462,21.083 866.97,57.031 902.918,462 866.97,866.97 462,902.918 57.031,866.97 21.083,462 57.031,57.031 462,21.083 M 462,0 37.667,37.667 0,462 37.667,886.333 462,924 886.333,886.333 924,462 886.333,37.667 Z" id="path1" /><rect x="327" y="433" width="270" height="58" id="rect1" /></g>
+                        </svg>
+                        <span id="rocky_bodies_value">0 - @Model.MaxValues.RockBodyCount</span>
+                    </div>
+                </div>
+                <div id="rocky_bodies_slider" class="--prevent-on-load-init" data-hs-range-slider='{
+                    "start": [0, @Model.MaxValues.RockBodyCount],
+                    "range": {
+                        "min": 0,
+                        "max": @Model.MaxValues.RockBodyCount
+                    },
+                    "step": 1,
+                    "connect": true,
+                    "cssClasses": {
+                        "target": "relative h-2.5 rounded-full bg-white border-1 border-[#0F0F0F]",
+                        "base": "size-full relative z-1",
+                        "origin": "absolute top-0 end-0 size-full origin-[0_0] rounded-full",
+                        "handle": "absolute top-1/2 end-0 size-5 bg-white border-3 border-[#0F0F0F] rounded-full cursor-pointer translate-x-2/4 -translate-y-2/4",
+                        "connects": "relative z-0 size-full rounded-full overflow-hidden",
+                        "connect": "absolute top-0 end-0 z-1 size-full bg-[#F07B05] origin-[0_0]",
+                        "touchArea": "absolute -inset-1"
+                    }
+                }'></div>
+                <div id="rocky_bodies_slider_tooltip" role="tooltip" class="tooltip invisible absolute z-10 inline-block rounded-lg bg-[#0F0F0F] px-3 py-2 text-sm text-[#F0F0F0] opacity-0 shadow-xs transition-opacity duration-200">
+                    Colony Influence: Refinery
+                </div>
+            </div>
+            <div class="z-11 mr-2 ml-2 flex min-h-13 flex-col justify-around">
+                <div class="relative -top-2 w-full">
+                    <span class="absolute left-1">Icy Bodies</span>
+                    <div class="absolute right-1">
+                        <svg data-tooltip-target="icy_bodies_slider_tooltip" class="absolute right-20 h-6 w-6" version="1.1" id="Layer_1" x="0px" y="0px" width="924" height="924" viewBox="0 0 924 924" enable-background="new 0 0 924 924" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><defs id="defs3" />
+                        <g id="g1">
+                            <path class="fill-[#FFFF00]" d="M 458.18182,917.9913 8.1454545,468.46402 46.836364,883.88221 Z" id="path7" />
+                            <path class="fill-[#FFFF00]" d="M 458.84246,917.9913 908.87883,468.46402 870.18792,883.88221 Z" id="path8" />
+                            <path class="fill-[#FFFF00]" d="M 458.18182,12.727273 8.1454545,462.25455 46.836364,46.836364 Z" id="path9" />
+                            <path class="fill-[#FFFF00]" d="M 458.84246,12.727273 908.87883,462.25455 870.18792,46.836364 Z" id="path10" />
+                         </g>
+                        <g id="g3"><path d="M 462,29.698 894.302,462 462,894.302 29.698,462 462,29.698 M 462,0 0,462 462,924 924,462 Z" id="path2" style="display:inline" /><path d="M 462,21.083 866.97,57.031 902.918,462 866.97,866.97 462,902.918 57.031,866.97 21.083,462 57.031,57.031 462,21.083 M 462,0 37.667,37.667 0,462 37.667,886.333 462,924 886.333,886.333 924,462 886.333,37.667 Z" id="path1" /><rect x="327" y="433" width="270" height="58" id="rect1" /></g>
+                        </svg>
+                        <span id="icy_bodies_value">0 - @Model.MaxValues.IcyBodyCount</span>
+                    </div>
+                </div>
+                <div id="icy_bodies_slider" class="--prevent-on-load-init" data-hs-range-slider='{
+                    "start": [0, @Model.MaxValues.IcyBodyCount],
+                    "range": {
+                        "min": 0,
+                        "max": @Model.MaxValues.IcyBodyCount
+                    },
+                    "step": 1,
+                    "connect": true,
+                    "cssClasses": {
+                        "target": "relative h-2.5 rounded-full bg-white border-1 border-[#0F0F0F]",
+                        "base": "size-full relative z-1",
+                        "origin": "absolute top-0 end-0 size-full origin-[0_0] rounded-full",
+                        "handle": "absolute top-1/2 end-0 size-5 bg-white border-3 border-[#0F0F0F] rounded-full cursor-pointer translate-x-2/4 -translate-y-2/4",
+                        "connects": "relative z-0 size-full rounded-full overflow-hidden",
+                        "connect": "absolute top-0 end-0 z-1 size-full bg-[#F07B05] origin-[0_0]",
+                        "touchArea": "absolute -inset-1"
+                    }
+                }'></div>
+                <div id="icy_bodies_slider_tooltip" role="tooltip" class="tooltip invisible absolute z-10 inline-block rounded-lg bg-[#0F0F0F] px-3 py-2 text-sm text-[#F0F0F0] opacity-0 shadow-xs transition-opacity duration-200">
+                    Colony Influence: Industrial
+                </div>
+            </div>
+            <div class="z-10 mr-2 ml-2 flex min-h-13 flex-col justify-around">
+                <div class="relative -top-2 w-full">
+                    <span class="absolute left-1">Rings</span>
+                    <div class="absolute right-1">
+                        <svg data-tooltip-target="rings_slider_tooltip" class="absolute right-20 h-6 w-6" version="1.1" id="Layer_1" x="0px" y="0px" width="924" height="924" viewBox="0 0 924 924" enable-background="new 0 0 924 924" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><defs id="defs3" />
+                        <g id="g1">
+                        <path class="fill-[#FF0000]" d="M 458.18182,917.9913 8.1454545,468.46402 46.836364,883.88221 Z" id="path7" />
+                        <path class="fill-[#FF0000]" d="M 458.84246,917.9913 908.87883,468.46402 870.18792,883.88221 Z" id="path8" />
+                        <path class="fill-[#FF0000]" d="M 458.18182,12.727273 8.1454545,462.25455 46.836364,46.836364 Z" id="path9" />
+                        <path class="fill-[#FF0000]" d="M 458.84246,12.727273 908.87883,462.25455 870.18792,46.836364 Z" id="path10" />
+                         </g>
+                        <g id="g3"><path d="M 462,29.698 894.302,462 462,894.302 29.698,462 462,29.698 M 462,0 0,462 462,924 924,462 Z" id="path2" style="display:inline" /><path d="M 462,21.083 866.97,57.031 902.918,462 866.97,866.97 462,902.918 57.031,866.97 21.083,462 57.031,57.031 462,21.083 M 462,0 37.667,37.667 0,462 37.667,886.333 462,924 886.333,886.333 924,462 886.333,37.667 Z" id="path1" /><rect x="327" y="433" width="270" height="58" id="rect1" /></g>
+                        </svg>
+                        <span id="rings_value">0 - @Model.MaxValues.RingCount</span>
+                    </div>
+                </div>
+                <div id="rings_slider" class="--prevent-on-load-init" data-hs-range-slider='{
+                    "start": [0, @Model.MaxValues.RingCount],
+                    "range": {
+                        "min": 0,
+                        "max": @Model.MaxValues.RingCount
+                    },
+                    "step": 1,
+                    "connect": true,
+                    "cssClasses": {
+                        "target": "relative h-2.5 rounded-full bg-white border-1 border-[#0F0F0F]",
+                        "base": "size-full relative z-1",
+                        "origin": "absolute top-0 end-0 size-full origin-[0_0] rounded-full",
+                        "handle": "absolute top-1/2 end-0 size-5 bg-white border-3 border-[#0F0F0F] rounded-full cursor-pointer translate-x-2/4 -translate-y-2/4",
+                        "connects": "relative z-0 size-full rounded-full overflow-hidden",
+                        "connect": "absolute top-0 end-0 z-1 size-full bg-[#F07B05] origin-[0_0]",
+                        "touchArea": "absolute -inset-1"
+                    }
+                }'></div>
+                <div id="rings_slider_tooltip" role="tooltip" class="tooltip invisible absolute z-10 inline-block rounded-lg bg-[#0F0F0F] px-3 py-2 text-sm text-[#F0F0F0] opacity-0 shadow-xs transition-opacity duration-200">
+                    Colony Influence: Extraction
+                </div>
+            </div>
+            <div class="z-11 mr-2 ml-2 flex min-h-13 flex-col justify-around">
+                <div class="relative -top-2 w-full">
+                    <span class="absolute left-1">Bodies with Geologicals</span>
+                    <div class="absolute right-1">
+                        <svg data-tooltip-target="geologicals_slider_tooltip" class="absolute right-20 h-6 w-6" version="1.1" id="Layer_1" x="0px" y="0px" width="924" height="924" viewBox="0 0 924 924" enable-background="new 0 0 924 924" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><defs id="defs3" />
+                        <g id="g1">
+                        <path class="fill-[#FF0000]" d="M 458.18182,917.9913 8.1454545,468.46402 46.836364,883.88221 Z" id="path7" />
+                        <path class="fill-[#FFFF00]" d="M 458.84246,917.9913 908.87883,468.46402 870.18792,883.88221 Z" id="path8" />
+                        <path class="fill-[#FF0000]" d="M 458.18182,12.727273 8.1454545,462.25455 46.836364,46.836364 Z" id="path9" />
+                        <path class="fill-[#FFFF00]" d="M 458.84246,12.727273 908.87883,462.25455 870.18792,46.836364 Z" id="path10" />
+                         </g>
+                        <g id="g3"><path d="M 462,29.698 894.302,462 462,894.302 29.698,462 462,29.698 M 462,0 0,462 462,924 924,462 Z" id="path2" style="display:inline" /><path d="M 462,21.083 866.97,57.031 902.918,462 866.97,866.97 462,902.918 57.031,866.97 21.083,462 57.031,57.031 462,21.083 M 462,0 37.667,37.667 0,462 37.667,886.333 462,924 886.333,886.333 924,462 886.333,37.667 Z" id="path1" /><rect x="327" y="433" width="270" height="58" id="rect1" /></g>
+                        </svg>
+                        <span id="geologicals_value">0 - @Model.MaxValues.GeologicalsCount</span>
+                    </div>
+                </div>
+                <div id="geologicals_slider" class="--prevent-on-load-init" data-hs-range-slider='{
+                    "start": [0, @Model.MaxValues.GeologicalsCount],
+                    "range": {
+                        "min": 0,
+                        "max": @Model.MaxValues.GeologicalsCount
+                    },
+                    "step": 1,
+                    "connect": true,
+                    "cssClasses": {
+                        "target": "relative h-2.5 rounded-full bg-white border-1 border-[#0F0F0F]",
+                        "base": "size-full relative z-1",
+                        "origin": "absolute top-0 end-0 size-full origin-[0_0] rounded-full",
+                        "handle": "absolute top-1/2 end-0 size-5 bg-white border-3 border-[#0F0F0F] rounded-full cursor-pointer translate-x-2/4 -translate-y-2/4",
+                        "connects": "relative z-0 size-full rounded-full overflow-hidden",
+                        "connect": "absolute top-0 end-0 z-1 size-full bg-[#F07B05] origin-[0_0]",
+                        "touchArea": "absolute -inset-1"
+                    }
+                }'></div>
+                <div id="geologicals_slider_tooltip" role="tooltip" class="tooltip invisible absolute z-10 inline-block rounded-lg bg-[#0F0F0F] px-3 py-2 text-sm text-[#F0F0F0] opacity-0 shadow-xs transition-opacity duration-200">
+                    Colony Influence: Extraction and Industrial
+                </div>
+            </div>
+            <div class="z-10 mr-2 ml-2 flex min-h-13 flex-col justify-around">
+                <div class="relative -top-2 w-full">
+                    <span class="absolute left-1">Bodies with Organics</span>
+                    <div class="absolute right-1">
+                        <svg data-tooltip-target="organics_slider_tooltip" class="absolute right-20 h-6 w-6" version="1.1" id="Layer_1" x="0px" y="0px" width="924" height="924" viewBox="0 0 924 924" enable-background="new 0 0 924 924" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><defs id="defs3" />
+                        <g id="g1">
+                        <path class="fill-[#80FF00]" d="M 458.18182,917.9913 8.1454545,468.46402 46.836364,883.88221 Z" id="path7" />
+                        <path class="fill-[#009900]" d="M 458.84246,917.9913 908.87883,468.46402 870.18792,883.88221 Z" id="path8" />
+                        <path class="fill-[#80FF00]" d="M 458.18182,12.727273 8.1454545,462.25455 46.836364,46.836364 Z" id="path9" />
+                        <path class="fill-[#009900]" d="M 458.84246,12.727273 908.87883,462.25455 870.18792,46.836364 Z" id="path10" />
+                         </g>
+                        <g id="g3"><path d="M 462,29.698 894.302,462 462,894.302 29.698,462 462,29.698 M 462,0 0,462 462,924 924,462 Z" id="path2" style="display:inline" /><path d="M 462,21.083 866.97,57.031 902.918,462 866.97,866.97 462,902.918 57.031,866.97 21.083,462 57.031,57.031 462,21.083 M 462,0 37.667,37.667 0,462 37.667,886.333 462,924 886.333,886.333 924,462 886.333,37.667 Z" id="path1" /><rect x="327" y="433" width="270" height="58" id="rect1" /></g>
+                        </svg>
+                        <span id="organics_value">0 - @Model.MaxValues.OrganicCount</span>
+                    </div>
+                </div>
+                <div id="organics_slider" class="--prevent-on-load-init" data-hs-range-slider='{
+                    "start": [0, @Model.MaxValues.OrganicCount],
+                    "range": {
+                        "min": 0,
+                        "max": @Model.MaxValues.OrganicCount
+                    },
+                    "step": 1,
+                    "connect": true,
+                    "cssClasses": {
+                        "target": "relative h-2.5 rounded-full bg-white border-1 border-[#0F0F0F]",
+                        "base": "size-full relative z-1",
+                        "origin": "absolute top-0 end-0 size-full origin-[0_0] rounded-full",
+                        "handle": "absolute top-1/2 end-0 size-5 bg-white border-3 border-[#0F0F0F] rounded-full cursor-pointer translate-x-2/4 -translate-y-2/4",
+                        "connects": "relative z-0 size-full rounded-full overflow-hidden",
+                        "connect": "absolute top-0 end-0 z-1 size-full bg-[#F07B05] origin-[0_0]",
+                        "touchArea": "absolute -inset-1"
+                    }
+                }'></div>
+                <div id="organics_slider_tooltip" role="tooltip" class="tooltip invisible absolute z-10 inline-block rounded-lg bg-[#0F0F0F] px-3 py-2 text-sm text-[#F0F0F0] opacity-0 shadow-xs transition-opacity duration-200">
+                    Colony Influence: Agriculture and Terraforming
+                </div>
+            </div>
+            <span class="m-0 h-1 rounded-full bg-gray-300 lg:col-start-1 lg:col-end-3"></span>
+            <div class="relative lg:col-span-2">
+                <span class="relative p-3">Available Hotspots</span>
+                <select id="hotspot_select" multiple=""> 
+                    @{
+                        foreach (string hotspot in Model.HotspotTypes)
+                        {
+                            <option value="@hotspot" data-hs-select-option='{"description": "@hotspot"}'>@hotspot</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
     </form>
 </section>
 <section class="relative mt-3 mb-3 w-full rounded-md bg-[#F0F0F0] p-3">
-    <div class="flex flex-col gap-3 md:justify-between md:gap-0 md:flex-row">
-        <h1 class="text-center text-xl text-[#0F0F0F] md:text-left">Colonisation Candidates</h1>
-        <div class="flex flex-col gap-4 md:flex-row">
+    <div class="flex flex-col gap-3 lg:flex-row lg:justify-between lg:gap-0">
+        <h1 class="text-center text-xl text-[#0F0F0F] lg:text-left">Colonisation Candidates</h1>
+        <div class="flex flex-col items-center gap-4 lg:flex-row">
             <div class="flex items-center justify-center gap-2">
                 <label id="results_per_page_lbl" class="text-sm text-[#0F0F0F]">Results per page</label>
-                <select id="results_per_page" class="min-h-full cursor-pointer rounded-md border border-[#0F0F0F] bg-white p-2.5 text-center text-sm text-[#0F0F0F] shadow-sm transition-all hover:shadow-lg hover:text-[#F0F0F0] hover:bg-slate-800 hover:border-[#0F0F0F] focus:text-[#F0F0F0] focus:bg-[#0F0F0F] focus:border-[#0F0F0F] active:border-[#0F0F0F] active:text-[#F0F0F0] active:bg-[#0F0F0F] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
+                <select id="results_per_page" class="min-h-full w-14 cursor-pointer rounded-md border border-[#0F0F0F] bg-white p-2.5 text-sm text-[#0F0F0F] shadow-sm transition-all hover:border-[#0F0F0F] hover:bg-[#0F0F0F] hover:text-[#F0F0F0] hover:shadow-lg focus:border-[#0F0F0F] focus:bg-[#0F0F0F] focus:text-[#F0F0F0] active:border-[#0F0F0F] active:bg-[#0F0F0F] active:text-[#F0F0F0] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
                     <option value="5">5</option>
                     <option value="10" selected>10</option>
+                    <option value="15">15</option>
                     <option value="20">20</option>
                     <option value="50">50</option>
                 </select>
             </div>
-            <div class="flex justify-center gap-2">
-                <button id="previous_page" class="cursor-pointer rounded-md border border-[#0F0F0F] bg-white p-2.5 text-center text-sm text-[#0F0F0F] shadow-sm transition-all hover:shadow-lg hover:text-[#F0F0F0] hover:bg-slate-800 hover:border-[#0F0F0F] focus:text-[#F0F0F0] focus:bg-[#0F0F0F] focus:border-[#0F0F0F] active:border-[#0F0F0F] active:text-[#F0F0F0] active:bg-[#0F0F0F] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
-                        <path fill-rule="evenodd" d="M11.03 3.97a.75.75 0 0 1 0 1.06l-6.22 6.22H21a.75.75 0 0 1 0 1.5H4.81l6.22 6.22a.75.75 0 1 1-1.06 1.06l-7.5-7.5a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+            <nav id="pagination" class="hidden w-full items-center justify-center gap-x-1 rounded-md border-1 border-[#0F0F0F] bg-white shadow-sm sm:w-fit">
+                <button id="pagination_previous_jump" title="Back Jump" type="button" class="inline-flex h-10 w-10 cursor-pointer items-center justify-center gap-x-2 rounded-md px-2.5 py-2 text-sm text-[#0F0F0F] hover:bg-[#0F0F0F] hover:text-[#F0F0F0] focus:bg-[#0F0F0F] focus:text-[#F0F0F0] focus:outline-hidden disabled:pointer-events-none disabled:opacity-50">
+                    <svg class="size-6 shrink-0" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" version="1.1" id="svg2" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+                        <defs id="defs2" />
+                        <g id="g2" transform="translate(-2)">
+                            <path d="m 11.892562,18 -6,-6 6,-6" id="path1" />
+                            <path d="m 19.165289,18 -6,-6 6,-6" id="path2" style="display:inline" />
+                        </g>
                     </svg>
                 </button>
-                <div>
-                    <button id="select_page_btn" class="h-11 w-36 cursor-pointer rounded-md border border-[#0F0F0F] bg-white p-2.5 text-center text-sm text-[#0F0F0F] shadow-sm transition-all hover:shadow-lg hover:text-[#F0F0F0] hover:bg-[#0F0F0F] hover:border-[#0F0F0F] focus:text-[#F0F0F0] focus:bg-[#0F0F0F] focus:border-[#0F0F0F] active:border-[#0F0F0F] active:text-[#F0F0F0] active:bg-[#0F0F0F] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button">
-                        Page <strong id="current_page">0</strong>&nbsp;of&nbsp;<strong id="max_pages">0</strong>
-                    </button>
-                    <form id="select_page_form" class="hidden" autocomplete="off">
-                        <input type="number" class="h-11 w-36 cursor-pointer rounded-md border border-[#0F0F0F] bg-white p-2.5 text-center text-sm text-[#0F0F0F] shadow-sm transition-all hover:shadow-lg hover:text-[#F0F0F0] hover:bg-[#0F0F0F] hover:border-[#0F0F0F] focus:outline-none focus:ring-0 focus:border-[#F07B05] active:border-[#0F0F0F] active:text-[#F0F0F0] active:bg-[#0F0F0F] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" min="1" placeholder="Jump to Page" required />
-                        <input type="submit" class="hidden" />
-                    </form>
+                <button id="pagination_previous" title="Back" type="button" class="inline-flex h-10 w-10 cursor-pointer items-center justify-center gap-x-2 rounded-md px-2.5 py-2 text-sm text-[#0F0F0F] hover:bg-[#0F0F0F] hover:text-[#F0F0F0] focus:bg-[#0F0F0F] focus:text-[#F0F0F0] focus:outline-hidden disabled:pointer-events-none disabled:opacity-50">
+                    <svg class="size-6 shrink-0" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m15 18-6-6 6-6"></path>
+                    </svg>
+                </button>
+                <div class="flex items-center gap-x-1">
+                    <button id="pagination_1" type="button" class="pagination_numbers flex h-10 w-10 items-center justify-center rounded-md bg-[#F07B05] px-3 py-2 text-sm text-[#F0F0F0] focus:outline-hidden disabled:pointer-events-none disabled:opacity-50">1</button>
+                    <button id="pagination_2" type="button" class="pagination_numbers flex h-10 w-10 cursor-pointer items-center justify-center rounded-md px-3 py-2 text-sm text-[#0F0F0F] hover:bg-[#0F0F0F] hover:text-[#F0F0F0] focus:bg-[#0F0F0F] focus:text-[#F0F0F0] focus:outline-hidden disabled:pointer-events-none disabled:opacity-50">2</button>
+                    <button id="pagination_3" type="button" class="pagination_numbers flex h-10 w-10 cursor-pointer items-center justify-center rounded-md px-3 py-2 text-sm text-[#0F0F0F] hover:bg-[#0F0F0F] hover:text-[#F0F0F0] focus:bg-[#0F0F0F] focus:text-[#F0F0F0] focus:outline-hidden disabled:pointer-events-none disabled:opacity-50">3</button>
+                    <button id="pagination_4" type="button" class="pagination_numbers flex h-10 w-10 cursor-pointer items-center justify-center rounded-md px-3 py-2 text-sm text-[#0F0F0F] hover:bg-[#0F0F0F] hover:text-[#F0F0F0] focus:bg-[#0F0F0F] focus:text-[#F0F0F0] focus:outline-hidden disabled:pointer-events-none disabled:opacity-50">4</button>
+                    <button id="pagination_5" type="button" class="pagination_numbers flex h-10 w-10 cursor-pointer items-center justify-center rounded-md px-3 py-2 text-sm text-[#0F0F0F] hover:bg-[#0F0F0F] hover:text-[#F0F0F0] focus:bg-[#0F0F0F] focus:text-[#F0F0F0] focus:outline-hidden disabled:pointer-events-none disabled:opacity-50">5</button>
                 </div>
-                <button id="next_page" class="cursor-pointer rounded-md border border-[#0F0F0F] bg-white p-2.5 text-center text-sm text-[#0F0F0F] shadow-sm transition-all hover:shadow-lg hover:text-[#F0F0F0] hover:bg-[#0F0F0F] hover:border-[#0F0F0F] focus:text-[#F0F0F0] focus:bg-[#0F0F0F] focus:border-[#0F0F0F] active:border-[#0F0F0F] active:text-[#F0F0F0] active:bg-[#0F0F0F] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
-                        <path fill-rule="evenodd" d="M12.97 3.97a.75.75 0 0 1 1.06 0l7.5 7.5a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 1 1-1.06-1.06l6.22-6.22H3a.75.75 0 0 1 0-1.5h16.19l-6.22-6.22a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                <button id="pagination_next" title="Next" type="button" class="inline-flex h-10 w-10 cursor-pointer items-center justify-center gap-x-2 rounded-md px-2.5 py-2 text-sm text-[#0F0F0F] hover:bg-[#0F0F0F] hover:text-[#F0F0F0] focus:bg-[#0F0F0F] focus:text-[#F0F0F0] focus:outline-hidden disabled:pointer-events-none disabled:opacity-50">
+                    <svg class="size-6 shrink-0 rotate-180" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m15 18-6-6 6-6"></path>
                     </svg>
                 </button>
-            </div>
+                <button id="pagination_next_jump" title="Next Jump" type="button" class="inline-flex h-10 w-10 cursor-pointer items-center justify-center gap-x-2 rounded-md px-2.5 py-2 text-sm text-[#0F0F0F] hover:bg-[#0F0F0F] hover:text-[#F0F0F0] focus:bg-[#0F0F0F] focus:text-[#F0F0F0] focus:outline-hidden disabled:pointer-events-none disabled:opacity-50">
+                    <svg class="size-6 shrink-0 rotate-180" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" version="1.1" id="svg2" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+                        <defs id="defs2" />
+                        <g id="g2" transform="translate(-2)">
+                            <path d="m 11.892562,18 -6,-6 6,-6" id="path1" />
+                            <path d="m 19.165289,18 -6,-6 6,-6" id="path2" style="display:inline" />
+                        </g>
+                    </svg>
+                </button>
+            </nav>
         </div>
     </div>
     <div id="results" data-accordion="open" class="mt-3">
@@ -124,5 +849,27 @@
             <span class="sr-only">Loading...</span>
         </div>
     </div>
+    <div id="error_modal" class="hs-overlay pointer-events-none fixed start-0 top-0 z-80 hidden size-full overflow-x-hidden overflow-y-auto" role="dialog" tabindex="-1">
+        <div class="hs-overlay-animation-target m-3 flex min-h-[calc(100%-56px)] scale-95 items-center opacity-0 transition-all duration-200 ease-in-out sm:mx-auto sm:w-full sm:max-w-lg hs-overlay-open:scale-100 hs-overlay-open:opacity-100">
+            <div class="pointer-events-auto flex w-full flex-col rounded-xl border border-gray-200 bg-white shadow-2xs">
+                <div class="flex items-center justify-between border-b border-gray-200 px-4 py-3">
+                    <h3 class="font-bold text-[#0F0F0F]">
+                        Something went wrong.
+                    </h3>
+                </div>
+                <div class="overflow-y-auto p-4">
+                    <p class="mt-1 text-[#0F0F0F]">
+                        Don't worry it's likely that your session just timed out. 
+                        <br />
+                        Refresh the page to pick up where you left off and continue reporting.
+                    </p>
+                </div>
+                <div id="error_modal_close" class="flex items-center justify-end gap-x-2 border-t border-gray-200 px-4 py-3">
+                    <button type="button" class="inline-flex cursor-pointer items-center gap-x-2 rounded-lg border border-transparent bg-[#0F0F0F] px-3 py-2 text-sm font-medium text-[#F0F0F0] hover:bg-[#F07B05] focus:bg-[#F07B05] focus:outline-hidden disabled:pointer-events-none disabled:opacity-50">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
-

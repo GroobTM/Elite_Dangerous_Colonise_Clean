@@ -5,103 +5,26 @@ using System.Numerics;
 
 namespace elite_dangerous_colonise.Classes
 {
-    /// <summary>
-    /// Represents a JsonReader.
-    /// </summary>
+    /// <summary> Defines a JsonReader. </summary>
     public class JsonReader
-    {
-        /// <summary> An array of invalid station types that can't be colonised from. </summary>
-        private readonly string[] INVALID_STATIONS =
-        {
-            "Drake-Class Carrier",
-            "Mega ship",
-            "Settlement",
-            "Planetary Construction Depot",
-            "Space Construction Depot",
-            null
-        };
-
-        /// <summary> Body types that are interesting. </summary>
-        private readonly string[] INTERESTING_TYPES =
-        {
-            "Black Hole",
-            "White Dwarf",
-            "Neutron Star",
-            "Ammonia world",
-            "Water world",
-            "Earth-like world"
-        };
-
-        /// <summary> The max distance from SOL that systems will be saved. </summary>
-        private const int SOL_COLONY_RANGE = 1000;
-
-        /// <summary> The system read from a Json file. </summary>
+    {      
+        private const int SOL_COLONY_RANGE = 2000;
         private SystemJson deserializedSystem;
 
-        /// <summary>
-        /// Creates a JsonReader.
-        /// </summary>
+        /// <summary> Instantiates a JsonReader object. </summary>
         /// <param name="jsonString"> A Spansh datadump system json string. </param>
-        /// <exception cref="InvalidOperationException">
-        /// The entered jsonString returned a null value when deserialized.
-        /// </exception>
+        /// <exception cref="InvalidOperationException"> The entered jsonString returned a null value when deserialized. </exception>
         public JsonReader(string jsonString)
         {
             deserializedSystem = JsonConvert.DeserializeObject<SystemJson>(jsonString)
                 ?? throw new InvalidOperationException("Deserialized failed: The JSON structure may be invalid.");
-
-            deserializedSystem.MergeSystemAndBodyStationLists();
         }
 
-        /// <summary> Removes all bodies from a system that are uninteresting. </summary>
-        /// <remarks> An interesting body is one that is a rare star, has rings, or is landable. </remarks>
-        private void PruneUninterestingBodies()
-        {
-            deserializedSystem.Bodies.RemoveAll(body => !(body.BodyType != null 
-                && INTERESTING_TYPES.Any(type => type.Contains(body.BodyType))
-                || body.Rings != null || body.IsDisembarkable()));
-            if (deserializedSystem.Bodies.Count == 0)
-            {
-                deserializedSystem.Bodies = null;
-            }
-        }
-
-        /// <summary> Removes invalid stations from the system. </summary>
-        private void PruneInvalidStations()
-        {
-            if (deserializedSystem.Stations != null && deserializedSystem.Stations.Count > 0)
-            {
-                deserializedSystem.Stations.RemoveAll(station => INVALID_STATIONS.Contains(station.StationType));
-
-                if (deserializedSystem.Stations.Count == 0)
-                {
-                    deserializedSystem.Stations = null;
-                }
-            }
-        }
-
-        /// <summary> Prunes unnecessary elements from the object. </summary>
-        public void PruneSystem()
-        {
-            PruneInvalidStations();
-            PruneUninterestingBodies();
-        }
-
-        /// <summary> Checks if the system is colonised or has interesting bodies. </summary>
-        /// <remarks> An interesting body is one that is a rare star, has rings, or is landable. </remarks>
-        public bool IsInteresting()
-        {
-            return deserializedSystem.IsColonised()
-                || ((deserializedSystem.Bodies != null && deserializedSystem.Bodies.Count > 0) && !deserializedSystem.HasInvalidSignals());
-        }
-
-        /// <summary>
-        /// Gets the value of the read system as a System object.
-        /// </summary>
+        /// <summary>  Gets the value of the read system as a StarSystem object. </summary>
         /// <returns> A system object. </returns>
-        public StarSystem GetSystem()
+        public StarSystem? GetStarSystem()
         {
-            return deserializedSystem.ConvertToSystem();
+            return deserializedSystem.ConvertToStarSystem();
         }
 
         /// <summary>

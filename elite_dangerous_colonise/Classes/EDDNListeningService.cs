@@ -7,14 +7,10 @@ using NetMQ;
 using Newtonsoft.Json.Linq;
 using Npgsql;
 using NpgsqlTypes;
-using System;
-using NuGet.Packaging.Signing;
 
 namespace elite_dangerous_colonise.Classes
 {
-    /// <summary>
-    /// Defines a EDDNListeningService.
-    /// </summary>
+    /// <summary> Defines a EDDNListeningService. </summary>
     public class EDDNListeningService : BackgroundService
     {
         private const string EDDN_ADDRESS = "tcp://eddn.edcd.io:9500";
@@ -24,9 +20,7 @@ namespace elite_dangerous_colonise.Classes
         private List<Task> colonyShipUpdates = new List<Task>();
         private List<Task> trailblazerUpdates = new List<Task>();
 
-        /// <summary>
-        /// Creates a EDDNListeningService object.
-        /// </summary>
+        /// <summary> Instantiates a EDDNListeningService object. </summary>
         public EDDNListeningService(NpgsqlDataSource dataSource)
         {
             this.dataSource = dataSource;
@@ -52,11 +46,6 @@ namespace elite_dangerous_colonise.Classes
             return messageStationName.Contains("Trailblazer");
         }
 
-        /// <summary>
-        /// Decompresses the recieved message.
-        /// </summary>
-        /// <param name="compressedMessage"> The compressed message byte array. </param>
-        /// <returns> The decompressed message string. </returns>
         private async Task<string> DecompressMessage(byte[] compressedMessage)
         {
             return await Task.Run(() =>
@@ -76,9 +65,6 @@ namespace elite_dangerous_colonise.Classes
             return new Vector3(coords[0], coords[1], coords[2]);
         }
 
-        /// <summary>
-        /// Sends a database update query to update the colonisation status of known systems.
-        /// </summary>
         private async Task UpdateColonisingTracker(JToken message)
         {
             try
@@ -87,9 +73,10 @@ namespace elite_dangerous_colonise.Classes
 
                 if (JsonReader.InRangeOfSol(coords))
                 {
-                    if (Int64.TryParse(message["SystemAddress"].ToString(), out Int64 systemID)
+                    if (long.TryParse(message["SystemAddress"].ToString(), out long systemID)
                         && DateTime.TryParse(message["timestamp"].ToString(), null, DateTimeStyles.AdjustToUniversal, out DateTime timestamp))
                     {
+                        timestamp = DateTime.SpecifyKind(timestamp, DateTimeKind.Utc);
                         await UpdateColonisationDatabase(systemID, timestamp);
 
                         Logger.LogInformation("EDDN Listening Service", 1, $"Updating system {systemID}.");
@@ -103,25 +90,22 @@ namespace elite_dangerous_colonise.Classes
             }
         }
 
-        private async Task UpdateColonisationDatabase(Int64 systemID, DateTime timestamp)
+        private async Task UpdateColonisationDatabase(long systemID, DateTime timestamp)
         {
             await using (NpgsqlConnection conn = await dataSource.OpenConnectionAsync())
             {
-                await using NpgsqlCommand command = new NpgsqlCommand("SELECT UpdateSystemColonisationStateFunc(@inputSystemID, @inputUpdateDate)", conn);
+                await using NpgsqlCommand command = new NpgsqlCommand("SELECT \"ClaimStarSystem\"(@inputSystemID, @inputClaimDate)", conn);
                 
                 command.Parameters.AddWithValue("inputSystemID", NpgsqlDbType.Bigint, systemID);
-                command.Parameters.AddWithValue("inputUpdateDate", NpgsqlDbType.Timestamp, timestamp);
+                command.Parameters.AddWithValue("inputClaimDate", NpgsqlDbType.TimestampTz, timestamp);
 
                 await command.ExecuteNonQueryAsync();
             }
         }
 
-        /// <summary>
-        /// Sends a database insert/update query to insert/update the position of the Trailblazer megaships.
-        /// </summary>
         private async Task UpdateTrailblazer(JToken message)
         {
-            Int64[] validStations =
+            long[] validStations =
             {
                 129033207,
                 129032951,
@@ -133,13 +117,14 @@ namespace elite_dangerous_colonise.Classes
 
             try
             {
-                if (Int64.TryParse(message?["MarketID"].ToString(), out Int64 stationID) && validStations.Contains(stationID))
+                if (long.TryParse(message?["MarketID"].ToString(), out long stationID) && validStations.Contains(stationID))
                 {
                     Vector3 coords = ConvertJsonToVector(message);
                     string name = message["StationName"].ToString();
 
                     if (DateTime.TryParse(message["timestamp"].ToString(), null, DateTimeStyles.AdjustToUniversal, out DateTime timestamp))
                     {
+                        timestamp = DateTime.SpecifyKind(timestamp, DateTimeKind.Utc);
                         await UpdateTrailblazerDatabase(stationID, name, coords, timestamp);
 
                         Logger.LogInformation("EDDN Listening Service", 8, $"Updating {name}.");
@@ -152,19 +137,19 @@ namespace elite_dangerous_colonise.Classes
             }
         }
 
-        private async Task UpdateTrailblazerDatabase(Int64 trailblazerID, string trailblazerName, Vector3 coordinates, DateTime timestamp)
+        private async Task UpdateTrailblazerDatabase(long trailblazerID, string trailblazerName, Vector3 coordinates, DateTime timestamp)
         {
             await using (NpgsqlConnection conn = await dataSource.OpenConnectionAsync())
             {
                 await using NpgsqlCommand command = new NpgsqlCommand(
-                    "SELECT InsertTrailblazerMegashipFunc(@inputID, @inputName, @inputCoordinateX, @inputCoordinateY, @inputCoordinateZ, @inputUpdateDate)", conn);
+                    "SELECT \"InsertTrailblazerMegaship\"(@inputID, @inputName, @inputCoordinateX, @inputCoordinateY, @inputCoordinateZ, @inputUpdateDate)", conn);
 
                 command.Parameters.AddWithValue("inputID", NpgsqlDbType.Bigint, trailblazerID);
                 command.Parameters.AddWithValue("inputName", NpgsqlDbType.Varchar, trailblazerName);
                 command.Parameters.AddWithValue("inputCoordinateX", NpgsqlDbType.Numeric, coordinates.X);
                 command.Parameters.AddWithValue("inputCoordinateY", NpgsqlDbType.Numeric, coordinates.Y);
                 command.Parameters.AddWithValue("inputCoordinateZ", NpgsqlDbType.Numeric, coordinates.Z);
-                command.Parameters.AddWithValue("inputUpdateDate", NpgsqlDbType.Timestamp, timestamp);
+                command.Parameters.AddWithValue("inputUpdateDate", NpgsqlDbType.TimestampTz, timestamp);
 
                 await command.ExecuteNonQueryAsync();
             }
@@ -178,7 +163,7 @@ namespace elite_dangerous_colonise.Classes
 
                 if (JsonReader.InRangeOfSol(coords))
                 {
-                    if (Int64.TryParse(message["SystemAddress"].ToString(), out Int64 systemID)
+                    if (long.TryParse(message["SystemAddress"].ToString(), out long systemID)
                         && DateTime.TryParse(message["timestamp"].ToString(), null, DateTimeStyles.AdjustToUniversal, out DateTime timestamp))
                     {
                         await RemoveClaimFromDatabase(systemID, timestamp);
@@ -194,22 +179,19 @@ namespace elite_dangerous_colonise.Classes
             }
         }
 
-        private async Task RemoveClaimFromDatabase(Int64 systemID, DateTime timestamp)
+        private async Task RemoveClaimFromDatabase(long systemID, DateTime timestamp)
         {
             await using (NpgsqlConnection conn = await dataSource.OpenConnectionAsync())
             {
-                await using NpgsqlCommand command = new NpgsqlCommand("SELECT UnclaimSystemFunc(@inputSystemID, @inputUpdateDate)", conn);
+                await using NpgsqlCommand command = new NpgsqlCommand("SELECT \"UnclaimStarSystem\"(@inputSystemID, @inputUnclaimDate)", conn);
 
                 command.Parameters.AddWithValue("inputSystemID", NpgsqlDbType.Bigint, systemID);
-                command.Parameters.AddWithValue("inputUpdateDate", NpgsqlDbType.Timestamp, timestamp);
+                command.Parameters.AddWithValue("inputUnclaimDate", NpgsqlDbType.TimestampTz, timestamp);
 
                 await command.ExecuteNonQueryAsync();
             }
         }
 
-        /// <summary>
-        /// Listens to the EDDN socket for journal events and updates the database with the colonisation status of systems.
-        /// </summary>
         private async Task ListenToEDDN(CancellationToken cancellationToken)
         {
             using (SubscriberSocket subscriber = new SubscriberSocket())
@@ -260,9 +242,6 @@ namespace elite_dangerous_colonise.Classes
             }
         }
 
-        /// <summary>
-        /// Runs the ListenToEDDN method on a new thread.
-        /// </summary>
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
             await Task.Run(() => ListenToEDDN(cancellationToken), cancellationToken);

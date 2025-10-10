@@ -1,11 +1,10 @@
 ﻿using Newtonsoft.Json;
 using elite_dangerous_colonise.Classes;
+using elite_dangerous_colonise.Models.Database_Types;
 
 namespace elite_dangerous_colonise.Models.Json_Structure
 {
-    /// <summary>
-    /// Represents the Json structure of the body's rings.
-    /// </summary>
+    /// <summary> Defines the Json structure of the body's rings. </summary>
     public class RingJson
     {
         [JsonProperty("name")]
@@ -15,20 +14,44 @@ namespace elite_dangerous_colonise.Models.Json_Structure
         [JsonProperty("signals")]
         public SignalsCategoryJson? SignalCategory { get; set; }
 
-        /// <summary>
-        /// Converts the RingJson object into a Ring object.
-        /// </summary>
-        /// <returns> A Ring object with the same values as this objects. </returns>
-        internal Ring ConvertToRing()
+        private Ring? ConvertToRing()
         {
-            if (SignalCategory != null)
+            if (!Enum.TryParse<RingType>(RingType, out  RingType ringType))
             {
-                return new Ring(Name, RingType, SignalCategory.SignalTypes);
+                if (SignalCategory != null)
+                {
+                    return new Ring(Name, ringType, SignalCategory.ConvertToHotspots());
+                }
+                else
+                {
+                    return new Ring(Name, ringType);
+                }
             }
             else
             {
-                return new Ring(Name, RingType);
+                return null;
             }
+        }
+
+        /// <summary> Converts the list of RingJson objects into a list of Ring objects. </summary>
+        public static List<Ring> ConvertToRingList(List<RingJson>? rings)
+        {
+            List<Ring> ringList = new List<Ring>();
+
+            if (rings != null && rings.Count > 0)
+            {
+                foreach (RingJson ring in rings)
+                {
+                    Ring? convertedRing = ring.ConvertToRing();
+
+                    if (convertedRing != null)
+                    {
+                        ringList.Add(convertedRing);
+                    }
+                }
+            }
+
+            return ringList;
         }
     }
 }

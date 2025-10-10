@@ -5,9 +5,7 @@ using Npgsql;
 
 namespace elite_dangerous_colonise.Classes
 {
-    /// <summary>
-    /// Defines a SpanshDataDumpDownloadService.
-    /// </summary>
+    /// <summary> Defines a SpanshDataDumpDownloadService. </summary>
     public class SpanshDataDumpDownloadService : BackgroundService
     {
         private const string DOWNLOAD_URL = "https://downloads.spansh.co.uk/galaxy_1day.json.gz";
@@ -21,9 +19,7 @@ namespace elite_dangerous_colonise.Classes
 
         public event EventHandler? DataDumpProcessingComplete;
 
-        /// <summary>
-        /// Creates a SpanshDataDumpDownloadService object.
-        /// </summary>
+        /// <summary> Instantiates a SpanshDataDumpDownloadService object. </summary>
         public SpanshDataDumpDownloadService(IServiceScopeFactory scopeFactory, IHubContext<UpdateHub> hubContext)
         {
             this.scopeFactory = scopeFactory;
@@ -31,10 +27,6 @@ namespace elite_dangerous_colonise.Classes
             this.hubContext = hubContext;
         }
 
-        /// <summary>
-        /// Calculates the time between the current time and 5 am UTC.
-        /// </summary>
-        /// <returns> Time until 5 am UTC. </returns>
         private TimeSpan TimeUntilStart()
         {
             DateTime currentTime = DateTime.UtcNow;
@@ -50,9 +42,6 @@ namespace elite_dangerous_colonise.Classes
             return startTime - currentTime;
         }
 
-        /// <summary>
-        /// Downloads the Spansh data dump.
-        /// </summary>
         private async Task DownloadDataDump()
         {
             int maxAttempts = 3;
@@ -100,9 +89,6 @@ namespace elite_dangerous_colonise.Classes
             }
         }
 
-        /// <summary>
-        /// Decompresses the downloaded Spansh data dump.
-        /// </summary>
         private async Task DecompressDataDump()
         {
             Logger.LogInformation("Spansh Download Service", 4, "Spansh data dump decompression starting.");
@@ -119,9 +105,6 @@ namespace elite_dangerous_colonise.Classes
             Logger.LogInformation("Spansh Download Service", 5, "Spansh data dump decompression complete.");
         }
 
-        /// <summary>
-        /// Inserts the decompressed Spansh data dump into the database.
-        /// </summary>
         private async Task InsertDataDumpIntoDatabase()
         {
             Logger.LogInformation("Spansh Download Service", 6, "Spansh data dump database insertion starting.");
@@ -135,9 +118,6 @@ namespace elite_dangerous_colonise.Classes
             Logger.LogInformation("Spansh Download Service", 7, "Spansh data dump database insertion complete.");
         }
 
-        /// <summary>
-        /// Deletes the downloaded Spansh data dump zip file and json file.
-        /// </summary>
         private void DeleteDataDump()
         {
             Logger.LogInformation("Spansh Download Service", 8, "Spansh data dump file delete starting.");
@@ -148,9 +128,6 @@ namespace elite_dangerous_colonise.Classes
             Logger.LogInformation("Spansh Download Service", 9, "Spansh data dump file delete complete.");
         }
 
-        /// <summary>
-        /// Downloads, decompresses, inserts, and deletes a Spansh data dump.
-        /// </summary>
         private async Task DownloadAndProcessDataDump()
         {
             try
@@ -174,9 +151,6 @@ namespace elite_dangerous_colonise.Classes
             }
         }
 
-        /// <summary>
-        /// Starts the background service and sets it to run once a day at 5 am UTC.
-        /// </summary>
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
             Logger.LogInformation("Spansh Download Service", 0, "Spansh data dump download service started.");
@@ -193,9 +167,7 @@ namespace elite_dangerous_colonise.Classes
             }
         }
 
-        /// <summary>
-        /// Stops the background service.
-        /// </summary>
+        /// <summary> Stops the background service. </summary>
         /// <returns> A completed task. </returns>
         public override Task StopAsync(CancellationToken cancellationToken)
         {

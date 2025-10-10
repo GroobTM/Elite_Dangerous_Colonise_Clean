@@ -2,20 +2,20 @@
 
 namespace elite_dangerous_colonise.Models.Database_Types
 {
-    [PgName("stationstype")]
-    public class StationsType
+    [PgName("StationInsertType")]
+    public class StationInsertType
     {
-        [PgName("stationid")]
+        [PgName("stationID")]
         public long StationID { get; set; }
-        [PgName("systemid")]
+        [PgName("systemID")]
         public long SystemID { get; set; }
-        [PgName("stationname")]
+        [PgName("stationName")]
         public string StationName {  get; set; }
-        [PgName("controllingfaction")]
+        [PgName("controllingFaction")]
         public string ControllingFaction {  get; set; }
 
-        public StationsType() { }
-        public StationsType(long stationID, long systemID, string stationName, string controllingFaction)
+        public StationInsertType() { }
+        public StationInsertType(long stationID, long systemID, string stationName, string controllingFaction)
         {
             StationID = stationID;
             SystemID = systemID;

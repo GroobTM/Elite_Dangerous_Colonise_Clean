@@ -1,77 +1,52 @@
-﻿using Murmur;
-using System.Text;
-using elite_dangerous_colonise.Models.Database_Types;
+﻿using elite_dangerous_colonise.Models.Database_Types;
 
 namespace elite_dangerous_colonise.Classes
 {
-    /// <summary>
-    /// Represents a rings.
-    /// </summary>
+    /// <summary> Defines a ring. </summary>
     public class Ring
     {
-        /// <summary> The ring's Spansh ID. </summary>
-        public int RingID { get; private set; }
-        /// <summary> The ring's name. </summary>
         public string Name { get; private set; }
-        /// <summary> The ring's material type. </summary>
-        public string RingType { get; private set; }
-        /// <summary> The hotspots present on the ring. </summary>
-        public Dictionary<string, short>? Hotspots { get; private set; }
+        public RingType RingType { get; private set; }
+        public Dictionary<HotspotType, short>? Hotspots { get; private set; }
 
-        /// <summary>
-        /// Creates a ring.
-        /// </summary>
+        /// <summary> Instantiates a ring object. </summary>
         /// <param name="name"> The name of the ring. </param>
         /// <param name="ringType"> The material type of the ring. </param>
-        public Ring(string name, string ringType)
+        public Ring(string name, RingType ringType)
         {
             Name = name;
             RingType = ringType;
-
-            RingID = BitConverter.ToInt32(
-                MurmurHash.Create32().ComputeHash(Encoding.UTF8.GetBytes(Name)), 0);
         }
-        /// <inheritdoc cref="Ring.Ring(string, string)"/>
+        /// <inheritdoc cref="Ring.Ring(string, RingType)"/>
         /// <param name="hotspots"> The hotspots present on the ring. </param>
-        public Ring(string name, string ringType, Dictionary<string, short> hotspots) :
+        public Ring(string name, RingType ringType, Dictionary<HotspotType, short> hotspots) :
             this(name, ringType)
         {
             Hotspots = hotspots;
         }
 
-        /// <summary>
-        /// Adds the Ring to the Rings List.
-        /// </summary>
-        private void AddRingToDataList(DatabaseDataLists dataLists, Int64 bodyID)
+        private void AddRingToDataList(DatabaseDataLists dataLists, long systemID)
         {
-            dataLists.Rings.Add(new RingsType(RingID, bodyID, Name,
-                RingType != null ? RingType : "None"));            
+
+            dataLists.Rings.Add( new RingInsertType(systemID, Name, RingType));            
         }
 
-        /// <summary>
-        /// Adds the Hotspot to the Hotspots List.
-        /// </summary>
-        private void AddHotspotToDataList(DatabaseDataLists dataLists)
+        private void AddHotspotToDataList(DatabaseDataLists dataLists, long systemID)
         {
             if (Hotspots != null)
             {
-                foreach (KeyValuePair<string, short> hotspot in Hotspots)
+                foreach (KeyValuePair<HotspotType, short> hotspot in Hotspots)
                 {
-                    dataLists.Hotspots.Add(new HotspotsType(RingID,
-                        hotspot.Key != null ? hotspot.Key : "None",
-                        hotspot.Value));
+                    dataLists.Hotspots.Add(new HotspotInsertType(systemID, Name, hotspot.Key, hotspot.Value));
                 }
             }
         }
 
-        /// <summary>
-        /// Adds the Ring and its Hotspots values to their Lists.
-        /// </summary>
-        /// <param name="bodyID"> The ID of the Body the Ring surrounds. </param>
-        internal void AddToDataLists(DatabaseDataLists dataLists, Int64 bodyID)
+        /// <summary> Adds the Ring and its Hotspots values to the data lists. </summary>
+        public void AddToDataLists(DatabaseDataLists dataLists, long systemID)
         {
-            AddRingToDataList(dataLists, bodyID);
-            AddHotspotToDataList(dataLists);
+            AddRingToDataList(dataLists, systemID);
+            AddHotspotToDataList(dataLists, systemID);
         }
     }
 }
