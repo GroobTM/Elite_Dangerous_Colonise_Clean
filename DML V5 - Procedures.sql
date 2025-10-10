@@ -801,7 +801,7 @@ BEGIN
 	
 	IF "inputSystemName" IS NOT NULL OR "inputFactionName" IS NOT NULL THEN
 		"queryString" := "queryString" || '
-			"uncolonisedSystemID" IN (
+			duss."uncolonisedSystemID" IN (
 				SELECT "uncolonisedSystemID"
 				FROM "ColonisedSearchResults"
 			)
