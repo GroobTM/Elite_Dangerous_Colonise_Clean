@@ -838,7 +838,7 @@ function FormatRings(inputRings) {
         inputRings.forEach(ring => {
             ringList += `
         <li>
-            ${ring.ringName} (${ring.ringType})
+            ${ring.ringName} (${ring.ringType.replace(/([A-Z])/g, ' $1').trim()})
             <ul class="items-center ps-7 font-normal">
                 ${FormatHotspots(ring.hotspots)}
             </ul>
