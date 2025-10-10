@@ -42,7 +42,6 @@ builder.Services.AddSession(options =>
 // Configures the data protection service.
 builder.Services.AddDataProtection()
     .PersistKeysToFileSystem(new DirectoryInfo(rootDir + @"\private\keys"))
-    .ProtectKeysWithDpapi()
     .SetApplicationName("EDColonise");
 
 // Configures Serilog.
