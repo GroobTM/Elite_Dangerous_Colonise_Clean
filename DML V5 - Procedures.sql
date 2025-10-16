@@ -535,24 +535,21 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION "InsertTrailblazerDistances"()
 RETURNS VOID AS $$
 BEGIN
-	WITH "UncalculatedDistances" AS (
-		SELECT DISTINCT css."uncolonisedSystemID"
-		FROM "ColonisableStarSystems" css
-		LEFT JOIN "TrailblazerDistances" td ON css."uncolonisedSystemID" = td."uncolonisedSystemID"
-		WHERE td."uncolonisedSystemID" IS NULL
-	)
 	INSERT INTO "TrailblazerDistances" (
 		"uncolonisedSystemID",
 		"trailblazerID",
 		"distanceBetween"
 	)
 	SELECT
-		ud."uncolonisedSystemID",
+		duss."uncolonisedSystemID",
 		tm."trailblazerID",
 		ST_3DDistance(ss."systemCoords", tm."trailblazerCoords")
-	FROM "UncalculatedDistances" ud	
+	FROM "DistinctUncolonisedStarSystems" duss	
 	CROSS JOIN "TrailblazerMegaships" tm
-	INNER JOIN "StarSystems" ss ON ud."uncolonisedSystemID" = ss."systemID";
+	INNER JOIN "StarSystems" ss ON duss."uncolonisedSystemID" = ss."systemID"
+	LEFT JOIN "TrailblazerDistances" td ON duss."uncolonisedSystemID" = td."uncolonisedSystemID"
+		AND tm."trailblazerID" = td."trailblazerID"
+	WHERE td."uncolonisedSystemID" IS NULL;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1192,6 +1189,13 @@ CREATE OR REPLACE FUNCTION "RefreshClosestTrailblazerByStarSystem"()
 RETURNS void AS $$
 BEGIN
     REFRESH MATERIALIZED VIEW "ClosestTrailblazerByStarSystem";
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE OR REPLACE FUNCTION "RefreshConcurrentlyClosestTrailblazerByStarSystem"()
+RETURNS void AS $$
+BEGIN
+    REFRESH MATERIALIZED VIEW CONCURRENTLY "ClosestTrailblazerByStarSystem";
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 

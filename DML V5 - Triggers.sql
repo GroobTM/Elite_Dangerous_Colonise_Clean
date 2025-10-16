@@ -109,3 +109,21 @@ AFTER UPDATE ON "UncolonisedStarSystemsAvailability"
 FOR EACH ROW
 WHEN (OLD."claimReportCount" IS DISTINCT FROM NEW."claimReportCount")
 EXECUTE FUNCTION "TriggerUpdateAvailabilityClaim"();
+
+CREATE OR REPLACE FUNCTION "TriggerUpdateTrailblazerMegaships"()
+RETURNS TRIGGER AS $$
+BEGIN
+	DELETE FROM "TrailblazerDistances"
+	WHERE "trailblazerID" = NEW."trailblazerID";
+	
+	SELECT "RefreshConcurrentlyClosestTrailblazerByStarSystem"();
+	
+	RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER "TriggerUpdateTrailblazerMegaships"
+AFTER UPDATE ON "TrailblazerMegaships"
+FOR EACH ROW
+WHEN (OLD."lastUpdate" < NEW."lastUpdate" AND NOT ST_Equals(OLD."trailblazerCoords", NEW."trailblazerCoords"))
+EXECUTE FUNCTION "TriggerUpdateTrailblazerMegaships"();
