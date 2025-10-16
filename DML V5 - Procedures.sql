@@ -807,7 +807,7 @@ BEGIN
 	
 	IF "inputHotspotTypes" IS NOT NULL THEN
 		"queryString" := "queryString" || '
-			"uncolonisedSystemID" IN (
+			duss."uncolonisedSystemID" IN (
 				SELECT "uncolonisedSystemID"
 				FROM "HotspotSearchResults"
 			)
