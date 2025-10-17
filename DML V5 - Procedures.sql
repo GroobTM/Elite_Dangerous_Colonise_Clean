@@ -523,12 +523,7 @@ BEGIN
 	SET
 		"trailblazerCoords" = EXCLUDED."trailblazerCoords",
 		"lastUpdate" = EXCLUDED."lastUpdate"
-	WHERE (
-		"TrailblazerMegaships"."trailblazerCoords"
-	)
-	IS DISTINCT FROM (
-		EXCLUDED."trailblazerCoords"
-	);
+	WHERE NOT ST_Equals("TrailblazerMegaships"."trailblazerCoords", EXCLUDED."trailblazerCoords");
 END;
 $$ LANGUAGE plpgsql;
 

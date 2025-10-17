@@ -116,7 +116,7 @@ BEGIN
 	DELETE FROM "TrailblazerDistances"
 	WHERE "trailblazerID" = NEW."trailblazerID";
 	
-	SELECT "RefreshConcurrentlyClosestTrailblazerByStarSystem"();
+	PERFORM "RefreshConcurrentlyClosestTrailblazerByStarSystem"();
 	
 	RETURN NULL;
 END;
