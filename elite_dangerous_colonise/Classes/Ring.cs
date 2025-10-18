@@ -28,7 +28,7 @@ namespace elite_dangerous_colonise.Classes
         private void AddRingToDataList(DatabaseDataLists dataLists, long systemID)
         {
 
-            dataLists.Rings.Add( new RingInsertType(systemID, Name, RingType));            
+            dataLists.Rings.Add( new RingInsertType(systemID, Name, RingType));
         }
 
         private void AddHotspotToDataList(DatabaseDataLists dataLists, long systemID)

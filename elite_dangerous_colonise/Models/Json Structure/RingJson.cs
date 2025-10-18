@@ -16,7 +16,7 @@ namespace elite_dangerous_colonise.Models.Json_Structure
 
         private Ring? ConvertToRing()
         {
-            if (!Enum.TryParse<RingType>(RingType, out  RingType ringType))
+            if (Enum.TryParse<RingType>(RingType.Replace(" ", ""), out  RingType ringType))
             {
                 if (SignalCategory != null)
                 {

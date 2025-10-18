@@ -523,36 +523,29 @@ BEGIN
 	SET
 		"trailblazerCoords" = EXCLUDED."trailblazerCoords",
 		"lastUpdate" = EXCLUDED."lastUpdate"
-	WHERE (
-		"TrailblazerMegaships"."trailblazerCoords"
-	)
-	IS DISTINCT FROM (
-		EXCLUDED."trailblazerCoords"
-	);
+	WHERE NOT ST_Equals("TrailblazerMegaships"."trailblazerCoords", EXCLUDED."trailblazerCoords")
+	AND "TrailblazerMegaships"."lastUpdate" > EXCLUDED."lastUpdate";
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION "InsertTrailblazerDistances"()
 RETURNS VOID AS $$
 BEGIN
-	WITH "UncalculatedDistances" AS (
-		SELECT DISTINCT css."uncolonisedSystemID"
-		FROM "ColonisableStarSystems" css
-		LEFT JOIN "TrailblazerDistances" td ON css."uncolonisedSystemID" = td."uncolonisedSystemID"
-		WHERE td."uncolonisedSystemID" IS NULL
-	)
 	INSERT INTO "TrailblazerDistances" (
 		"uncolonisedSystemID",
 		"trailblazerID",
 		"distanceBetween"
 	)
 	SELECT
-		ud."uncolonisedSystemID",
+		duss."uncolonisedSystemID",
 		tm."trailblazerID",
 		ST_3DDistance(ss."systemCoords", tm."trailblazerCoords")
-	FROM "UncalculatedDistances" ud	
+	FROM "DistinctUncolonisedStarSystems" duss	
 	CROSS JOIN "TrailblazerMegaships" tm
-	INNER JOIN "StarSystems" ss ON ud."uncolonisedSystemID" = ss."systemID";
+	INNER JOIN "StarSystems" ss ON duss."uncolonisedSystemID" = ss."systemID"
+	LEFT JOIN "TrailblazerDistances" td ON duss."uncolonisedSystemID" = td."uncolonisedSystemID"
+		AND tm."trailblazerID" = td."trailblazerID"
+	WHERE td."uncolonisedSystemID" IS NULL;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -577,7 +570,7 @@ BEGIN
 		END AS "colonisedSystemID"
 	FROM "StagedStarSystems" sss
 	INNER JOIN "StarSystems" source ON sss."systemID" = source."systemID"
-	INNER JOIN "StarSystems" target ON ST_DWithin(source."systemCoords", target."systemCoords", 15)
+	INNER JOIN "StarSystems" target ON ST_3DDWithin(source."systemCoords", target."systemCoords", 15)
 	WHERE source."isColonised" = "insertColonised"
 	AND target."isColonised" = NOT "insertColonised"
 	AND source."systemID" != target."systemID"
@@ -734,7 +727,7 @@ BEGIN
 				FROM "DistinctUncolonisedStarSystems" duss
 				INNER JOIN "Rings" r ON duss."uncolonisedSystemID" = r."systemID"
 				INNER JOIN "Hotspots" h ON r."ringID" = h."ringID"
-				WHERE h."hotspotType" = ANY($43)
+				WHERE h."hotspotType" = ANY($42)
 			),';
 	END IF;
 	
@@ -801,7 +794,7 @@ BEGIN
 	
 	IF "inputSystemName" IS NOT NULL OR "inputFactionName" IS NOT NULL THEN
 		"queryString" := "queryString" || '
-			"uncolonisedSystemID" IN (
+			duss."uncolonisedSystemID" IN (
 				SELECT "uncolonisedSystemID"
 				FROM "ColonisedSearchResults"
 			)
@@ -810,7 +803,7 @@ BEGIN
 	
 	IF "inputHotspotTypes" IS NOT NULL THEN
 		"queryString" := "queryString" || '
-			"uncolonisedSystemID" IN (
+			duss."uncolonisedSystemID" IN (
 				SELECT "uncolonisedSystemID"
 				FROM "HotspotSearchResults"
 			)
@@ -1192,6 +1185,13 @@ CREATE OR REPLACE FUNCTION "RefreshClosestTrailblazerByStarSystem"()
 RETURNS void AS $$
 BEGIN
     REFRESH MATERIALIZED VIEW "ClosestTrailblazerByStarSystem";
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE OR REPLACE FUNCTION "RefreshConcurrentlyClosestTrailblazerByStarSystem"()
+RETURNS void AS $$
+BEGIN
+    REFRESH MATERIALIZED VIEW CONCURRENTLY "ClosestTrailblazerByStarSystem";
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 

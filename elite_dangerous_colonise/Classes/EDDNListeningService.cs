@@ -151,6 +151,7 @@ namespace elite_dangerous_colonise.Classes
                 command.Parameters.AddWithValue("inputCoordinateZ", NpgsqlDbType.Numeric, coordinates.Z);
                 command.Parameters.AddWithValue("inputUpdateDate", NpgsqlDbType.TimestampTz, timestamp);
 
+                command.CommandTimeout = 120;
                 await command.ExecuteNonQueryAsync();
             }
         }

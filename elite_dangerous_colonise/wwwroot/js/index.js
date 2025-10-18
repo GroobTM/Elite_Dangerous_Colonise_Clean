@@ -141,62 +141,60 @@ function SetupGenericSlider(sliderID, valueID) {
     });
 }
 
-$(document).ready(function () {
+$(window).on("load", function () {
     window.HSStaticMethods.autoInit();
 
-    setTimeout(function () {
-        $("#hotspot_select").each(function () {
-            new HSSelect(this, {
-                placeholder: "Select (Optional)",
-                dropdownClasses: "!mt-0 z-50 w-full max-h-55 p-1 space-y-0.5 bg-white border-1 border-[#BCBCBC] rounded-lg overflow-hidden overflow-y-auto shadow-lg",
-                optionClasses: "py-2 px-4 w-full text-[#0F0F0F] cursor-pointer hover:bg-[#E1E1E1] rounded-lg focus:outline-hidden focus:bg-gray-100 hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50",
-                mode: "tags",
-                wrapperClasses: "relative ps-0.5 pe-9 min-h-20 flex items-center flex-wrap text-nowrap w-full border border-[#0F0F0F] rounded-lg text-start focus:border-[#F07B05] focus:ring-[#F07B05] bg-white shadow-sm mt-2",
-                tagsItemTemplate: `
-                <div class="flex flex-nowrap items-center relative z-10 bg-[#F0F0F0] border border-[#0F0F0F] rounded-full p-3 m-1">
-                    <div class="whitespace-nowrap text-[#0F0F0F]" data-title></div>
-                    <div class="inline-flex shrink-0 justify-center items-center size-5 ms-2 rounded-full text-[#0F0F0F] text-2xl -translate-y-0.5 hover:text-[#F07B05] cursor-pointer" data-remove>&times;</div>
-                </div>`,
-                tagsInputId: "hs-tags-input",
-                tagsInputClasses: "py-2.5 px-2 min-w-20 rounded-lg order-1 border-transparent focus:ring-0 outline-hidden",
-                optionTemplate: `
-                <div class="flex items-center text-[#0F0F0F]">
-                    <div>
-                        <div data-title></div>
-                    </div>
-                    <div class="ms-auto">
-                        <span class="hidden hs-selected:block">
-                            <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
-                            </svg>
-                        </span>
-                    </div>
-                </div>`
-            });
+    $("#hotspot_select").each(function () {
+        new HSSelect(this, {
+            placeholder: "Select (Optional)",
+            dropdownClasses: "!mt-0 z-50 w-full max-h-55 p-1 space-y-0.5 bg-white border-1 border-[#BCBCBC] rounded-lg overflow-hidden overflow-y-auto shadow-lg",
+            optionClasses: "py-2 px-4 w-full text-[#0F0F0F] cursor-pointer hover:bg-[#E1E1E1] rounded-lg focus:outline-hidden focus:bg-gray-100 hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50",
+            mode: "tags",
+            wrapperClasses: "relative ps-0.5 pe-9 min-h-20 flex items-center flex-wrap text-nowrap w-full border border-[#0F0F0F] rounded-lg text-start focus:border-[#F07B05] focus:ring-[#F07B05] bg-white shadow-sm mt-2",
+            tagsItemTemplate: `
+            <div class="flex flex-nowrap items-center relative z-10 bg-[#F0F0F0] border border-[#0F0F0F] rounded-full p-3 m-1">
+                <div class="whitespace-nowrap text-[#0F0F0F]" data-title></div>
+                <div class="inline-flex shrink-0 justify-center items-center size-5 ms-2 rounded-full text-[#0F0F0F] text-2xl -translate-y-0.5 hover:text-[#F07B05] cursor-pointer" data-remove>&times;</div>
+            </div>`,
+            tagsInputId: "hs-tags-input",
+            tagsInputClasses: "py-2.5 px-2 min-w-20 rounded-lg order-1 border-transparent focus:ring-0 outline-hidden",
+            optionTemplate: `
+            <div class="flex items-center text-[#0F0F0F]">
+                <div>
+                    <div data-title></div>
+                </div>
+                <div class="ms-auto">
+                    <span class="hidden hs-selected:block">
+                        <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
+                        </svg>
+                    </span>
+                </div>
+            </div>`
         });
+    });
 
-        SetupSearchInput("colonised_system_search", "/api/ColonisedSystemNames");
-        SetupSearchInput("faction_search", "/api/FactionNames");
-        SetupMaxDistanceFromSolSlider();
-        SetupGenericSlider("landable_bodies_slider", "landable_bodies_value");
-        SetupGenericSlider("walkable_bodies_slider", "walkable_bodies_value");
-        SetupGenericSlider("black_holes_slider", "black_holes_value");
-        SetupGenericSlider("neutron_stars_slider", "neutron_stars_value");
-        SetupGenericSlider("white_dwarves_slider", "white_dwarves_value");
-        SetupGenericSlider("other_stars_slider", "other_stars_value");
-        SetupGenericSlider("earth_likes_slider", "earth_likes_value");
-        SetupGenericSlider("water_worlds_slider", "water_worlds_value");
-        SetupGenericSlider("ammonia_worlds_slider", "ammonia_worlds_value");
-        SetupGenericSlider("gas_giants_slider", "gas_giants_value");
-        SetupGenericSlider("high_metal_content_slider", "high_metal_content_value");
-        SetupGenericSlider("metal_rich_slider", "metal_rich_value");
-        SetupGenericSlider("rocky_ice_world_slider", "rocky_ice_world_value");
-        SetupGenericSlider("rocky_bodies_slider", "rocky_bodies_value");
-        SetupGenericSlider("icy_bodies_slider", "icy_bodies_value");
-        SetupGenericSlider("rings_slider", "rings_value");
-        SetupGenericSlider("geologicals_slider", "geologicals_value");
-        SetupGenericSlider("organics_slider", "organics_value");
-    }, 1);
+    SetupSearchInput("colonised_system_search", "/api/ColonisedSystemNames");
+    SetupSearchInput("faction_search", "/api/FactionNames");
+    SetupMaxDistanceFromSolSlider();
+    SetupGenericSlider("landable_bodies_slider", "landable_bodies_value");
+    SetupGenericSlider("walkable_bodies_slider", "walkable_bodies_value");
+    SetupGenericSlider("black_holes_slider", "black_holes_value");
+    SetupGenericSlider("neutron_stars_slider", "neutron_stars_value");
+    SetupGenericSlider("white_dwarves_slider", "white_dwarves_value");
+    SetupGenericSlider("other_stars_slider", "other_stars_value");
+    SetupGenericSlider("earth_likes_slider", "earth_likes_value");
+    SetupGenericSlider("water_worlds_slider", "water_worlds_value");
+    SetupGenericSlider("ammonia_worlds_slider", "ammonia_worlds_value");
+    SetupGenericSlider("gas_giants_slider", "gas_giants_value");
+    SetupGenericSlider("high_metal_content_slider", "high_metal_content_value");
+    SetupGenericSlider("metal_rich_slider", "metal_rich_value");
+    SetupGenericSlider("rocky_ice_world_slider", "rocky_ice_world_value");
+    SetupGenericSlider("rocky_bodies_slider", "rocky_bodies_value");
+    SetupGenericSlider("icy_bodies_slider", "icy_bodies_value");
+    SetupGenericSlider("rings_slider", "rings_value");
+    SetupGenericSlider("geologicals_slider", "geologicals_value");
+    SetupGenericSlider("organics_slider", "organics_value");
 });
 
 $("#more_options_button").on("click", function () {
@@ -266,7 +264,7 @@ window.addEventListener("popstate", (event) => {
     }
 });
 
-$(document).ready(function () {
+$(window).on("load", function () {
     const encodedParams = new URLSearchParams(window.location.search).get("q");
 
     if (encodedParams) {
@@ -840,7 +838,7 @@ function FormatRings(inputRings) {
         inputRings.forEach(ring => {
             ringList += `
         <li>
-            ${ring.ringName} (${ring.ringType})
+            ${ring.ringName} (${ring.ringType.replace(/([A-Z])/g, ' $1').trim()})
             <ul class="items-center ps-7 font-normal">
                 ${FormatHotspots(ring.hotspots)}
             </ul>
