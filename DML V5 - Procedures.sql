@@ -523,7 +523,8 @@ BEGIN
 	SET
 		"trailblazerCoords" = EXCLUDED."trailblazerCoords",
 		"lastUpdate" = EXCLUDED."lastUpdate"
-	WHERE NOT ST_Equals("TrailblazerMegaships"."trailblazerCoords", EXCLUDED."trailblazerCoords");
+	WHERE NOT ST_Equals("TrailblazerMegaships"."trailblazerCoords", EXCLUDED."trailblazerCoords")
+	AND "TrailblazerMegaships"."lastUpdate" > EXCLUDED."lastUpdate";
 END;
 $$ LANGUAGE plpgsql;
 
