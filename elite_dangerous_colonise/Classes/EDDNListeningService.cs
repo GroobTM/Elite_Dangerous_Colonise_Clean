@@ -214,10 +214,7 @@ namespace elite_dangerous_colonise.Classes
                         JToken message = jsonContent["message"];
                         string schema = jsonContent?["$schemaRef"]?.ToString();
                         string messageEvent = message?["event"]?.ToString();
-                        string messageStationName = message?["StationName"]?.ToString();
-
-                        //Logger.LogInformation("test", 100, message.ToString());
-                        
+                        string messageStationName = message?["StationName"]?.ToString();                        
 
                         if (IsJournalSchema(schema) && IsDockedEvent(messageEvent))
                         {
@@ -227,12 +224,12 @@ namespace elite_dangerous_colonise.Classes
 
                                 colonyShipUpdates.Add(task);
                             }
-                            else if (IsTrailblazerMegaship(messageStationName))
-                            {
-                                Task task = Task.Run(async () => await UpdateTrailblazer(message), cancellationToken);
+                            //else if (IsTrailblazerMegaship(messageStationName))
+                            //{
+                            //    Task task = Task.Run(async () => await UpdateTrailblazer(message), cancellationToken);
 
-                                trailblazerUpdates.Add(task);
-                            }
+                            //    trailblazerUpdates.Add(task);
+                            //}
                         }
                     }
                     catch (Exception ex)

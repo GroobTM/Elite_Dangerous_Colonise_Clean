@@ -11,8 +11,8 @@ namespace elite_dangerous_colonise.Models.Database_Types
         MostWalkables,
         [PgName("DistanceToSol")]
         DistanceToSol,
-        [PgName("DistanceToTrailblazer")]
-        DistanceToTrailblazer,
+        //[PgName("DistanceToTrailblazer")]
+        //DistanceToTrailblazer,
         [PgName("MostHotspots")]
         MostHotspots
     }
