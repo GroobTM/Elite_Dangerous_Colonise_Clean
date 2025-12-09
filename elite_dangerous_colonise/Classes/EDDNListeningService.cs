@@ -105,7 +105,7 @@ namespace elite_dangerous_colonise.Classes
 
         private async Task UpdateTrailblazer(JToken message)
         {
-            long[] validStations =
+            ulong[] validStations =
             {
                 129033207,
                 129032951,
@@ -117,7 +117,7 @@ namespace elite_dangerous_colonise.Classes
 
             try
             {
-                if (long.TryParse(message?["MarketID"].ToString(), out long stationID) && validStations.Contains(stationID))
+                if (ulong.TryParse(message?["MarketID"].ToString(), out ulong stationID) && validStations.Contains(stationID))
                 {
                     Vector3 coords = ConvertJsonToVector(message);
                     string name = message["StationName"].ToString();
@@ -137,14 +137,14 @@ namespace elite_dangerous_colonise.Classes
             }
         }
 
-        private async Task UpdateTrailblazerDatabase(long trailblazerID, string trailblazerName, Vector3 coordinates, DateTime timestamp)
+        private async Task UpdateTrailblazerDatabase(ulong trailblazerID, string trailblazerName, Vector3 coordinates, DateTime timestamp)
         {
             await using (NpgsqlConnection conn = await dataSource.OpenConnectionAsync())
             {
                 await using NpgsqlCommand command = new NpgsqlCommand(
                     "SELECT \"InsertTrailblazerMegaship\"(@inputID, @inputName, @inputCoordinateX, @inputCoordinateY, @inputCoordinateZ, @inputUpdateDate)", conn);
 
-                command.Parameters.AddWithValue("inputID", NpgsqlDbType.Bigint, trailblazerID);
+                command.Parameters.AddWithValue("inputID", NpgsqlDbType.Numeric, trailblazerID);
                 command.Parameters.AddWithValue("inputName", NpgsqlDbType.Varchar, trailblazerName);
                 command.Parameters.AddWithValue("inputCoordinateX", NpgsqlDbType.Numeric, coordinates.X);
                 command.Parameters.AddWithValue("inputCoordinateY", NpgsqlDbType.Numeric, coordinates.Y);

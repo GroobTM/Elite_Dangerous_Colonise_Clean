@@ -73,7 +73,7 @@ CREATE TABLE "StarSystems" (
 );
 
 CREATE TABLE "Stations" (
-	"stationID" BIGINT PRIMARY KEY,
+	"stationID" NUMERIC(20, 0) PRIMARY KEY,
 	"systemID" BIGINT NOT NULL,
 	"stationName" VARCHAR(75) NOT NULL,
 	"controllingFaction" INT NOT NULL,
@@ -143,7 +143,7 @@ CREATE TABLE "Hotspots" (
 );
 
 CREATE TABLE "TrailblazerMegaships" (
-	"trailblazerID" BIGINT PRIMARY KEY,
+	"trailblazerID" NUMERIC(20, 0) PRIMARY KEY,
 	"trailblazerName" VARCHAR(25) NOT NULL,
 	"trailblazerCoords" GEOMETRY(PointZ, 0) NOT NULL,
 	"lastUpdate" TIMESTAMPTZ NOT NULL
@@ -159,7 +159,7 @@ CREATE TABLE "ColonisableStarSystems" (
 
 CREATE TABLE "TrailblazerDistances" (
 	"uncolonisedSystemID" BIGINT,
-	"trailblazerID" BIGINT,
+	"trailblazerID" NUMERIC(20, 0),
 	"distanceBetween" INT NOT NULL,
 	PRIMARY KEY ("uncolonisedSystemID", "trailblazerID"),
 	FOREIGN KEY ("uncolonisedSystemID") REFERENCES "UncolonisedStarSystems"("systemID") ON DELETE CASCADE,
