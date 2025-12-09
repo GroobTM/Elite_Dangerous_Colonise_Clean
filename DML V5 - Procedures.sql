@@ -60,7 +60,7 @@ CREATE OR REPLACE FUNCTION "InsertStationsBulk"("inputStations" "StationInsertTy
 RETURNS VOID AS $$
 BEGIN
 	CREATE TEMP TABLE ins (
-		"stationID" BIGINT,
+		"stationID" NUMERIC(20, 0),
 		"systemID" BIGINT,
 		"stationName" VARCHAR(75),
 		"controllingFaction" VARCHAR(75)
@@ -498,7 +498,7 @@ $$ LANGUAGE plpgsql;
 
 
 CREATE OR REPLACE FUNCTION "InsertTrailblazerMegaship"(
-	"inputID" BIGINT,
+	"inputID" NUMERIC(20, 0),
 	"inputName" VARCHAR(25),
 	"inputCoordX" NUMERIC(11, 5),
 	"inputCoordY" NUMERIC(11, 5),

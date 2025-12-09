@@ -280,7 +280,7 @@ CREATE TYPE "StarSystemInsertType" AS (
 );
 
 CREATE TYPE "StationInsertType" AS (
-    "stationID" BIGINT,
+    "stationID" NUMERIC(20, 0),
     "systemID" BIGINT,
     "stationName" VARCHAR(75),
     "controllingFaction" VARCHAR(75)
