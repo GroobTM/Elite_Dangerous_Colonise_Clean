@@ -6,7 +6,7 @@ namespace elite_dangerous_colonise.Models.Database_Types
     public class StationInsertType
     {
         [PgName("stationID")]
-        public ulong StationID { get; set; }
+        public decimal StationID { get; set; }
         [PgName("systemID")]
         public long SystemID { get; set; }
         [PgName("stationName")]
