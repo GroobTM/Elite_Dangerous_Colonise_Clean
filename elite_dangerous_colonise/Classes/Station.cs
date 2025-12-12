@@ -5,7 +5,7 @@ namespace elite_dangerous_colonise.Classes
     /// <summary> Defines a station. </summary>
     public class Station
     {
-        public long StationID { get; private set; }
+        public ulong StationID { get; private set; }
         public string Name { get; private set; }
         public string Faction { get; private set; }
 
@@ -15,7 +15,7 @@ namespace elite_dangerous_colonise.Classes
         /// <param name="stationID"> The Spansh ID of the station. </param>
         /// <param name="name"> The name of the station. </param>
         /// <param name="faction"> The station's controlling faction. </param>
-        public Station(long stationID, string name, string faction)
+        public Station(ulong stationID, string name, string faction)
         {
             StationID = stationID;
             Name = name;

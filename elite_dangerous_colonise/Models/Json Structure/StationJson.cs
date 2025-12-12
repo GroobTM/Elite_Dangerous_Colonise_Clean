@@ -7,7 +7,7 @@ namespace elite_dangerous_colonise.Models.Json_Structure
     public class StationJson
     {
         [JsonProperty("id")]
-        public required long StationID { get; set; }
+        public required ulong StationID { get; set; }
         [JsonProperty("name")]
         public required string Name { get; set; }
         [JsonProperty("controllingFaction")]

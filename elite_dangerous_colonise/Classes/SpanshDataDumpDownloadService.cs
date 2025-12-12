@@ -42,112 +42,58 @@ namespace elite_dangerous_colonise.Classes
             return startTime - currentTime;
         }
 
-        private async Task DownloadDataDump()
+        private async Task DownloadAndProcessDataDump()
         {
             int maxAttempts = 3;
             int attemptDelay = 5;
 
-            Logger.LogInformation("Spansh Download Service", 1, "Spansh data dump download starting.");
-
-            string path = Path.GetDirectoryName(downloadPath);
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
-
-            for (int attempt = 1; attempt <= maxAttempts; attempt++)
-            {
-                try
-                {
-                    using (HttpResponseMessage response = await client.GetAsync(DOWNLOAD_URL, HttpCompletionOption.ResponseHeadersRead))
-                    {
-                        response.EnsureSuccessStatusCode();
-
-                        await using (Stream stream = await response.Content.ReadAsStreamAsync())
-                        await using (FileStream fileStream = new FileStream(downloadPath, FileMode.Create, FileAccess.Write,
-                            FileShare.None, bufferSize: 81920, useAsync: true))
-                        {
-                            await stream.CopyToAsync(fileStream);
-                        }
-                    }
-                    Logger.LogInformation("Spansh Download Service", 3, "Spansh data dump download complete.");
-                    return;
-                }
-                catch (HttpRequestException ex)
-                {
-                    if (attempt < maxAttempts)
-                    {
-                        Logger.LogError("Spansh Download Service", 2, $"Spansh data dump download attempt {attempt} failed.", ex);
-
-                        await Task.Delay(TimeSpan.FromSeconds(attemptDelay));
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-            }
-        }
-
-        private async Task DecompressDataDump()
-        {
-            Logger.LogInformation("Spansh Download Service", 4, "Spansh data dump decompression starting.");
-
-            await using (FileStream compressedFileStream = new FileStream(downloadPath, FileMode.Open, FileAccess.Read,
-                FileShare.None, bufferSize: 81920, useAsync: true))
-            await using(GZipStream decompressionStream = new GZipStream(compressedFileStream, CompressionMode.Decompress))
-            await using(FileStream decompressedFileStream = new FileStream(decompressPath, FileMode.Create, FileAccess.Write,
-                FileShare.None, bufferSize: 81920, useAsync: true))
-            {
-                await decompressionStream.CopyToAsync(decompressedFileStream);
-            }
-
-            Logger.LogInformation("Spansh Download Service", 5, "Spansh data dump decompression complete.");
-        }
-
-        private async Task InsertDataDumpIntoDatabase()
-        {
-            Logger.LogInformation("Spansh Download Service", 6, "Spansh data dump database insertion starting.");
-
-            await using (AsyncServiceScope scope = scopeFactory.CreateAsyncScope())
-            {
-                DatabaseBulkWriter dbWriter = scope.ServiceProvider.GetRequiredService<DatabaseBulkWriter>();
-                await dbWriter.InsertJsonIntoDatabase(decompressPath);
-            }
-
-            Logger.LogInformation("Spansh Download Service", 7, "Spansh data dump database insertion complete.");
-        }
-
-        private void DeleteDataDump()
-        {
-            Logger.LogInformation("Spansh Download Service", 8, "Spansh data dump file delete starting.");
-
-            File.Delete(downloadPath);
-            File.Delete(decompressPath);
-
-            Logger.LogInformation("Spansh Download Service", 9, "Spansh data dump file delete complete.");
-        }
-
-        private async Task DownloadAndProcessDataDump()
-        {
             try
             {
                 UpdateHub.StartUpdate();
                 await hubContext.Clients.All.SendAsync("SystemUpdateStarted");
 
-                await DownloadDataDump();
-                await DecompressDataDump();
-                await InsertDataDumpIntoDatabase();
+                for (int attempt = 1; attempt <= maxAttempts; attempt++)
+                {
+                    try
+                    {
+                        Logger.LogInformation("Spansh Download Service", 1, $"Spansh data dump download and processing attempt {attempt} starting.");
+                        await using (AsyncServiceScope scope = scopeFactory.CreateAsyncScope())
+                        {
+                            DatabaseBulkWriter dbWriter = scope.ServiceProvider.GetRequiredService<DatabaseBulkWriter>();
 
-                DataDumpProcessingComplete?.Invoke(this, EventArgs.Empty);
+                            using (HttpResponseMessage response = await client.GetAsync(DOWNLOAD_URL, HttpCompletionOption.ResponseHeadersRead))
+                            {
+                                response.EnsureSuccessStatusCode();
+                                await using (Stream networkStream = await response.Content.ReadAsStreamAsync())
+                                await using (GZipStream decompressionStream = new GZipStream(networkStream, CompressionMode.Decompress))
+                                {
+                                    await dbWriter.InsertJsonIntoDatabase(decompressionStream);
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        if (attempt < maxAttempts)
+                        {
+                            Logger.LogError("Spansh Download Service", 2, $"Spansh data dump download attempt {attempt} failed.", ex);
+
+                            await Task.Delay(TimeSpan.FromSeconds(attemptDelay));
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+
+                    Logger.LogInformation("Spansh Download Service", 3, "Spansh data dump download and processing complete.");
+                    DataDumpProcessingComplete?.Invoke(this, EventArgs.Empty);
+                    return;
+                }
             }
             catch (Exception ex)
             {
                 Logger.LogError("Spansh Download Service", 10, "Spansh data dump download and processing failed.", ex);
-            }
-            finally
-            {
-                DeleteDataDump();
             }
         }
 

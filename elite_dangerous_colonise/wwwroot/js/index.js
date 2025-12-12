@@ -483,7 +483,7 @@ function FormatResults(results) {
             </div>
             
             <div id="results-body-${system.systemID}" class="hidden" aria-labelledby="results-heading-${system.systemID}">
-                <div class="grid-rows-auto grid grid-cols-1 gap-y-5 border border-t-0 border-[#0F0F0F] bg-white p-5 shadow-sm lg:grid-cols-2 lg:gap-x-5 xl:grid-cols-4 xl:gap-y-0">
+                <div class="grid-rows-auto grid grid-cols-1 gap-y-5 border border-t-0 border-[#0F0F0F] bg-white p-5 shadow-sm lg:grid-cols-2 lg:gap-x-5 xl:grid-cols-3 xl:gap-y-0">
                     <h2 class="row-start-1 border-b border-gray-300 pb-3 text-center text-lg drop-shadow-xs lg:col-start-1 lg:text-left">Details</h2>
                     <div class="row-start-2 mt-3 lg:col-start-1">
                         <div class="grid grid-cols-2 items-end gap-x-2">
@@ -509,20 +509,14 @@ function FormatResults(results) {
                             ${FormatRings(system.rings)}
                         </ul>
                     </div>
-                    <h2 class="row-start-5 border-b border-gray-300 pt-5 pb-3 text-center text-lg drop-shadow-xs lg:col-start-1 lg:row-start-3 lg:text-left xl:col-start-3 xl:row-start-1 xl:pt-0">Nearby Stations</h2>
-                    <div class="row-start-6 mt-3 max-h-100 overflow-auto lg:col-start-1 lg:row-start-4 xl:col-start-3 xl:row-start-2">
+                    <h2 class="row-start-5 border-b border-gray-300 pt-5 pb-3 text-center text-lg drop-shadow-xs lg:col-start-1 lg:col-end-3 lg:row-start-3 lg:text-left xl:col-start-3 xl:col-end-5 xl:row-start-1 xl:pt-0">Nearby Stations</h2>
+                    <div class="row-start-6 mt-3 max-h-100 overflow-auto lg:col-start-1 lg:col-end-3 lg:row-start-4 xl:col-start-3 xl:col-end-5 xl:row-start-2">
                         <ul class="list-inside list-disc">
                             ${FormatColonisedSystems(system.systemID, system.colonisedSystems)}
                         </ul>
                     </div>
-                    <h2 class="row-start-7 border-b border-gray-300 pt-5 pb-3 text-center text-lg drop-shadow-xs lg:col-start-2 lg:row-start-3 lg:text-left xl:col-start-4 xl:row-start-1 xl:pt-0">Trailblazer Megaships</h2>
-                    <div class="row-start-8 mt-3 max-h-100 overflow-auto lg:col-start-2 lg:row-start-4 xl:col-start-4 xl:row-start-2">
-                        <ul class="list-inside list-disc">
-                            ${FormatTrailblazers(system.trailblazers)}
-                        </ul>
-                    </div>
-                    <h2 class="col-start-1 row-start-9 border-b border-gray-300 pt-5 pb-3 text-center text-lg drop-shadow-xs lg:col-end-3 lg:row-start-5 lg:text-left xl:col-end-5 xl:row-start-3">Colony Influences</h2>
-                    <div class="col-start-1 row-start-10 mt-3 grid grid-cols-2 gap-x-2 overflow-auto lg:col-end-3 lg:row-start-6 lg:grid-cols-4 xl:col-end-5 xl:row-start-4 2xl:grid-cols-8">
+                    <h2 class="col-start-1 row-start-7 border-b border-gray-300 pt-5 pb-3 text-center text-lg drop-shadow-xs lg:col-end-3 lg:row-start-5 lg:text-left xl:col-end-4 xl:row-start-3">Colony Influences</h2>
+                    <div class="col-start-1 row-start-8 mt-3 grid grid-cols-2 gap-x-2 overflow-auto lg:col-end-3 lg:row-start-6 lg:grid-cols-4 xl:col-end-4 xl:row-start-4 2xl:grid-cols-8">
                         <div class="mt-3 flex gap-3">
                             <svg data-tooltip-target="${system.systemID}_black_holes_tooltip" class="h-6 w-6" version="1.1" id="Layer_1" x="0px" y="0px" width="924" height="924" viewBox="0 0 924 924" enable-background="new 0 0 924 924" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><defs id="defs3" />
                                 <g id="g1">
@@ -780,7 +774,7 @@ function FormatResults(results) {
                         </div>
                         <p class="mt-3">${system.systemCounts.organicCount}</p>
                     </div>
-                    <h2 class="col-start-1 row-start-11 border-b border-gray-300 pt-5 text-center text-lg drop-shadow-xs lg:col-end-3 lg:row-start-7 lg:text-left xl:col-end-5 xl:row-start-5"></h2>
+                    <h2 class="col-start-1 row-start-9 border-b border-gray-300 pt-5 text-center text-lg drop-shadow-xs lg:col-end-3 lg:row-start-7 lg:text-left xl:col-end-5 xl:row-start-5"></h2>
                     <div class="mt-5 flex flex-col justify-between gap-y-5 sm:flex-row lg:col-span-2 xl:col-span-4">
                         <a href="https://spansh.co.uk/system/${system.systemID}" target="_blank" class="text-center text-blue-800 underline sm:text-left">View on Spansh</a>
                         <div class="flex justify-center gap-x-3 text-center sm:text-left">

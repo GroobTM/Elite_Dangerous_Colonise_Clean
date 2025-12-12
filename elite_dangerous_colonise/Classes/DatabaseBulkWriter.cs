@@ -90,18 +90,18 @@ namespace elite_dangerous_colonise.Classes
             }
         }
 
-        private async Task ReportInsert(List<string> insertedNames)
+        private void ReportInsert(List<string> insertedNames)
         {
             if (verboseReporting)
             {
                 foreach (string name in insertedNames)
                 {
-                    await Task.Run(() => Logger.LogInformation("Database Writer", 4, $"System {name} was added to the database."));
+                    Logger.LogInformation("Database Writer", 4, $"System {name} was added to the database.");
                 }
             }
         }
 
-        private async Task<Task> BulkInsertIntoDatabase(DatabaseDataLists dataLists)
+        private async Task BulkInsertIntoDatabase(DatabaseDataLists dataLists)
         {
             await using (NpgsqlConnection conn = await dataSource.OpenConnectionAsync())
             {
@@ -118,7 +118,10 @@ namespace elite_dangerous_colonise.Classes
                         await transaction.CommitAsync();
                         recordsAddedOrUpdated += dataLists.Count();
 
-                        return ReportInsert(dataLists.GetNames());
+                        if (verboseReporting) 
+                        {
+                            ReportInsert(dataLists.GetNames());
+                        }
                     }
                     catch (NpgsqlException ex)
                     {
@@ -136,9 +139,7 @@ namespace elite_dangerous_colonise.Classes
                         
                     }
                 }
-                
             }
-            return Task.CompletedTask;
         }
 
         private async Task ReportReading(CancellationToken token)
@@ -179,49 +180,7 @@ namespace elite_dangerous_colonise.Classes
             try
             {
                 using StreamReader streamReader = new StreamReader(filePath);
-                using JsonTextReader jsonReader = new JsonTextReader(streamReader);
-
-                CancellationTokenSource cancellationToken = new CancellationTokenSource();
-                Task readingReportingTask = ReportReading(cancellationToken.Token);
-                List<Task> insertReportingTask = new List<Task>();
-
-                DatabaseDataLists dataLists = new DatabaseDataLists();
-
-                while (await jsonReader.ReadAsync())
-                {
-                    if (jsonReader.TokenType == JsonToken.StartObject)
-                    {
-                        JObject obj = await JObject.LoadAsync(jsonReader);
-
-                        if (Classes.JsonReader.InRangeOfSol(obj))
-                        {
-                            Classes.JsonReader readSystem = new Classes.JsonReader(obj.ToString());
-
-                            StarSystem? decodedSystem = readSystem.GetStarSystem();
-                            if (decodedSystem != null)
-                            {
-                                decodedSystem.AddToDataLists(dataLists);
-                            }
-
-                            if (dataLists.Count() >= BULK_SIZE)
-                            {
-                                insertReportingTask.Add(await BulkInsertIntoDatabase(dataLists));
-                                dataLists.ClearLists();
-                            }
-                        }
-                        recordsRead++;
-                    }
-                }
-
-                if (dataLists.Count() > 0)
-                {
-                    insertReportingTask.Add(await BulkInsertIntoDatabase(dataLists));
-                }
-
-
-                await Task.WhenAll(insertReportingTask);
-                cancellationToken.Cancel();
-                await readingReportingTask;
+                await InsertJsonIntoDatabase(streamReader);
 
             }
             catch (JsonReaderException ex)
@@ -236,6 +195,75 @@ namespace elite_dangerous_colonise.Classes
             {
                 Logger.LogError("Database Writer", 2, ex);
             }
+        }
+
+        /// <summary> Reads a streamed Json file and inserts its data into the database. </summary>
+        /// <param name="inputStream"> The stream of a Json file. </param>
+        /// <remarks> This method reports it's progress periodically. </remarks>
+        public async Task InsertJsonIntoDatabase(Stream inputStream)
+        {
+            try
+            {
+                using StreamReader streamReader = new StreamReader(inputStream, bufferSize: 81920);
+                await InsertJsonIntoDatabase(streamReader);
+
+            }
+            catch (JsonReaderException ex)
+            {
+                Logger.LogError("Database Writer", 0, ex);
+            }
+            catch (IOException ex)
+            {
+                Logger.LogError("Database Writer", 1, ex);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError("Database Writer", 2, ex);
+            }
+        }
+
+        private async Task InsertJsonIntoDatabase(StreamReader streamReader)
+        {
+            using JsonTextReader jsonReader = new JsonTextReader(streamReader);
+
+            CancellationTokenSource cancellationToken = new CancellationTokenSource();
+            Task readingReportingTask = ReportReading(cancellationToken.Token);
+
+            DatabaseDataLists dataLists = new DatabaseDataLists();
+
+            while (await jsonReader.ReadAsync())
+            {
+                if (jsonReader.TokenType == JsonToken.StartObject)
+                {
+                    JObject obj = await JObject.LoadAsync(jsonReader);
+
+                    if (Classes.JsonReader.InRangeOfSol(obj))
+                    {
+                        Classes.JsonReader readSystem = new Classes.JsonReader(obj.ToString());
+
+                        StarSystem? decodedSystem = readSystem.GetStarSystem();
+                        if (decodedSystem != null)
+                        {
+                            decodedSystem.AddToDataLists(dataLists);
+                        }
+
+                        if (dataLists.Count() >= BULK_SIZE)
+                        {
+                            await BulkInsertIntoDatabase(dataLists);
+                            dataLists.ClearLists();
+                        }
+                    }
+                    recordsRead++;
+                }
+            }
+
+            if (dataLists.Count() > 0)
+            {
+                await BulkInsertIntoDatabase(dataLists);
+            }
+
+            cancellationToken.Cancel();
+            await readingReportingTask;
         }
     }
 }
