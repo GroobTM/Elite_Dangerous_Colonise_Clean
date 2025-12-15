@@ -16,20 +16,7 @@
         }
 
         /// <summary>
-        /// Calculates the time until the service is next due to start running.
-        /// </summary>
-        //private TimeSpan TimeUntilStart()
-        //{
-        //    DateTime currentTime = DateTime.UtcNow;
-
-        //    DateTime startTime = new DateTime(currentTime.Year, currentTime.Month, currentTime.Day,
-        //        currentTime.Hour, currentTime.Minute + 1, 0, DateTimeKind.Utc);
-
-        //    return startTime - currentTime;
-        //}
-
-        /// <summary>
-        /// Pings https://edcolonise.net/ every 5 minutes between 4am and 7am to keep it awake.
+        /// Pings https://edcolonise.net/ every 10 minutes to keep it awake.
         /// </summary>
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
@@ -54,7 +41,7 @@
                     Logger.LogError("Self Ping Service", 2, "Self ping failed and caused an error.", ex);
                 }
 
-                await Task.Delay(TimeSpan.FromMinutes(1), cancellationToken);
+                await Task.Delay(TimeSpan.FromMinutes(10), cancellationToken);
             }
 
             Logger.LogInformation("Self Ping Service", 3, "Self Ping Service stopping.");
