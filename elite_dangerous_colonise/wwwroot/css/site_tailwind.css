@@ -385,12 +385,6 @@
   .row-start-9 {
     grid-row-start: 9;
   }
-  .row-start-10 {
-    grid-row-start: 10;
-  }
-  .row-start-11 {
-    grid-row-start: 11;
-  }
   .row-end-2 {
     grid-row-end: 2;
   }
@@ -1913,11 +1907,6 @@
       grid-column-start: 3;
     }
   }
-  .xl\:col-start-4 {
-    @media (width >= 80rem) {
-      grid-column-start: 4;
-    }
-  }
   .xl\:col-end-4 {
     @media (width >= 80rem) {
       grid-column-end: 4;
@@ -1956,11 +1945,6 @@
   .xl\:grid-cols-3 {
     @media (width >= 80rem) {
       grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-  }
-  .xl\:grid-cols-4 {
-    @media (width >= 80rem) {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
     }
   }
   .xl\:gap-y-0 {

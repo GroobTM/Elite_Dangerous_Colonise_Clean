@@ -6,26 +6,9 @@ using System.Numerics;
 namespace elite_dangerous_colonise.Classes
 {
     /// <summary> Defines a JsonReader. </summary>
-    public class JsonReader
+    public class SolDistanceChecker
     {      
         private const int SOL_COLONY_RANGE = 2000;
-        private SystemJson deserializedSystem;
-
-        /// <summary> Instantiates a JsonReader object. </summary>
-        /// <param name="jsonString"> A Spansh datadump system json string. </param>
-        /// <exception cref="InvalidOperationException"> The entered jsonString returned a null value when deserialized. </exception>
-        public JsonReader(string jsonString)
-        {
-            deserializedSystem = JsonConvert.DeserializeObject<SystemJson>(jsonString)
-                ?? throw new InvalidOperationException("Deserialized failed: The JSON structure may be invalid.");
-        }
-
-        /// <summary>  Gets the value of the read system as a StarSystem object. </summary>
-        /// <returns> A system object. </returns>
-        public StarSystem? GetStarSystem()
-        {
-            return deserializedSystem.ConvertToStarSystem();
-        }
 
         /// <summary>
         /// Checks if a set of coordinates in a json file are within colonisation range of Sol.
@@ -58,6 +41,18 @@ namespace elite_dangerous_colonise.Classes
             return Math.Abs(coordinates.X) < SOL_COLONY_RANGE
                 && Math.Abs(coordinates.Y) < SOL_COLONY_RANGE
                 && Math.Abs(coordinates.Z) < SOL_COLONY_RANGE;
+        }
+
+        /// <summary>
+        /// Checks if a set of coordinates are within colonisation range of Sol.
+        /// </summary>
+        /// <param name="coordinatesJson"> A set of deserialized coordinates. </param>
+        /// <returns> If the coordinates are within colonisation range of Sol. </returns>
+        public static bool InRangeOfSol(CoordinatesJson coordinatesJson)
+        {
+            return Math.Abs(coordinatesJson.X) < SOL_COLONY_RANGE
+                && Math.Abs(coordinatesJson.Y) < SOL_COLONY_RANGE
+                && Math.Abs(coordinatesJson.Z) < SOL_COLONY_RANGE;
         }
     }
 }

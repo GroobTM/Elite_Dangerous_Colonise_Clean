@@ -109,6 +109,9 @@ if (!DEBUG)
     // Configures the self ping background service.
     builder.Services.AddHttpClient();
     builder.Services.AddHostedService<SelfPingService>();
+
+    // Configures the memory reporting background service.
+    builder.Services.AddHostedService<MemoryReportingService>();
 }
 
 var app = builder.Build();

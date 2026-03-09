@@ -71,7 +71,7 @@ namespace elite_dangerous_colonise.Classes
             {
                 Vector3 coords = ConvertJsonToVector(message);
 
-                if (JsonReader.InRangeOfSol(coords))
+                if (SolDistanceChecker.InRangeOfSol(coords))
                 {
                     if (long.TryParse(message["SystemAddress"].ToString(), out long systemID)
                         && DateTime.TryParse(message["timestamp"].ToString(), null, DateTimeStyles.AdjustToUniversal, out DateTime timestamp))
@@ -162,7 +162,7 @@ namespace elite_dangerous_colonise.Classes
             {
                 Vector3 coords = ConvertJsonToVector(message);
 
-                if (JsonReader.InRangeOfSol(coords))
+                if (SolDistanceChecker.InRangeOfSol(coords))
                 {
                     if (long.TryParse(message["SystemAddress"].ToString(), out long systemID)
                         && DateTime.TryParse(message["timestamp"].ToString(), null, DateTimeStyles.AdjustToUniversal, out DateTime timestamp))

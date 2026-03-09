@@ -1,6 +1,7 @@
 ﻿using Npgsql;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using elite_dangerous_colonise.Models.Json_Structure;
 
 namespace elite_dangerous_colonise.Classes
 {
@@ -109,6 +110,7 @@ namespace elite_dangerous_colonise.Classes
                 {
                     try
                     {
+                        dataLists.Deduplicate();
                         await InsertStarSystemsBulk(conn, transaction, dataLists);
                         await InsertStationsBulk(conn, transaction, dataLists);
                         await InsertUncolonisedStarSystemDetailsBulk(conn, transaction, dataLists);
@@ -224,46 +226,48 @@ namespace elite_dangerous_colonise.Classes
 
         private async Task InsertJsonIntoDatabase(StreamReader streamReader)
         {
-            using JsonTextReader jsonReader = new JsonTextReader(streamReader);
-
-            CancellationTokenSource cancellationToken = new CancellationTokenSource();
-            Task readingReportingTask = ReportReading(cancellationToken.Token);
-
-            DatabaseDataLists dataLists = new DatabaseDataLists();
-
-            while (await jsonReader.ReadAsync())
+            using (JsonTextReader jsonReader = new JsonTextReader(streamReader))
             {
-                if (jsonReader.TokenType == JsonToken.StartObject)
+                jsonReader.CloseInput = false;
+                JsonSerializer serializer = new JsonSerializer();
+
+                CancellationTokenSource cancellationToken = new CancellationTokenSource();
+                Task readingReportingTask = ReportReading(cancellationToken.Token);
+
+                DatabaseDataLists dataLists = new DatabaseDataLists();
+
+                while (await jsonReader.ReadAsync())
                 {
-                    JObject obj = await JObject.LoadAsync(jsonReader);
-
-                    if (Classes.JsonReader.InRangeOfSol(obj))
+                    if (jsonReader.TokenType == JsonToken.StartObject)
                     {
-                        Classes.JsonReader readSystem = new Classes.JsonReader(obj.ToString());
+                        SystemJson? systemJson = serializer.Deserialize<SystemJson>(jsonReader);
 
-                        StarSystem? decodedSystem = readSystem.GetStarSystem();
-                        if (decodedSystem != null)
+                        if (systemJson != null && SolDistanceChecker.InRangeOfSol(systemJson.Coordinates))
                         {
-                            decodedSystem.AddToDataLists(dataLists);
-                        }
+                            StarSystem? decodedSystem = systemJson.ConvertToStarSystem();
+                            if (decodedSystem != null)
+                            {
+                                decodedSystem.AddToDataLists(dataLists);
+                            }
 
-                        if (dataLists.Count() >= BULK_SIZE)
-                        {
-                            await BulkInsertIntoDatabase(dataLists);
-                            dataLists.ClearLists();
+                            if (dataLists.Count() >= BULK_SIZE)
+                            {
+                                await BulkInsertIntoDatabase(dataLists);
+                                dataLists.ClearLists();
+                            }
                         }
+                        recordsRead++;
                     }
-                    recordsRead++;
                 }
-            }
 
-            if (dataLists.Count() > 0)
-            {
-                await BulkInsertIntoDatabase(dataLists);
-            }
+                if (dataLists.Count() > 0)
+                {
+                    await BulkInsertIntoDatabase(dataLists);
+                }
 
-            cancellationToken.Cancel();
-            await readingReportingTask;
+                cancellationToken.Cancel();
+                await readingReportingTask;
+            }
         }
     }
 }
