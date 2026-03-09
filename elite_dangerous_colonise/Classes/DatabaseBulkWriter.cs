@@ -110,6 +110,7 @@ namespace elite_dangerous_colonise.Classes
                 {
                     try
                     {
+                        dataLists.Deduplicate();
                         await InsertStarSystemsBulk(conn, transaction, dataLists);
                         await InsertStationsBulk(conn, transaction, dataLists);
                         await InsertUncolonisedStarSystemDetailsBulk(conn, transaction, dataLists);
