@@ -10,7 +10,10 @@ namespace elite_dangerous_colonise.Pages;
 
 public class IndexModel : PageModel
 {
-    private readonly NpgsqlDataSource dataSource;
+    private const int MAX_QUERY_ATTEMPTS = 3;
+    private const int QUERY_ATTEMPT_DELAY = 1;
+
+    private readonly NpgsqlDataSource dataSource;    
 
     public SelectMaxSearchValuesResult MaxValues { get; private set; }
     public List<string> HotspotTypes { get; private set; }
@@ -42,8 +45,8 @@ public class IndexModel : PageModel
 
         try
         {
-            MaxValues = await SelectMaxSearchValues();
-            HotspotTypes = await SelectHotspotTypes();
+            MaxValues = await SelectMaxSearchValues() ?? throw new Exception("MaxValues is null");
+            HotspotTypes = await SelectHotspotTypes() ?? throw new Exception("HotspotTypes is null");
 
             return Page();
         }
@@ -67,61 +70,99 @@ public class IndexModel : PageModel
 
     }
 
-    private async Task<SelectMaxSearchValuesResult> SelectMaxSearchValues()
+    private async Task<SelectMaxSearchValuesResult?> SelectMaxSearchValues()
     {
-        await using (NpgsqlConnection conn = await dataSource.OpenConnectionAsync())
+        for (int attempt = 1; attempt <= MAX_QUERY_ATTEMPTS; attempt++)
         {
-            await using (NpgsqlCommand command = new NpgsqlCommand("SELECT * FROM \"MaxSearchValues\"", conn))
+            try
             {
-                await using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                await using (NpgsqlConnection conn = await dataSource.OpenConnectionAsync())
                 {
-                    await reader.ReadAsync();
-
-                    return new SelectMaxSearchValuesResult(
-                        reader.GetInt32(0),
-                        reader.GetInt32(1),
-                        reader.GetInt32(2),
-                        reader.GetInt32(3),
-                        reader.GetInt32(4),
-                        reader.GetInt32(5),
-                        reader.GetInt32(6),
-                        reader.GetInt32(7),
-                        reader.GetInt32(8),
-                        reader.GetInt32(9),
-                        reader.GetInt32(10),
-                        reader.GetInt32(11),
-                        reader.GetInt32(12),
-                        reader.GetInt32(13),
-                        reader.GetInt32(14),
-                        reader.GetInt32(15),
-                        reader.GetInt32(16),
-                        reader.GetInt32(17),
-                        reader.GetInt32(18),
-                        reader.GetInt32(19)
-                        );
-                }
-            }
-        }
-    }
-
-    private async Task<List<string>> SelectHotspotTypes()
-    {
-        List<string> result = new List<string>();
-
-        await using (NpgsqlConnection conn = await dataSource.OpenConnectionAsync())
-        {
-            await using (NpgsqlCommand command = new NpgsqlCommand("SELECT DISTINCT \"hotspotType\" FROM \"Hotspots\";", conn))
-            {
-                await using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
-                {
-                    while(await reader.ReadAsync())
+                    await using (NpgsqlCommand command = new NpgsqlCommand("SELECT * FROM \"MaxSearchValues\"", conn))
                     {
-                        result.Add(Regex.Replace(reader.GetString(0), "(\\B[A-Z])", " $1"));
+                        await using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                        {
+                            await reader.ReadAsync();
+
+                            return new SelectMaxSearchValuesResult(
+                                reader.GetInt32(0),
+                                reader.GetInt32(1),
+                                reader.GetInt32(2),
+                                reader.GetInt32(3),
+                                reader.GetInt32(4),
+                                reader.GetInt32(5),
+                                reader.GetInt32(6),
+                                reader.GetInt32(7),
+                                reader.GetInt32(8),
+                                reader.GetInt32(9),
+                                reader.GetInt32(10),
+                                reader.GetInt32(11),
+                                reader.GetInt32(12),
+                                reader.GetInt32(13),
+                                reader.GetInt32(14),
+                                reader.GetInt32(15),
+                                reader.GetInt32(16),
+                                reader.GetInt32(17),
+                                reader.GetInt32(18),
+                                reader.GetInt32(19)
+                                );
+                        }
                     }
                 }
             }
+            catch (Exception)
+            {
+                if (attempt < MAX_QUERY_ATTEMPTS)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(QUERY_ATTEMPT_DELAY));
+                }
+                else
+                {
+                    throw;
+                }
+            }
         }
 
-        return result;
+        return null;
+    }
+
+    private async Task<List<string>?> SelectHotspotTypes()
+    {
+        for (int attempt = 1; attempt <= MAX_QUERY_ATTEMPTS; attempt++)
+        {
+            List<string> result = new List<string>();
+
+            try 
+            {
+                await using (NpgsqlConnection conn = await dataSource.OpenConnectionAsync())
+                {
+                    await using (NpgsqlCommand command = new NpgsqlCommand("SELECT DISTINCT \"hotspotType\" FROM \"Hotspots\";", conn))
+                    {
+                        await using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                result.Add(Regex.Replace(reader.GetString(0), "(\\B[A-Z])", " $1"));
+                            }
+                        }
+                    }
+                }
+
+                return result;
+            }
+            catch (Exception)
+            {
+                if (attempt < MAX_QUERY_ATTEMPTS)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(QUERY_ATTEMPT_DELAY));
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
+        return null;
     }
 }
